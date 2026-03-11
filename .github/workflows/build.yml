@@ -29,6 +29,7 @@ on:
         default: false
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   FLUTTER_VERSION: "3.38.5"
   BUILD_TARGET: "lib/main.dart"
 
@@ -69,30 +70,40 @@ jobs:
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release --target=${{ env.BUILD_TARGET }}
-
-      - name: Build AAB
-        run: flutter build appbundle --release --target=${{ env.BUILD_TARGET }}
+        id: build_apk
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p build-logs
+          flutter build apk --release --target=${{ env.BUILD_TARGET }} 2>&1 | tee build-logs/android-apk.log
+          exit ${PIPESTATUS[0]}
 
       - name: Collect Android artifacts
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p out
-          find build build_out -type f \( -name "*.apk" -o -name "*.aab" \) -print 2>/dev/null || true
+          find build build_out -type f \( -name "*.apk" -o -name "*.log" \) -print 2>/dev/null || true
           cp build/app/outputs/flutter-apk/*.apk out/ 2>/dev/null || true
-          cp build/app/outputs/bundle/release/*.aab out/ 2>/dev/null || true
           cp build_out/app/outputs/flutter-apk/*.apk out/ 2>/dev/null || true
-          cp build_out/app/outputs/bundle/release/*.aab out/ 2>/dev/null || true
+          cp build-logs/*.log out/ 2>/dev/null || true
           ls -la out
 
       - name: Upload Android artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: android-artifacts
           path: out/*
           retention-days: ${{ inputs.artifact-retention-days }}
           if-no-files-found: error
+
+      - name: Mark Android build failure
+        if: ${{ steps.build_apk.outcome != 'success' }}
+        shell: bash
+        run: exit 1
 
   windows:
     name: Windows
@@ -134,7 +145,13 @@ jobs:
         run: flutter pub get
 
       - name: Build Windows release
-        run: flutter build windows --release --target=${{ env.BUILD_TARGET }}
+        id: build_windows
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path build-logs -Force | Out-Null
+          flutter build windows --release --target=${{ env.BUILD_TARGET }} *>&1 | Tee-Object -FilePath build-logs\\windows-build.log
+          exit $LASTEXITCODE
 
       - name: Build Windows setup package
         if: ${{ inputs.package-windows-setup }}
@@ -143,10 +160,13 @@ jobs:
           fastforge package --platform windows --targets exe --skip-clean --build-target=${{ env.BUILD_TARGET }}
 
       - name: Collect Windows artifacts
+        if: always()
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path out -Force | Out-Null
-          Compress-Archive -Path "build\windows\x64\runner\Release\*" -DestinationPath "out\SlothVPN-windows-portable-x64.zip" -Force
+          if (Test-Path "build\windows\x64\runner\Release") {
+            Compress-Archive -Path "build\windows\x64\runner\Release\*" -DestinationPath "out\SlothVPN-windows-portable-x64.zip" -Force
+          }
           if ('${{ inputs.package-windows-setup }}' -eq 'true') {
             $setup = Get-ChildItem -Path dist -Recurse -File | Where-Object { $_.Name -like "SlothVPN-*-windows-setup.exe" } | Select-Object -First 1
             if (-not $setup) {
@@ -154,14 +174,23 @@ jobs:
             }
             Copy-Item $setup.FullName -Destination (Join-Path "out" $setup.Name) -Force
           }
+          if (Test-Path "build-logs\windows-build.log") {
+            Copy-Item "build-logs\windows-build.log" -Destination "out\windows-build.log" -Force
+          }
 
       - name: Upload Windows artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: windows-artifacts
           path: out/*
           retention-days: ${{ inputs.artifact-retention-days }}
           if-no-files-found: error
+
+      - name: Mark Windows build failure
+        if: ${{ steps.build_windows.outcome != 'success' }}
+        shell: pwsh
+        run: exit 1
 
   linux:
     name: Linux
