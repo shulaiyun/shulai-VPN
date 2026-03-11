@@ -1,22 +1,22 @@
----
+﻿---
 name: Bug Report
-description: Report a bug encountered while using Hiddify
+description: Report a bug encountered while using SlothVPN
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
         ## Only English
-        For access to our user forums, please join [our Telegram group](https://t.me/shulai2026).
+        For access to our user forums, please join [our Telegram channel](https://t.me/shulai2026).
 
         Please make sure to provide a descriptive, deterministic, and reproducible report. It saves time for both the developers and users who are looking for solutions. Providing as much information as possible, including screenshots and logs, is highly appreciated. This will help us to better understand the issue and respond more effectively.
 
-        Please DO NOT use this template to ask questions. You can join [our Telegram group](https://t.me/shulai2026) or [our Website](https://hiddify.com/app) to ask questions. This template is strictly for reporting bugs.
+        Please DO NOT use this template to ask questions. You can join [our Telegram channel](https://t.me/shulai2026) or open a discussion in the repository to ask questions. This template is strictly for reporting bugs.
   - type: checkboxes
     id: confirm-search
     attributes:
       label: Search first
-      description: Please search [existing issues](https://github.com/shulaiyun/shulai-VPN.git/issues) before reporting.
+      description: Please search [existing issues](https://github.com/shulaiyun/shulai-VPN/issues) before reporting.
       options:
         - label: I searched and no similar issues were found
           required: true
@@ -33,21 +33,21 @@ body:
         - Linux
         - Android TV
         - iOS
-        - HiddifyCli (Core)
+        - Core
     validations:
       required: true
   - type: input
     id: os
     attributes:
       label: "OS version"
-      description: "Please provide the operating system version. (Example: Windows 10)"
+      description: "Please provide the operating system version. (Example: Windows 11)"
     validations:
       required: true
   - type: input
     id: version
     attributes:
-      label: Hiddify Version
-      description: "What version of Hiddify are you using?"
+      label: SlothVPN Version
+      description: "What version of SlothVPN are you using?"
     validations:
       required: true
   - type: textarea
@@ -91,7 +91,7 @@ body:
     id: configs
     attributes:
       label: Application Config Options
-      description: Please copy and paste Application config.
+      description: Please copy and paste application config.
     validations:
       required: false
   - type: textarea

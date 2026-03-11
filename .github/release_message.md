@@ -1,62 +1,25 @@
-<div align=center>
-    
-[![Release Downloads](https://img.shields.io/github/downloads/hiddify/hiddify-next/RELEASE_TAG/total?style=flat-square&logo=github)](https://img.shields.io/github/downloads/hiddify/hiddify-next/RELEASE_TAG/)
+﻿# 树懒VPN Release Notes Template
 
-</div>
+此文件用于后续手动整理 Release 说明。
 
-**Download based on your OS:**
+## 下载说明
 
-<div dir="rtl">
+请以当前 Release 页面中的 Assets 为准。
 
-**بر اساس سیستم عامل خود دانلود کنید:**
+常见产物包括：
 
-</div>
+- Android APK
+- Windows Portable ZIP
+- Windows Setup EXE（后续稳定后补齐）
+- Linux Bundle / TAR.GZ（按 workflow 配置启用）
+- macOS App ZIP（按 workflow 配置启用）
 
+## 项目链接
 
+- GitHub：<https://github.com/shulaiyun/shulai-VPN>
+- Telegram：<https://t.me/shulai2026>
 
-<div align=left>
-<table>
-    <thead align=left>
-        <tr>
-            <th>OS</th>
-            <th>Download</th>
-        </tr>
-    </thead>
-    <tbody align=left>
-        <tr>
-        <td>Android</td><td>
-            <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Android-universal.apk"><img src="https://img.shields.io/badge/APK-Universal-044d29.svg?logo=android"></a><br>
-            <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Android-arm64.apk"><img src="https://img.shields.io/badge/APK-ARMv8-168039.svg?logo=android"></a><br>
-            <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Android-arm7.apk"><img src="https://img.shields.io/badge/APK-ARMv7-45bf55.svg?logo=android"></a><br>
-            <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Android-x86_64.apk"><img src="https://img.shields.io/badge/APK-x64-96ed89.svg?logo=android"></a>
-        </td>
-        </tr>
-        <tr>
-            <td>Windows</td><td>
-                <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Windows-Setup-x64.Msix"><img src="https://img.shields.io/badge/OfficialSetup-x64-0078d7.svg?logo=windows"></a><br>
-                <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Windows-Setup-x64.exe"><img src="https://img.shields.io/badge/Setup-x64-2d7d9a.svg?logo=windows"></a><br>
-                <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Windows-Portable-x64.zip"><img src="https://img.shields.io/badge/Portable-x64-67b7d1.svg?logo=windows"></a>
-        </td>
-        </tr>
-        <tr>
-            <td>macOS (v10.15+)</td>
-            <td><a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-MacOS.dmg"><img src="https://img.shields.io/badge/DMG-Universal-ea005e.svg?logo=apple"></a><br>
-            <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-MacOS-Installer.pkg"><img src="https://img.shields.io/badge/PKG-Universal-bc544b.svg?logo=apple" /></a></a></td>
-        </tr>
-        <tr>
-            <td>Linux</td>
-            <td><a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Linux-x64.AppImage"><img src="https://img.shields.io/badge/AppImage-x64-f84e29.svg?logo=linux"> </a><br>
-            <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-Debian-x64.deb"><img src="https://img.shields.io/badge/DebPackage-x64-FF9966.svg?logo=debian"> </a><br>
-            <a href="https://github.com/shulaiyun/shulai-VPN.git/releases/download/RELEASE_TAG/Hiddify-rpm-x64.rpm"><img src="https://img.shields.io/badge/RpmPackage-x64-F1B42F.svg?logo=redhat"> </a></td>
-        </tr>
-    </tbody>
-</table>
+## 备注
 
-
-</div>
-
-<div dir="ltr">
-  
-**List of all changes:** [ChangeLog](https://github.com/shulaiyun/shulai-VPN.git/blob/main/HISTORY.md)
-
-</div>
+- 当前 Release 产物由 GitHub Actions 自动构建并上传。
+- 如某个平台暂未出现在本次 Release 中，通常表示该平台工作流尚在稳定化阶段，或该次发布未启用对应构建任务。

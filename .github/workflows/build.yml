@@ -7,6 +7,26 @@ on:
         required: false
         type: number
         default: 7
+      build-android:
+        required: false
+        type: boolean
+        default: true
+      build-windows:
+        required: false
+        type: boolean
+        default: true
+      build-linux:
+        required: false
+        type: boolean
+        default: false
+      build-macos:
+        required: false
+        type: boolean
+        default: false
+      package-windows-setup:
+        required: false
+        type: boolean
+        default: false
 
 env:
   FLUTTER_VERSION: "3.38.5"
@@ -15,7 +35,11 @@ env:
 jobs:
   android:
     name: Android
+    if: ${{ inputs.build-android }}
     runs-on: ubuntu-latest
+    env:
+      PUB_CACHE: ${{ github.workspace }}/.pub-cache
+      GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +54,9 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -52,9 +79,12 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p out
-          find build/app/outputs -type f \( -name "*.apk" -o -name "*.aab" \) -print
-          cp build/app/outputs/flutter-apk/*.apk out/ || true
-          cp build/app/outputs/bundle/release/*.aab out/ || true
+          find build build_out -type f \( -name "*.apk" -o -name "*.aab" \) -print 2>/dev/null || true
+          cp build/app/outputs/flutter-apk/*.apk out/ 2>/dev/null || true
+          cp build/app/outputs/bundle/release/*.aab out/ 2>/dev/null || true
+          cp build_out/app/outputs/flutter-apk/*.apk out/ 2>/dev/null || true
+          cp build_out/app/outputs/bundle/release/*.aab out/ 2>/dev/null || true
+          ls -la out
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
@@ -66,7 +96,10 @@ jobs:
 
   windows:
     name: Windows
+    if: ${{ inputs.build-windows }}
     runs-on: windows-latest
+    env:
+      PUB_CACHE: ${{ github.workspace }}\\.pub-cache
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -80,10 +113,18 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Enable symlink support
+        shell: pwsh
+        run: |
+          reg add "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d 1
+          git config --global core.symlinks true
+
       - name: Install Inno Setup
+        if: ${{ inputs.package-windows-setup }}
         run: choco install innosetup -y --no-progress
 
       - name: Install Fastforge
+        if: ${{ inputs.package-windows-setup }}
         shell: pwsh
         run: |
           dart pub global activate fastforge
@@ -96,6 +137,7 @@ jobs:
         run: flutter build windows --release --target=${{ env.BUILD_TARGET }}
 
       - name: Build Windows setup package
+        if: ${{ inputs.package-windows-setup }}
         shell: pwsh
         run: |
           fastforge package --platform windows --targets exe --skip-clean --build-target=${{ env.BUILD_TARGET }}
@@ -105,11 +147,13 @@ jobs:
         run: |
           New-Item -ItemType Directory -Path out -Force | Out-Null
           Compress-Archive -Path "build\windows\x64\runner\Release\*" -DestinationPath "out\SlothVPN-windows-portable-x64.zip" -Force
-          $setup = Get-ChildItem -Path dist -Recurse -File | Where-Object { $_.Name -like "SlothVPN-*-windows-setup.exe" } | Select-Object -First 1
-          if (-not $setup) {
-            throw "Windows setup package not found."
+          if ('${{ inputs.package-windows-setup }}' -eq 'true') {
+            $setup = Get-ChildItem -Path dist -Recurse -File | Where-Object { $_.Name -like "SlothVPN-*-windows-setup.exe" } | Select-Object -First 1
+            if (-not $setup) {
+              throw "Windows setup package not found."
+            }
+            Copy-Item $setup.FullName -Destination (Join-Path "out" $setup.Name) -Force
           }
-          Copy-Item $setup.FullName -Destination (Join-Path "out" $setup.Name) -Force
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
@@ -121,7 +165,10 @@ jobs:
 
   linux:
     name: Linux
+    if: ${{ inputs.build-linux }}
     runs-on: ubuntu-22.04
+    env:
+      PUB_CACHE: ${{ github.workspace }}/.pub-cache
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -183,7 +230,10 @@ jobs:
 
   macos:
     name: macOS
+    if: ${{ inputs.build-macos }}
     runs-on: macos-latest
+    env:
+      PUB_CACHE: ${{ github.workspace }}/.pub-cache
     steps:
       - name: Checkout
         uses: actions/checkout@v4

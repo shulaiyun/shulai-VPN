@@ -16,3 +16,8 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       artifact-retention-days: 7
+      build-android: true
+      build-windows: true
+      build-linux: false
+      build-macos: false
+      package-windows-setup: false
