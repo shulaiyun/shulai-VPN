@@ -1,0 +1,41 @@
+display_name: 树懒VPN
+
+icon: ..\..\assets\images\windows.ico
+
+keywords:
+  - SlothVPN
+  - Proxy
+  - VPN
+  - V2ray
+  - Nekoray
+  - Xray
+  - Psiphon
+  - OpenVPN
+
+generic_name: 树懒VPN
+
+actions:
+  - name: Start
+    label: start
+    arguments:
+      - --start
+  - name: Stop
+    label: stop
+    arguments:
+      - --stop
+
+categories:
+  - Internet
+
+startup_notify: true
+
+# You can specify the shared libraries that you want to bundle with your app
+#
+# flutter_distributor automatically detects the shared libraries that your app
+# depends on, but you can also specify them manually here.
+# 
+# The following example shows how to bundle the libcurl library with your app.
+#
+# include:
+#   - libcurl.so.4
+include: []

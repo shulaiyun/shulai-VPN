@@ -1,0 +1,11 @@
+app_id: EE9835F4-7CEE-4272-A1D4-3205F417562A
+publisher: Shulaiyun
+publisher_url: https://github.com/shulaiyun/shulai-VPN.git
+display_name: "\u6811\u61D2VPN"
+create_desktop_icon: true
+install_dir_name: "{autopf64}\\SlothVPN"
+setup_icon_file: windows\runner\resources\app_icon.ico
+locales:
+  - zh
+  - en
+script_template: inno_setup.sas

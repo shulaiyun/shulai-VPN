@@ -1,0 +1,81 @@
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Dart / Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+.pub-cache/
+coverage/
+build/
+build_out/
+dist/
+dist_docker/
+*.log
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/key.properties
+.cxx/
+**/.cxx/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+ios/DerivedData/
+ios/Runner.xcworkspace/xcuserdata/
+ios/Runner.xcodeproj/xcuserdata/
+
+# macOS
+macos/Pods/
+macos/.symlinks/
+macos/Flutter/ephemeral/
+macos/DerivedData/
+macos/Runner.xcodeproj/xcuserdata/
+
+# Desktop generated
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+
+# Web generated
+web/build/
+
+# Signing files / local certs
+windows/sign.pfx
+windows/sign.cer
+*.jks
+*.keystore
+*.p12
+
+# Packaging artifacts
+*.apk
+*.aab
+*.ipa
+*.appimage
+*.deb
+*.rpm
+*.msix
+*.msixbundle
+*.dmg
+*.pkg
+*-setup.exe
+*setup*.exe
+
+# Keep runtime core payloads if the app depends on them
+!hiddify-core/bin/**

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/splash_screen_background"/>
+        </shape>
+    </item>
+    <item>
+        <inset
+            android:drawable="@drawable/ic_launcher_brand"
+            android:insetLeft="34dp"
+            android:insetTop="34dp"
+            android:insetRight="34dp"
+            android:insetBottom="34dp" />
+    </item>
+</layer-list>
+

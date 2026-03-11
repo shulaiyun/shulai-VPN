@@ -1,0 +1,15 @@
+title: 树懒VPN
+background: "background.png"
+window:
+  size:
+    width: 600
+    height: 400
+contents:
+  - x: 440
+    y: 230
+    type: link
+    path: "/Applications"
+  - x: 160
+    y: 230
+    type: file
+    path: SlothVPN.app

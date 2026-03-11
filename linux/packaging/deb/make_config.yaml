@@ -1,0 +1,58 @@
+display_name: "\u6811\u61D2VPN"
+package_name: slothvpn
+maintainer:
+  name: shulaiyun
+  email: support@shulaiyun.top
+
+priority: optional
+section: x11
+installed_size: 6604
+essential: false
+icon: assets/images/source/ic_launcher_border.png
+
+# Post-installation tasks:
+# 1. Inject StartupWMClass into the system .desktop file for correct icon association
+# 2. Remove conflicting slothvpn.desktop files from users' .local directories (cleanup AppImage artifacts)
+# 3. Update the desktop database to apply changes immediately
+postinstall_scripts:
+  - echo "Setting up SlothVPN..."
+  - sudo sed -i '/^\[Desktop Entry\]/a StartupWMClass=top.shulaiyun.slothvpn' "/usr/share/applications/slothvpn.desktop"
+  - echo "Search and remove slothvpn.desktop from .local"
+  - for user_dir in /home/*; do if [ -f "$user_dir/.local/share/applications/slothvpn.desktop" ]; then rm -f "$user_dir/.local/share/applications/slothvpn.desktop"; echo "Found and removed slothvpn.desktop from $user_dir .local"; fi; done
+  - update-desktop-database /usr/share/applications
+  - echo "SlothVPN is ready to use :)"
+
+# Post-uninstallation tasks:
+# 1. Iterate through all user directories to remove SlothVPN configuration and data
+# 2. Clean up root user data to ensure a clean removal
+postuninstall_scripts:
+  - echo "Removing SlothVPN user data..."
+  - for user_dir in /home/*; do if [ -d "$user_dir/.local/share/slothvpn" ]; then rm -rf "$user_dir/.local/share/slothvpn"; echo "Removed data from $user_dir"; fi; done
+  - rm -rf /root/.local/share/slothvpn
+  - echo "SlothVPN data cleanup complete."
+
+keywords:
+  - SlothVPN
+  - Proxy
+  - VPN
+  - V2ray
+  - Xray
+
+generic_name: "\u6811\u61D2VPN"
+
+categories:
+  - Network
+
+startup_notify: true
+# app_links setup for Linux
+# https://github.com/llfbandit/app_links/blob/master/doc/README_linux.md
+supported_mime_type:
+  - x-scheme-handler/slothvpn
+  - x-scheme-handler/v2ray
+  - x-scheme-handler/v2rayn
+  - x-scheme-handler/v2rayng
+  - x-scheme-handler/clash
+  - x-scheme-handler/clashmeta
+  - x-scheme-handler/sing-box
+
+metainfo: linux/packaging/top.shulaiyun.slothvpn.appdata.xml

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>top.shulaiyun.slothvpn</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>&#x6811;&#x61D2;VPN</name>
+  <summary>Multi-protocol proxy and VPN client for Linux</summary>
+
+  <developer_name>Shulaiyun</developer_name>
+  <update_contact>support@shulaiyun.top</update_contact>
+
+  <description>
+    <p>
+      &#x6811;&#x61D2;VPN is a multi-protocol proxy and VPN client with subscription support,
+      node management, and desktop-friendly controls.
+    </p>
+    <p>
+      It supports mainstream protocols and provides a stable experience for
+      everyday secure connectivity.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">slothvpn.desktop</launchable>
+  <icon type="stock">slothvpn</icon>
+
+  <categories>
+    <category>Network</category>
+  </categories>
+
+  <keywords>
+    <keyword>SlothVPN</keyword>
+    <keyword>Proxy</keyword>
+    <keyword>VPN</keyword>
+    <keyword>V2Ray</keyword>
+    <keyword>Xray</keyword>
+    <keyword>Sing-box</keyword>
+  </keywords>
+
+  <mime-types>
+    <mime-type>x-scheme-handler/slothvpn</mime-type>
+    <mime-type>x-scheme-handler/v2ray</mime-type>
+    <mime-type>x-scheme-handler/v2rayn</mime-type>
+    <mime-type>x-scheme-handler/v2rayng</mime-type>
+    <mime-type>x-scheme-handler/clash</mime-type>
+    <mime-type>x-scheme-handler/clashmeta</mime-type>
+    <mime-type>x-scheme-handler/sing-box</mime-type>
+  </mime-types>
+
+  <url type="homepage">https://github.com/shulaiyun/shulai-VPN.git</url>
+  <url type="bugtracker">https://github.com/shulaiyun/shulai-VPN/issues</url>
+  <url type="help">https://github.com/shulaiyun/shulai-VPN.git</url>
+
+  <provides>
+    <binary>slothvpn</binary>
+  </provides>
+
+  <releases>
+    <release version="1.0.1" date="2026-03-11">
+      <description>
+        <p>Branding decoupling and desktop build preparation update.</p>
+      </description>
+    </release>
+  </releases>
+
+  <translation type="gettext">slothvpn</translation>
+
+  <custom>
+    <value key="PackageName">slothvpn</value>
+    <value key="Priority">optional</value>
+    <value key="Section">x11</value>
+    <value key="InstalledSize">6604</value>
+    <value key="Essential">false</value>
+  </custom>
+</component>

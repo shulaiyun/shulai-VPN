@@ -1,0 +1,643 @@
+{
+  "common": {
+    "appTitle": "树懒VPN",
+    "start": "Ba艧lat",
+    "version": "S眉r眉m",
+    "ok": "Tamam",
+    "cancel": "陌ptal",
+    "kContinue": "Devam et",
+    "showMore": "Daha fazla g枚ster",
+    "showLess": "Daha az g枚ster",
+    "filter": "Filtrele",
+    "all": "T眉m眉",
+    "pause": "Duraklat",
+    "resume": "Devam et",
+    "clear": "Temizle",
+    "close": "Kapat",
+    "auto": "Otomatik",
+    "manually": "Manuel",
+    "name": "陌sim",
+    "url": "URL",
+    "add": "Ekle",
+    "clipboard": "Pano",
+    "addToClipboard": "Panoya ekle",
+    "scanQr": "QR Tara",
+    "free": "脺cretsiz",
+    "warp": "WARP",
+    "fragment": "Fragment",
+    "help": "Yard谋m",
+    "save": "Kaydet",
+    "update": "G眉ncelle",
+    "share": "Payla艧",
+    "edit": "D眉zenle",
+    "delete": "Sil",
+    "discard": "Vazge莽",
+    "import": "陌莽e aktar",
+    "export": "D谋艧a aktar",
+    "later": "Daha sonra",
+    "ignore": "Yoksay",
+    "quit": "脟谋k",
+    "notSet": "Ayarlanmad谋",
+    "hide": "Gizle",
+    "exit": "脟谋k谋艧",
+    "reset": "S谋f谋rla",
+    "done": "Bitti",
+    "search": "Ara",
+    "decline": "Reddet",
+    "agree": "Kabul et",
+    "empty": "Bo艧",
+    "unknown": "Bilinmeyen",
+    "hidden": "Gizli",
+    "timeout": "Zaman a艧谋m谋",
+    "sort": "S谋rala",
+    "dashboard": "G枚sterge Paneli",
+    "interval": {
+      "day": {
+        "zero": "",
+        "one": "$n g眉n",
+        "other": "$n g眉n"
+      },
+      "hour": {
+        "zero": "",
+        "one": "$n saat",
+        "other": "$n saat"
+      }
+    },
+    "msg": {
+      "permission": {
+        "denied": "陌zin reddedildi"
+      },
+      "export": {
+        "clipboard": {
+          "success": "Panoya ba艧ar谋yla eklendi",
+          "failure": "Panoya kopyalanamad谋",
+          "contentTooLarge": "陌莽erik 莽ok b眉y眉k. Bunun yerine dosyaya aktarmay谋 kullan谋n"
+        },
+        "file": {
+          "success": "JSON dosyas谋 ba艧ar谋yla olu艧turuldu",
+          "failure": "Dosya olu艧turulamad谋"
+        }
+      },
+      "import": {
+        "confirm": "陌莽e aktarmay谋 onayla",
+        "success": "Ba艧ar谋yla i莽e aktar谋ld谋",
+        "failure": "陌莽e aktar谋lamad谋"
+      }
+    }
+  },
+  "intro": {
+    "banner": "S谋n谋rs谋z bir internet i莽in ihtiyac谋n谋z olan her 艧ey",
+    "termsAndPolicyCaution(rich)": "Devam ederek ${tap(@:pages.about.termsAndConditions)} kabul etmi艧 olursunuz",
+    "info(rich)": "Hiddify taraf谋ndan 鉂わ笍 ile yap谋ld谋 - ${tap_source(A莽谋k Kaynak)} (${tap_license(Lisans)})"
+  },
+  "pages": {
+    "home": {
+      "title": "Ana Sayfa",
+      "quickSettings": "H谋zl谋 ayarlar"
+    },
+    "proxies": {
+      "title": "Proxy'ler",
+      "sort": "Proxy'leri s谋rala",
+      "testDelay": "Gecikmeyi test et",
+      "empty": "Kullan谋labilir proxy yok",
+      "activeProxy": "Aktif proxy",
+      "unknownIp": "Bilinmeyen IP",
+      "sortOptions": {
+        "unsorted": "Varsay谋lan",
+        "name": "Alfabetik",
+        "delay": "Gecikmeye g枚re"
+      },
+      "ipInfo": {
+        "address": "IP adresi",
+        "country": "脺lke",
+        "organization": "Kurulu艧"
+      },
+      "delay": {
+        "result": "Gecikme: ${delay}ms",
+        "timeout": "Gecikme testi zaman a艧谋m谋na u臒rad谋",
+        "testing": "Gecikme: test ediliyor..."
+      }
+    },
+    "profiles": {
+      "title": "Profiller",
+      "add": "Profil ekle",
+      "update": "Profili g眉ncelle",
+      "viewAllProfiles": "T眉m profilleri g枚r眉nt眉le",
+      "activeProfileName": "Aktif profil ad谋: \"${name}\".",
+      "nonActiveProfileName": "Aktif profil olarak \"${name}\" se莽in",
+      "freeSubNotFound": "脺cretsiz abonelik bulunamad谋",
+      "freeSubNotFoundForRegion": "\"${region}\" b枚lgesi i莽in 眉cretsiz abonelik bulunamad谋",
+      "failedToLoad": "Y眉klenemedi",
+      "updateSubscriptions": "Abonelikleri g眉ncelle",
+      "share": {
+        "urlToClipboard": "URL'yi panoya kopyala",
+        "showUrlQr": "URL QR kodunu g枚ster",
+        "jsonToClipboard": "JSON'u panoya kopyala"
+      },
+      "msg": {
+        "save": {
+          "success": "Profil ba艧ar谋yla kaydedildi"
+        },
+        "invalidUrl": "Ge莽ersiz URL",
+        "add": {
+          "failure": "Profil eklenemedi"
+        },
+        "update": {
+          "success": "Profil ba艧ar谋yla g眉ncellendi",
+          "successNamed": "\"${name}\" ba艧ar谋yla g眉ncellendi",
+          "failure": "Profil g眉ncellenemedi",
+          "failureNamed": "\"${name}\" g眉ncellenemedi"
+        },
+        "delete": {
+          "success": "Profil ba艧ar谋yla silindi"
+        }
+      }
+    },
+    "profileDetails": {
+      "title": "Profil",
+      "lastUpdate": "Son g眉ncelleme",
+      "form": {
+        "nameHint": "Profil ad谋",
+        "emptyName": "陌sim gerekli",
+        "invalidUrl": "Ge莽ersiz URL",
+        "urlHint": "Tam yap谋land谋rma URL'si",
+        "disableAutoUpdate": "Otomatik g眉ncellemeyi devre d谋艧谋 b谋rak",
+        "autoUpdateInterval": "Otomatik g眉ncelleme aral谋臒谋",
+        "loading": "Profil ekleniyor..."
+      }
+    },
+    "logs": {
+      "title": "Loglar",
+      "shareCoreLogs": "脟ekirdek loglar谋n谋 payla艧",
+      "shareAppLogs": "Uygulama loglar谋n谋 payla艧"
+    },
+    "about": {
+      "title": "Hakk谋nda",
+      "notAvailableMsg": "Zaten en son s眉r眉m眉 kullan谋yorsunuz",
+      "checkForUpdate": "G眉ncellemeleri kontrol et",
+      "openWorkingDir": "脟al谋艧ma dizinini a莽",
+      "sourceCode": "Kaynak kodu",
+      "telegramChannel": "Telegram kanal谋",
+      "termsAndConditions": "艦artlar ve Ko艧ullar",
+      "privacyPolicy": "Gizlilik Politikas谋"
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "resetTunnel": "VPN profilini s谋f谋rla",
+      "options": {
+        "import": {
+          "clipboard": "Se莽enekleri panodan i莽e aktar",
+          "file": "Se莽enekleri dosyadan i莽e aktar"
+        },
+        "export": {
+          "anonymousToClipboard": "Anonim se莽enekleri panoya kopyala",
+          "anonymousToFile": "Anonim se莽enekleri dosyaya aktar",
+          "allToClipboard": "T眉m se莽enekleri panoya kopyala",
+          "allToFile": "T眉m se莽enekleri dosyaya aktar"
+        },
+        "reset": "Se莽enekleri s谋f谋rla"
+      },
+      "general": {
+        "title": "Genel",
+        "locale": "Dil",
+        "themeMode": "Tema modu",
+        "themeModes": {
+          "system": "Sistem varsay谋lan谋",
+          "dark": "Karanl谋k mod",
+          "light": "A莽谋k mod",
+          "black": "Siyah mod"
+        },
+        "enableAnalytics": "Analizi etkinle艧tir",
+        "enableAnalyticsMsg": "Uygulamay谋 iyile艧tirmek i莽in analiz ve kilitlenme raporlar谋 toplanmas谋na izin verin",
+        "autoIpCheck": "Ba臒lant谋 IP'sini otomatik kontrol et",
+        "dynamicNotification": "H谋z谋 bildirimde g枚ster",
+        "hapticFeedback": "Dokunsal geri bildirim",
+        "actionAtClosing": "Kapatma eylemi",
+        "autoStart": "Oturum a莽谋l谋艧谋nda ba艧lat",
+        "silentStart": "Simge durumunda ba艧lat",
+        "ignoreBatteryOptimizations": "Pil optimizasyonunu devre d谋艧谋 b谋rak",
+        "ignoreBatteryOptimizationsMsg": "Optimum VPN performans谋 i莽in k谋s谋tlamalar谋 kald谋r谋n",
+        "memoryLimit": "Bellek limiti",
+        "memoryLimitMsg": "Bellek yetersizli臒i hatalar谋 veya s谋k uygulama 莽枚kmeleri ya艧谋yorsan谋z etkinle艧tirin",
+        "debugMode": "Hata ay谋klama modu",
+        "debugModeMsg": "Bu de臒i艧ikli臒i uygulamak i莽in uygulamay谋 yeniden ba艧lat谋n",
+        "logLevel": "Log seviyesi",
+        "connectionTestUrl": "Ba臒lant谋 testi URL'si",
+        "urlTestInterval": "URL testi aral谋臒谋",
+        "clashApiPort": "Clash API portu",
+        "useXrayCoreWhenPossible": "M眉mk眉n oldu臒unda xray-core kullan",
+        "useXrayCoreWhenPossibleMsg": "Abonelik ba臒lant谋lar谋n谋 ayr谋艧t谋r谋rken xray-core kullan谋n. Bu se莽ene臒i etkinle艧tirmek i莽in ba臒lant谋y谋 yeniden i莽e aktarman谋z gerekir."
+      },
+      "routing": {
+        "title": "Y枚nlendirme",
+        "perAppProxy": {
+          "title": "Uygulama bazl谋 proxy",
+          "hideSysApps": "Sistem uygulamalar谋n谋 gizle",
+          "options": {
+            "import": {
+              "clipboard": "Se莽imi panodan i莽e aktar",
+              "file": "Se莽imi dosyadan i莽e aktar",
+              "msg": "陌莽e aktarma mevcut se莽imlerinizin 眉zerine yazacakt谋r. Devam etmek istedi臒inizden emin misiniz?"
+            },
+            "export": {
+              "clipboard": "Se莽imi panoya kopyala",
+              "file": "Se莽imi dosyaya aktar"
+            },
+            "shareToAll": "Herkesle payla艧",
+            "clearAllSelections": "T眉m se莽imleri temizle"
+          },
+          "modes": {
+            "all": "T眉m眉",
+            "proxy": "Proxy",
+            "bypass": "Atla",
+            "allMsg": "T眉m uygulamalar谋 proxy'le",
+            "proxyMsg": "Yaln谋zca se莽ili uygulamalar谋 proxy'le",
+            "bypassMsg": "Se莽ili uygulamalar谋 proxy'leme"
+          },
+          "autoSelection": {
+            "title": "Otomatik se莽im",
+            "performNow": "艦imdi ger莽ekle艧tir",
+            "resetToDefault": "Varsay谋lana s谋f谋rla",
+            "autoUpdateInterval": "Otomatik g眉ncelleme aral谋臒谋",
+            "toast": {
+              "success": "Otomatik uygulama se莽imi ba艧ar谋yla tamamland谋",
+              "failure": "Otomatik se莽im ba艧ar谋s谋z oldu",
+              "regionNotFound": "\"${region}\" b枚lgesi i莽in otomatik se莽im bulunamad谋",
+              "alreadyInAuto": "Se莽imleriniz zaten otomatik listede"
+            },
+            "dialog": {
+              "title": "Otomatik uygulama se莽imi",
+              "msg": "Uygulama bazl谋 proxy i莽in otomatik se莽im 枚zelli臒i, b枚lge \"${region}\" olarak de臒i艧tirildi臒i i莽in devre d谋艧谋 b谋rak谋ld谋"
+            }
+          }
+        },
+        "region": "B枚lge",
+        "regions": {
+          "ir": "陌ran (ir)",
+          "cn": "脟in (cn)",
+          "ru": "Rusya (ru)",
+          "af": "Afganistan (af)",
+          "id": "Endonezya (id)",
+          "tr": "T眉rkiye (tr)",
+          "br": "Brezilya (br)",
+          "other": "Di臒er"
+        },
+        "balancerStrategy": {
+          "title": "Balancer stratejisi",
+          "roundRobin": "Round robin",
+          "consistentHash": "Consistent hash",
+          "stickySession": "Sticky session"
+        },
+        "blockAds": "Reklamlar谋 engelle",
+        "bypassLan": "LAN'谋 atla",
+        "resolveDestination": "Hedefi 莽枚z眉mle",
+        "ipv6Route": "IPv6 rotas谋",
+        "ipv6Modes": {
+          "disable": "Devre d谋艧谋 b谋rak",
+          "enable": "Etkinle艧tir",
+          "prefer": "Tercih et",
+          "only": "Sadece"
+        },
+        "routeRule": {
+          "title": "Y枚nlendirme kurallar谋",
+          "options": {
+            "import": {
+              "clipboard": "Kurallar谋 panodan i莽e aktar",
+              "file": "Kurallar谋 dosyadan i莽e aktar"
+            },
+            "export": {
+              "clipboard": "Kurallar谋 panoya kopyala",
+              "file": "Kurallar谋 dosyaya kaydet"
+            },
+            "reset": "Kurallar谋 s谋f谋rla"
+          },
+          "deleteRule": "Kural谋 sil",
+          "createRule": "Yeni kural olu艧tur",
+          "rule": {
+            "title": "Kural",
+            "ruleChanged": "Kural de臒i艧tirildi",
+            "ruleChangedMsg": "D眉zenlemelerinizi kaydetmek istiyor musunuz?",
+            "onlyTunMode": "Yaln谋zca TUN modunda kullan谋labilir",
+            "notAvailabeInThisPlatform": "Bu platformda mevcut de臒il",
+            "canNotBeEmpty": "Bo艧 olamaz",
+            "validUrlEx": "https://example.com",
+            "validUrl": "Ge莽erli \"URL\", 枚rn.\n@:pages.settings.routing.routeRule.rule.validUrlEx",
+            "validProcessNameEx": "Chrome.exe veya google chrome veya chrome",
+            "validProcessName": "Ge莽erli \"陌艧lem Ad谋\", 枚rn.\n@:pages.settings.routing.routeRule.rule.validProcessNameEx",
+            "validProcessPathEx": "C:\\Pro...\\chrome.exe\n/App.../Google Chrome\n/usr/lib.../chrome",
+            "validProcessPath": "Ge莽erli \"陌艧lem Yolu\", 枚rn.\n@:pages.settings.routing.routeRule.rule.validProcessPathEx",
+            "validPortRangeEx": "80 veya 1-65000",
+            "validPortRange": "Ge莽erli \"Port\" veya \"Port Aral谋臒谋\", 枚rn.\n@:pages.settings.routing.routeRule.rule.validPortRangeEx",
+            "validIpCidrEx": "8.8.8.8 veya 10.0.0.0/24",
+            "validIpCidr": "Ge莽erli IP CIDR, 枚rn.\n@:pages.settings.routing.routeRule.rule.validIpCidrEx",
+            "validDomainEx": "Google.com veya dl.google.com",
+            "validDomain": "Ge莽erli \"Alan Ad谋\", 枚rn.\n@:pages.settings.routing.routeRule.rule.validDomainEx",
+            "validDomainSuffixEx": ".com veya .tr",
+            "validDomainSuffix": "Ge莽erli \"Alan Ad谋 Son Eki\", 枚rn.\n@:pages.settings.routing.routeRule.rule.validDomainSuffixEx",
+            "tileTitle(map)": {
+              "name": "陌sim",
+              "outbound": "E艧le艧irse giden",
+              "rule_set": "Kural seti URL'si",
+              "package_name": "Paket adlar谋",
+              "process_name": "陌艧lem adlar谋",
+              "process_path": "陌艧lem yollar谋",
+              "network": "A臒lar",
+              "port_range": "Hedef portlar",
+              "source_port_range": "Kaynak portlar",
+              "protocol": "Protokol",
+              "ip_cidr": "Hedef IP CIDR",
+              "source_ip_cidr": "Kaynak IP CIDR",
+              "domain": "Alan ad谋",
+              "domain_suffixe": "Alan ad谋 son eki",
+              "domain_keyword": "Alan ad谋 anahtar kelimesi",
+              "domain_regex": "Alan ad谋 regex"
+            },
+            "outbound(map)": {
+              "proxy": "Proxy",
+              "direct": "Do臒rudan",
+              "direct_with_fragment": "Do臒rudan (fragment ile)",
+              "block": "Engelle"
+            },
+            "network(map)": {
+              "all": "T眉m眉",
+              "tcp": "TCP",
+              "udp": "UDP"
+            },
+            "protocol(map)": {
+              "": "T眉m眉",
+              "tls": "TLS",
+              "http": "HTTP",
+              "quic": "QUIC",
+              "stun": "STUN",
+              "dns": "DNS",
+              "bittorrent": "BitTorrent"
+            }
+          },
+          "genericList": {
+            "addNew": "Yeni de臒er ekle",
+            "update": "De臒eri g眉ncelle",
+            "clearList": "Listeyi temizle",
+            "clearListMsg": "T眉m 枚臒eler silindi"
+          },
+          "androidApps": {
+            "pageTitle": "Android uygulamalar谋",
+            "showSystemApps": "Sistem uygulamalar谋n谋 g枚ster",
+            "hideSystemApps": "Sistem uygulamalar谋n谋 gizle",
+            "clearSelection": "Se莽imi temizle",
+            "uninstalled": "Kald谋r谋ld谋"
+          }
+        }
+      },
+      "dns": {
+        "title": "DNS",
+        "remoteDns": "Uzak DNS",
+        "remoteDnsDomainStrategy": "Uzak DNS alan ad谋 stratejisi",
+        "directDns": "Giden sunucu 莽枚z眉mleyicisi (do臒rudan)",
+        "directDnsDomainStrategy": "Giden alan ad谋 stratejisi",
+        "enableDnsRouting": "DNS y枚nlendirmeyi etkinle艧tir",
+        "enableFakeDns": "Sahte DNS'i etkinle艧tir",
+        "domainStrategy": {
+          "auto": "Otomatik",
+          "preferIpv6": "IPv6 tercih et",
+          "preferIpv4": "IPv4 tercih et",
+          "ipv4Only": "Sadece IPv4",
+          "ipv6Only": "Sadece IPv6"
+        }
+      },
+      "inbound": {
+        "title": "Gelen",
+        "serviceMode": "Servis modu",
+        "serviceModes": {
+          "proxy": "Yaln谋zca proxy servisi",
+          "systemProxy": "Sistem proxy'sini ayarla",
+          "tun": "VPN",
+          "tunService": "VPN servisi"
+        },
+        "shortServiceModes": {
+          "proxy": "Proxy",
+          "systemProxy": "Sistem proxy'si",
+          "tun": "VPN",
+          "tunService": "VPN servisi"
+        },
+        "strictRoute": "Kat谋 y枚nlendirme",
+        "tunImplementation": "TUN uygulamas谋",
+        "tunImplementations": {
+          "mixed": "Kar谋艧谋k",
+          "system": "Sistem",
+          "gvisor": "gVisor"
+        },
+        "mixedPort": "Kar谋艧谋k port",
+        "tproxyPort": "艦effaf proxy portu",
+        "directPort": "Direct portu",
+        "redirectPort": "Y枚nlendirme portu",
+        "allowConnectionFromLan": "VPN'i yerel a臒da payla艧"
+      },
+      "tlsTricks": {
+        "title": "TLS hileleri",
+        "enable": "Fragment'谋 etkinle艧tir",
+        "packets": "Fragmentation Paketleri",
+        "packetsTlsHello": "TLS Hello",
+        "packets1_1": "1-1",
+        "packets1_2": "1-2",
+        "packets1_3": "1-3",
+        "packets1_4": "1-4",
+        "packets1_5": "1-5",
+        "size": "Fragment boyutu",
+        "sleep": "Fragment gecikmesi",
+        "mixedSniCase": {
+          "enable": "Kar谋艧谋k SNI harf durumunu etkinle艧tir"
+        },
+        "padding": {
+          "enable": "Dolguyu etkinle艧tir",
+          "size": "Dolgu boyutu"
+        }
+      },
+      "warp": {
+        "title": "WARP",
+        "enable": "WARP'谋 etkinle艧tir",
+        "generateConfig": "WARP yap谋land谋rmas谋 olu艧tur",
+        "configGenerated": "WARP yap谋land谋rmas谋 olu艧turuldu",
+        "missingConfig": "WARP yap谋land谋rmas谋 eksik",
+        "detourMode": "Y枚nlendirme modu",
+        "detourModes": {
+          "proxyOverWarp": "Proxy'leri WARP 眉zerinden y枚nlendir",
+          "warpOverProxy": "WARP'谋 proxy'ler 眉zerinden y枚nlendir",
+          "proxyOverWarpExplain": "Proxy'lerin engelini WARP ile kald谋r",
+          "warpOverProxyExplain": "WARP ile ekstra g眉venlik"
+        },
+        "licenseKey": "Lisans anahtar谋",
+        "cleanIp": "Temiz IP",
+        "port": "Port",
+        "noise": {
+          "count": "G眉r眉lt眉 say谋s谋",
+          "mode": "G眉r眉lt眉 modu",
+          "size": "G眉r眉lt眉 boyutu",
+          "delay": "G眉r眉lt眉 gecikmesi"
+        }
+      }
+    }
+  },
+  "components": {
+    "stats": {
+      "connection": "Ba臒lant谋",
+      "traffic": "Trafik",
+      "trafficLive": "Canl谋 trafik",
+      "trafficTotal": "Toplam trafik",
+      "uplink": "Y眉kleme",
+      "downlink": "陌ndirme",
+      "speed": "H谋z",
+      "totalTransferred": "Toplam aktar谋lan"
+    },
+    "subscriptionInfo": {
+      "upload": "Y眉kleme",
+      "download": "陌ndirme",
+      "total": "Toplam trafik",
+      "expireDate": "Biti艧 tarihi",
+      "expired": "S眉resi doldu",
+      "noTraffic": "Kota doldu",
+      "remainingTime": "Kalan s眉re",
+      "remainingDuration": "kalan ${duration} g眉n",
+      "remainingDurationNew": "${duration} g眉n",
+      "remainingTrafficSemanticLabel": "${consumed} / ${total} trafik kullan谋ld谋",
+      "remainingTraffic": "Kalan trafik",
+      "remainingUsage": "Kalan",
+      "profileSite": "Sa臒lay谋c谋",
+      "profileSupport": "Destek"
+    }
+  },
+  "dialogs": {
+    "sortProfiles": {
+      "title": "S谋ralama 枚l莽眉t眉",
+      "sort": {
+        "name": "Alfabetik",
+        "lastUpdate": "Son g眉ncelleme"
+      }
+    },
+    "warpLicense": {
+      "title": "Cloudflare WARP onay谋",
+      "description(rich)": "Cloudflare WARP 眉cretsiz bir WireGuard VPN sa臒lay谋c谋s谋d谋r. Bu se莽ene臒i etkinle艧tirerek Cloudflare WARP'谋n ${tos(Hizmet 艦artlar谋)}'n谋 ve ${privacy(Gizlilik Politikas谋)}'n谋 kabul etmi艧 olursunuz."
+    },
+    "newVersion": {
+      "title": "G眉ncelleme mevcut",
+      "msg": "@:common.appTitle'谋n yeni bir s眉r眉m眉 mevcut. 艦imdi g眉ncellemek ister misiniz?",
+      "currentVersion": "Mevcut s眉r眉m: ",
+      "newVersion": "Yeni s眉r眉m: ",
+      "updateNow": "艦imdi g眉ncelle"
+    },
+    "confirmation": {
+      "settings": {
+        "import": {
+          "msg": "Bu i艧lem t眉m yap谋land谋rma se莽eneklerini verilen de臒erlerle yeniden yazacakt谋r. Emin misiniz?"
+        }
+      },
+      "profile": {
+        "delete": {
+          "title": "Profili sil",
+          "msg": "Bu profili kal谋c谋 olarak silmek istedi臒inizden emin misiniz?"
+        }
+      },
+      "perAppProxy": {
+        "shareOnGithub": {
+          "title": "Otomatik se莽imi iyile艧tirme",
+          "msg": "Se莽ili uygulamalar谋 payla艧arak \"otomatik se莽im\" listesini tamamlamaya yard谋mc谋 olursunuz"
+        },
+        "import": {
+          "msg": "Bu i艧lem mevcut t眉m uygulama bazl谋 proxy se莽imlerinizi de臒i艧tirecektir. Devam etmek istedi臒inizden emin misiniz?"
+        }
+      },
+      "routeRule": {
+        "delete": {
+          "title": "Kural谋 sil",
+          "msg": "\"$rulename\" kural谋n谋 silmek istedi臒inizden emin misiniz?"
+        }
+      }
+    },
+    "experimentalNotice": {
+      "title": "Deneysel 枚zellikler kullan谋l谋yor",
+      "msg": "Ba臒lant谋 kalitesini etkileyebilecek ve beklenmedik hatalara neden olabilecek baz谋 deneysel 枚zellikleri etkinle艧tirdiniz. Bu se莽enekleri istedi臒iniz zaman yap谋land谋rma sayfas谋ndan de臒i艧tirebilir veya s谋f谋rlayabilirsiniz.",
+      "disable": "Tekrar g枚sterme"
+    },
+    "noActiveProfile": {
+      "title": "Bir profil se莽in",
+      "msg": "VPN ba臒lant谋 ayr谋nt谋lar谋n谋z谋 i莽eren bir ba臒lant谋 profili ekleyerek ba艧layal谋m.\n\nHen眉z bir VPN sunucunuz yok mu? Endi艧elenmeyin, h谋zl谋 ve 眉cretsiz bir 艧ekilde kurmak i莽in a艧a臒谋daki e臒itimi takip edin.",
+      "helpBtn": {
+        "label": "Nas谋l yap谋ld谋臒谋n谋 g枚ster",
+        "url": "https://github.com/shulaiyun/shulai-VPN.git"
+      }
+    },
+    "unknownDomainsWarning": {
+      "title": "D谋艧 ba臒lant谋 uyar谋s谋",
+      "youAreAboutToVisit": "艦u adresi ziyaret etmek 眉zeresiniz:",
+      "thisWebsiteIsNotInOurTrustedList": "Bu web sitesi g眉venilir listemizde de臒il. L眉tfen dikkatli devam edin."
+    },
+    "proxyInfo": {
+      "fullTag": "Tam etiket:",
+      "type": "T眉r:",
+      "testTime": "Test zaman谋:",
+      "testDelay": "Test gecikmesi:",
+      "isSelected": "Se莽ili:",
+      "isGroup": "Grup",
+      "isSecure": "G眉venli:",
+      "port": "Port:",
+      "host": "Sunucu:",
+      "ip": "IP:",
+      "countryCode": "脺lke kodu:",
+      "region": "B枚lge:",
+      "city": "艦ehir:",
+      "asn": "ASN:",
+      "organization": "Kurulu艧:",
+      "location": "Konum:",
+      "postalCode": "Posta kodu:"
+    },
+    "windowClosing": {
+      "askEachTime": "Her seferinde sor",
+      "alertMessage": "Uygulama gizlensin mi, kapat谋ls谋n m谋?",
+      "remember": "Se莽imimi hat谋rla"
+    }
+  },
+  "connection": {
+    "tapToConnect": "Ba臒lanmak i莽in dokunun",
+    "connect": "Ba臒lan",
+    "connecting": "Ba臒lan谋yor...",
+    "connected": "Ba臒l谋",
+    "disconnect": "Ba臒lant谋y谋 kes",
+    "disconnecting": "Ba臒lant谋 kesiliyor...",
+    "reconnect": "Yeniden ba臒lan",
+    "reconnectMsg": "De臒i艧iklikleri uygulamak i莽in yeniden ba臒lan谋l谋yor...",
+    "secure": "WARP ile g眉vende"
+  },
+  "errors": {
+    "unexpected": "Beklenmeyen hata",
+    "connection": {
+      "unexpected": "Beklenmeyen ba臒lant谋 hatas谋",
+      "timeout": "Ba臒lant谋 zaman a艧谋m谋na u臒rad谋",
+      "badResponse": "Hatal谋 yan谋t",
+      "connectionError": "Ba臒lant谋 hatas谋",
+      "badCertificate": "Ge莽ersiz sertifika"
+    },
+    "profiles": {
+      "unexpected": "Beklenmeyen hata",
+      "notFound": "Profil bulunamad谋",
+      "invalidConfig": "Ge莽ersiz yap谋land谋rmalar",
+      "invalidUrl": "Ge莽ersiz URL",
+      "canceledByUser": "Kullan谋c谋 taraf谋ndan iptal edildi"
+    },
+    "connectivity": {
+      "unexpected": "Beklenmeyen hata",
+      "missingVpnPermission": "VPN izni eksik",
+      "missingNotificationPermission": "Bildirim izni eksik",
+      "core": "脟ekirdek hatas谋"
+    },
+    "singbox": {
+      "serviceNotRunning": "Servis 莽al谋艧m谋yor",
+      "missingPrivilege": "Eksik yetki",
+      "missingPrivilegeMsg": "VPN modu y枚netici yetkisi gerektirir. L眉tfen uygulamay谋 y枚netici olarak yeniden ba艧lat谋n veya servis modunu de臒i艧tirin.",
+      "invalidConfigOptions": "Ge莽ersiz yap谋land谋rma se莽enekleri",
+      "invalidConfig": "Ge莽ersiz yap谋land谋rma"
+    },
+    "warp": {
+      "missingLicense": "WARP lisans谋 eksik",
+      "missingLicenseMsg": "Se莽ili profil WARP 枚zelli臒ini kullan谋yor. Bu 枚zelli臒i kullanmak i莽in WARP lisans谋n谋 kabul etmeniz gerekir."
+    }
+  }
+}

@@ -1,0 +1,51 @@
+display_name: "\u6811\u61D2VPN"
+
+icon: assets/images/source/ic_launcher_border.png
+
+keywords:
+  - SlothVPN
+  - Proxy
+  - VPN
+  - V2ray
+  - Xray
+
+generic_name: "\u6811\u61D2VPN"
+
+actions:
+  - name: Start
+    label: start
+    arguments:
+      - --start
+  - name: Stop
+    label: stop
+    arguments:
+      - --stop
+
+categories:
+  - Network
+
+startup_notify: true
+
+# app_links setup for Linux
+# https://github.com/llfbandit/app_links/blob/master/doc/README_linux.md
+supported_mime_type:
+  - x-scheme-handler/slothvpn
+  - x-scheme-handler/v2ray
+  - x-scheme-handler/v2rayn
+  - x-scheme-handler/v2rayng
+  - x-scheme-handler/clash
+  - x-scheme-handler/clashmeta
+  - x-scheme-handler/sing-box
+
+# You can specify the shared libraries that you want to bundle with your app
+#
+# flutter_distributor automatically detects the shared libraries that your app
+# depends on, but you can also specify them manually here.
+#
+# The following example shows how to bundle the libcurl library with your app.
+#
+# include:
+#   - libcurl.so.4
+include: []
+
+metainfo: linux/packaging/top.shulaiyun.slothvpn.appdata.xml

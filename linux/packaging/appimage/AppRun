@@ -1,0 +1,114 @@
+﻿#!/bin/bash
+
+cd "$(dirname "$0")"
+export LD_LIBRARY_PATH=usr/lib
+
+# Handles desktop integration:
+# 1. Copies app icons to ~/.local/share/icons
+# 2. Ensures icon theme index exists
+# 3. Creates a .desktop file pointing to this AppImage
+# 4. Skips if a system-wide installation (/usr/share/applications) is detected
+install_integration() {
+    if [[ -z "$APPIMAGE" ]]; then
+        return
+    fi
+
+    REAL_HOME=$(getent passwd "$USER" | cut -d: -f6)
+    
+    if [ -z "$REAL_HOME" ]; then
+        REAL_HOME="$HOME"
+    fi
+
+    APP_NAME="slothvpn"
+    TARGET_DESKTOP="$REAL_HOME/.local/share/applications/slothvpn.desktop"
+    LOCAL_HICOLOR="$REAL_HOME/.local/share/icons/hicolor"
+    
+    if [ ! -f "$LOCAL_HICOLOR/index.theme" ]; then
+        mkdir -p "$LOCAL_HICOLOR"
+        if [ -f "/usr/share/icons/hicolor/index.theme" ]; then
+            cp "/usr/share/icons/hicolor/index.theme" "$LOCAL_HICOLOR/"
+        else
+            echo -e "[Icon Theme]\nName=Hicolor\nDirectories=128x128/apps,256x256/apps" > "$LOCAL_HICOLOR/index.theme"
+        fi
+    fi
+
+    if [[ -f "./slothvpn.png" ]]; then
+
+        mkdir -p "$LOCAL_HICOLOR/128x128/apps"
+        cp "./slothvpn.png" "$LOCAL_HICOLOR/128x128/apps/slothvpn.png"
+        
+        mkdir -p "$LOCAL_HICOLOR/256x256/apps"
+        cp "./slothvpn.png" "$LOCAL_HICOLOR/256x256/apps/slothvpn.png"
+        
+        gtk-update-icon-cache -f -t "$LOCAL_HICOLOR" 2>/dev/null || true
+    fi
+
+    if [ -f "/usr/share/applications/slothvpn.desktop" ]; then
+        return
+    fi
+
+    mkdir -p "$(dirname "$TARGET_DESKTOP")"
+
+    cat > "$TARGET_DESKTOP" <<EOF
+[Desktop Entry]
+Type=Application
+Name=SlothVPN
+Exec="$APPIMAGE"
+Icon=slothvpn
+Terminal=false
+StartupWMClass=top.shulaiyun.slothvpn
+EOF
+
+    chmod +x "$TARGET_DESKTOP"
+    update-desktop-database "$REAL_HOME/.local/share/applications" 2>/dev/null || true
+}
+
+# Usage info
+show_help() {
+cat << EOF
+Usage: ${0##*/} ...
+start SlothVPN or SlothVPNCli, when no parameter is given, SlothVPN is executed.
+    -v              show version
+EOF
+}
+show_version() {
+    printf "SlothVPN version "
+    jq .version <./data/flutter_assets/version.json
+}
+# Initialize variables:
+service=0 #declare -i service
+OPTIND=1
+
+# Resetting OPTIND is necessary if getopts was used previously in the script.
+# It is a good idea to make OPTIND local if you process options in a function.
+
+# if no arg is provided, execute slothvpn app
+if [[ $# == 0 ]];then 
+    install_integration
+    exec ./slothvpn
+else
+
+# processing arguments
+
+    case $1 in
+        SlothVPNCli)
+            exec ./SlothVPNCli ${@:3}
+            exit 0
+            ;;
+        h)
+            show_help
+            exit 0
+            ;;
+        v)  show_version
+            exit 0
+            ;;
+        *)
+            show_help >&2
+            exit 1
+            ;;
+    esac
+
+
+
+fi
+

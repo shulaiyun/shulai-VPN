@@ -1,0 +1,2980 @@
+﻿///
+/// Generated file. Do not edit.
+///
+// coverage:ignore-file
+// ignore_for_file: type=lint, unused_import
+
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:slang/generated.dart';
+import 'translations.g.dart';
+
+// Path: <root>
+class TranslationsZhCn extends Translations {
+  /// You can call this constructor and build your own translation instance of this locale.
+  /// Constructing via the enum [AppLocale.build] is preferred.
+  TranslationsZhCn({
+    Map<String, Node>? overrides,
+    PluralResolver? cardinalResolver,
+    PluralResolver? ordinalResolver,
+    TranslationMetadata<AppLocale, Translations>? meta,
+  }) : assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
+       $meta =
+           meta ??
+           TranslationMetadata(
+             locale: AppLocale.zhCn,
+             overrides: overrides ?? {},
+             cardinalResolver: cardinalResolver,
+             ordinalResolver: ordinalResolver,
+           ),
+       super(cardinalResolver: cardinalResolver, ordinalResolver: ordinalResolver) {
+    super.$meta.setFlatMapFunction($meta.getTranslation); // copy base translations to super.$meta
+    $meta.setFlatMapFunction(_flatMapFunction);
+  }
+
+  /// Metadata for the translations of <ar>.
+  @override
+  final TranslationMetadata<AppLocale, Translations> $meta;
+
+  /// Access flat map
+  @override
+  dynamic operator [](String key) => $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
+
+  late final TranslationsZhCn _root = this; // ignore: unused_field
+
+  @override
+  TranslationsZhCn $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) =>
+      TranslationsZhCn(meta: meta ?? this.$meta);
+
+  // Translations
+  @override
+  late final TranslationsCommonZhCn common = TranslationsCommonZhCn._(_root);
+  @override
+  late final TranslationsIntroZhCn intro = TranslationsIntroZhCn._(_root);
+  @override
+  late final TranslationsPagesZhCn pages = TranslationsPagesZhCn._(_root);
+  @override
+  late final TranslationsComponentsZhCn components = TranslationsComponentsZhCn._(_root);
+  @override
+  late final TranslationsDialogsZhCn dialogs = TranslationsDialogsZhCn._(_root);
+  @override
+  late final TranslationsConnectionZhCn connection = TranslationsConnectionZhCn._(_root);
+  @override
+  late final TranslationsErrorsZhCn errors = TranslationsErrorsZhCn._(_root);
+}
+
+// Path: common
+class TranslationsCommonZhCn extends TranslationsCommonEn {
+  TranslationsCommonZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get appTitle => '鏍戞噿VPN';
+  @override
+  String get start => '寮€濮?;
+  @override
+  String get version => '鐗堟湰';
+  @override
+  String get ok => '纭畾';
+  @override
+  String get cancel => '鍙栨秷';
+  @override
+  String get kContinue => '缁х画';
+  @override
+  String get showMore => '鏄剧ず鏇村';
+  @override
+  String get showLess => '鏄剧ず鏇村皯';
+  @override
+  String get filter => '绛涢€?;
+  @override
+  String get all => '鍏ㄩ儴';
+  @override
+  String get pause => '鏆傚仠';
+  @override
+  String get resume => '鎭㈠';
+  @override
+  String get clear => '娓呴櫎';
+  @override
+  String get close => '鍏抽棴';
+  @override
+  String get auto => '鑷姩';
+  @override
+  String get manually => '鎵嬪姩';
+  @override
+  String get name => '鍚嶇О';
+  @override
+  String get url => 'URL';
+  @override
+  String get add => '娣诲姞';
+  @override
+  String get clipboard => '鍓创鏉?;
+  @override
+  String get addToClipboard => '娣诲姞鍒板壀璐存澘';
+  @override
+  String get scanQr => '鎵弿浜岀淮鐮?;
+  @override
+  String get free => '鍏嶈垂';
+  @override
+  String get warp => 'WARP';
+  @override
+  String get fragment => 'Fragment';
+  @override
+  String get help => '甯姪';
+  @override
+  String get save => '淇濆瓨';
+  @override
+  String get update => '鏇存柊';
+  @override
+  String get share => '鍒嗕韩';
+  @override
+  String get edit => '缂栬緫';
+  @override
+  String get delete => '鍒犻櫎';
+  @override
+  String get discard => '鏀惧純';
+  @override
+  String get import => '瀵煎叆';
+  @override
+  String get export => '瀵煎嚭';
+  @override
+  String get later => '绋嶅悗';
+  @override
+  String get ignore => '蹇界暐';
+  @override
+  String get quit => '閫€鍑?;
+  @override
+  String get notSet => '鏈缃?;
+  @override
+  String get hide => '闅愯棌';
+  @override
+  String get exit => '閫€鍑?;
+  @override
+  String get reset => '閲嶇疆';
+  @override
+  String get done => '瀹屾垚';
+  @override
+  String get search => '鎼滅储';
+  @override
+  String get decline => '鎷掔粷';
+  @override
+  String get agree => '鍚屾剰';
+  @override
+  String get empty => '绌?;
+  @override
+  String get unknown => '鏈煡';
+  @override
+  String get hidden => '闅愯棌';
+  @override
+  String get timeout => '瓒呮椂';
+  @override
+  String get sort => '鎺掑簭';
+  @override
+  String get dashboard => '浠〃鐩?;
+  @override
+  late final TranslationsCommonIntervalZhCn interval = TranslationsCommonIntervalZhCn._(_root);
+  @override
+  late final TranslationsCommonMsgZhCn msg = TranslationsCommonMsgZhCn._(_root);
+}
+
+// Path: intro
+class TranslationsIntroZhCn extends TranslationsIntroEn {
+  TranslationsIntroZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get banner => '鐣呬韩鏃犻檺鍒剁綉缁滅殑鎵€闇€涓€鍒?;
+  @override
+  TextSpan termsAndPolicyCaution({required InlineSpanBuilder tap}) => TextSpan(
+    children: [
+      const TextSpan(text: '亘丕賱丕爻鬲賲乇丕乇貙 兀賳鬲 鬲賵丕賮賯 毓賱賶 '),
+      tap(_root.pages.about.termsAndConditions),
+    ],
+  );
+  @override
+  TextSpan info({required InlineSpanBuilder tap_source, required InlineSpanBuilder tap_license}) => TextSpan(
+    children: [
+      const TextSpan(text: '氐購賳毓 亘賭 鉂わ笍 亘賵丕爻胤丞 Hiddify - '),
+      tap_source('賲賮鬲賵丨 丕賱賲氐丿乇'),
+      const TextSpan(text: ' ('),
+      tap_license('丕賱乇禺氐丞'),
+      const TextSpan(text: ')'),
+    ],
+  );
+}
+
+// Path: pages
+class TranslationsPagesZhCn extends TranslationsPagesEn {
+  TranslationsPagesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsPagesHomeZhCn home = TranslationsPagesHomeZhCn._(_root);
+  @override
+  late final TranslationsPagesProxiesZhCn proxies = TranslationsPagesProxiesZhCn._(_root);
+  @override
+  late final TranslationsPagesProfilesZhCn profiles = TranslationsPagesProfilesZhCn._(_root);
+  @override
+  late final TranslationsPagesProfileDetailsZhCn profileDetails = TranslationsPagesProfileDetailsZhCn._(_root);
+  @override
+  late final TranslationsPagesLogsZhCn logs = TranslationsPagesLogsZhCn._(_root);
+  @override
+  late final TranslationsPagesAboutZhCn about = TranslationsPagesAboutZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsZhCn settings = TranslationsPagesSettingsZhCn._(_root);
+}
+
+// Path: components
+class TranslationsComponentsZhCn extends TranslationsComponentsEn {
+  TranslationsComponentsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsComponentsStatsZhCn stats = TranslationsComponentsStatsZhCn._(_root);
+  @override
+  late final TranslationsComponentsSubscriptionInfoZhCn subscriptionInfo = TranslationsComponentsSubscriptionInfoZhCn._(
+    _root,
+  );
+}
+
+// Path: dialogs
+class TranslationsDialogsZhCn extends TranslationsDialogsEn {
+  TranslationsDialogsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsDialogsSortProfilesZhCn sortProfiles = TranslationsDialogsSortProfilesZhCn._(_root);
+  @override
+  late final TranslationsDialogsWarpLicenseZhCn warpLicense = TranslationsDialogsWarpLicenseZhCn._(_root);
+  @override
+  late final TranslationsDialogsNewVersionZhCn newVersion = TranslationsDialogsNewVersionZhCn._(_root);
+  @override
+  late final TranslationsDialogsConfirmationZhCn confirmation = TranslationsDialogsConfirmationZhCn._(_root);
+  @override
+  late final TranslationsDialogsExperimentalNoticeZhCn experimentalNotice = TranslationsDialogsExperimentalNoticeZhCn._(
+    _root,
+  );
+  @override
+  late final TranslationsDialogsNoActiveProfileZhCn noActiveProfile = TranslationsDialogsNoActiveProfileZhCn._(_root);
+  @override
+  late final TranslationsDialogsUnknownDomainsWarningZhCn unknownDomainsWarning =
+      TranslationsDialogsUnknownDomainsWarningZhCn._(_root);
+  @override
+  late final TranslationsDialogsProxyInfoZhCn proxyInfo = TranslationsDialogsProxyInfoZhCn._(_root);
+  @override
+  late final TranslationsDialogsWindowClosingZhCn windowClosing = TranslationsDialogsWindowClosingZhCn._(_root);
+}
+
+// Path: connection
+class TranslationsConnectionZhCn extends TranslationsConnectionEn {
+  TranslationsConnectionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get tapToConnect => '鐐瑰嚮杩炴帴';
+  @override
+  String get connect => '杩炴帴';
+  @override
+  String get connecting => '杩炴帴涓?..';
+  @override
+  String get connected => '宸茶繛鎺?;
+  @override
+  String get disconnect => '鏂紑杩炴帴';
+  @override
+  String get disconnecting => '鏂紑杩炴帴涓?..';
+  @override
+  String get reconnect => '閲嶆柊杩炴帴';
+  @override
+  String get reconnectMsg => '姝ｅ湪閲嶆柊杩炴帴浠ュ簲鐢ㄦ洿鏀?..';
+  @override
+  String get secure => '鐢?WARP 淇濇姢';
+}
+
+// Path: errors
+class TranslationsErrorsZhCn extends TranslationsErrorsEn {
+  TranslationsErrorsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get unexpected => '鎰忓閿欒';
+  @override
+  late final TranslationsErrorsConnectionZhCn connection = TranslationsErrorsConnectionZhCn._(_root);
+  @override
+  late final TranslationsErrorsProfilesZhCn profiles = TranslationsErrorsProfilesZhCn._(_root);
+  @override
+  late final TranslationsErrorsConnectivityZhCn connectivity = TranslationsErrorsConnectivityZhCn._(_root);
+  @override
+  late final TranslationsErrorsSingboxZhCn singbox = TranslationsErrorsSingboxZhCn._(_root);
+  @override
+  late final TranslationsErrorsWarpZhCn warp = TranslationsErrorsWarpZhCn._(_root);
+}
+
+// Path: common.interval
+class TranslationsCommonIntervalZhCn extends TranslationsCommonIntervalEn {
+  TranslationsCommonIntervalZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String day({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
+    n,
+    zero: '',
+    one: '賷賵賲 賵丕丨丿',
+    two: '賷賵賲丕賳',
+    few: '${n} 兀賷丕賲',
+    many: '${n} 賷賵賲賸丕',
+    other: '${n} 賷賵賲',
+  );
+  @override
+  String hour({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
+    n,
+    zero: '',
+    one: '爻丕毓丞 賵丕丨丿丞',
+    two: '爻丕毓鬲丕賳',
+    few: '${n} 爻丕毓丕鬲',
+    many: '${n} 爻丕毓丞',
+    other: '${n} 爻丕毓丞',
+  );
+}
+
+// Path: common.msg
+class TranslationsCommonMsgZhCn extends TranslationsCommonMsgEn {
+  TranslationsCommonMsgZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsCommonMsgPermissionZhCn permission = TranslationsCommonMsgPermissionZhCn._(_root);
+  @override
+  late final TranslationsCommonMsgExportZhCn export = TranslationsCommonMsgExportZhCn._(_root);
+  @override
+  late final TranslationsCommonMsgImportZhCn import = TranslationsCommonMsgImportZhCn._(_root);
+}
+
+// Path: pages.home
+class TranslationsPagesHomeZhCn extends TranslationsPagesHomeEn {
+  TranslationsPagesHomeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '涓婚〉';
+  @override
+  String get quickSettings => '蹇€熻缃?;
+}
+
+// Path: pages.proxies
+class TranslationsPagesProxiesZhCn extends TranslationsPagesProxiesEn {
+  TranslationsPagesProxiesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '浠ｇ悊';
+  @override
+  String get sort => '鎺掑簭浠ｇ悊';
+  @override
+  String get testDelay => '娴嬭瘯寤惰繜';
+  @override
+  String get empty => '鏃犲彲鐢ㄤ唬鐞?;
+  @override
+  String get activeProxy => '褰撳墠浠ｇ悊';
+  @override
+  String get unknownIp => '鏈煡 IP';
+  @override
+  late final TranslationsPagesProxiesSortOptionsZhCn sortOptions = TranslationsPagesProxiesSortOptionsZhCn._(_root);
+  @override
+  late final TranslationsPagesProxiesIpInfoZhCn ipInfo = TranslationsPagesProxiesIpInfoZhCn._(_root);
+  @override
+  late final TranslationsPagesProxiesDelayZhCn delay = TranslationsPagesProxiesDelayZhCn._(_root);
+}
+
+// Path: pages.profiles
+class TranslationsPagesProfilesZhCn extends TranslationsPagesProfilesEn {
+  TranslationsPagesProfilesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '閰嶇疆鏂囦欢';
+  @override
+  String get add => '娣诲姞閰嶇疆鏂囦欢';
+  @override
+  String get update => '鏇存柊閰嶇疆鏂囦欢';
+  @override
+  String get viewAllProfiles => '鏌ョ湅鎵€鏈夐厤缃枃浠?;
+  @override
+  String activeProfileName({required Object name}) => '褰撳墠閰嶇疆鏂囦欢锛?${name}"';
+  @override
+  String nonActiveProfileName({required Object name}) => '閫夋嫨 "${name}" 浣滀负褰撳墠閰嶇疆鏂囦欢';
+  @override
+  String get freeSubNotFound => '鏈壘鍒板厤璐硅闃?;
+  @override
+  String freeSubNotFoundForRegion({required Object region}) => '鏈壘鍒?"${region}" 鍦板尯鐨勫厤璐硅闃?;
+  @override
+  String get failedToLoad => '鍔犺浇澶辫触';
+  @override
+  String get updateSubscriptions => '鏇存柊璁㈤槄';
+  @override
+  late final TranslationsPagesProfilesShareZhCn share = TranslationsPagesProfilesShareZhCn._(_root);
+  @override
+  late final TranslationsPagesProfilesMsgZhCn msg = TranslationsPagesProfilesMsgZhCn._(_root);
+}
+
+// Path: pages.profileDetails
+class TranslationsPagesProfileDetailsZhCn extends TranslationsPagesProfileDetailsEn {
+  TranslationsPagesProfileDetailsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '閰嶇疆鏂囦欢';
+  @override
+  String get lastUpdate => '鏈€鍚庢洿鏂?;
+  @override
+  late final TranslationsPagesProfileDetailsFormZhCn form = TranslationsPagesProfileDetailsFormZhCn._(_root);
+}
+
+// Path: pages.logs
+class TranslationsPagesLogsZhCn extends TranslationsPagesLogsEn {
+  TranslationsPagesLogsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鏃ュ織';
+  @override
+  String get shareCoreLogs => '鍒嗕韩鏍稿績鏃ュ織';
+  @override
+  String get shareAppLogs => '鍒嗕韩搴旂敤鏃ュ織';
+}
+
+// Path: pages.about
+class TranslationsPagesAboutZhCn extends TranslationsPagesAboutEn {
+  TranslationsPagesAboutZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鍏充簬';
+  @override
+  String get notAvailableMsg => '宸叉槸鏈€鏂扮増鏈?;
+  @override
+  String get checkForUpdate => '妫€鏌ユ洿鏂?;
+  @override
+  String get openWorkingDir => '鎵撳紑宸ヤ綔鐩綍';
+  @override
+  String get sourceCode => '婧愪唬鐮?;
+  @override
+  String get telegramChannel => 'Telegram 棰戦亾';
+  @override
+  String get termsAndConditions => '鏉℃涓庢潯浠?;
+  @override
+  String get privacyPolicy => '闅愮鏀跨瓥';
+}
+
+// Path: pages.settings
+class TranslationsPagesSettingsZhCn extends TranslationsPagesSettingsEn {
+  TranslationsPagesSettingsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '璁剧疆';
+  @override
+  String get resetTunnel => '閲嶇疆 VPN 閰嶇疆鏂囦欢';
+  @override
+  late final TranslationsPagesSettingsOptionsZhCn options = TranslationsPagesSettingsOptionsZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsGeneralZhCn general = TranslationsPagesSettingsGeneralZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingZhCn routing = TranslationsPagesSettingsRoutingZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsDnsZhCn dns = TranslationsPagesSettingsDnsZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsInboundZhCn inbound = TranslationsPagesSettingsInboundZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsTlsTricksZhCn tlsTricks = TranslationsPagesSettingsTlsTricksZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsWarpZhCn warp = TranslationsPagesSettingsWarpZhCn._(_root);
+}
+
+// Path: components.stats
+class TranslationsComponentsStatsZhCn extends TranslationsComponentsStatsEn {
+  TranslationsComponentsStatsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get connection => '杩炴帴';
+  @override
+  String get traffic => '娴侀噺';
+  @override
+  String get trafficLive => '瀹炴椂娴侀噺';
+  @override
+  String get trafficTotal => '鎬绘祦閲?;
+  @override
+  String get uplink => '涓婁紶';
+  @override
+  String get downlink => '涓嬭浇';
+  @override
+  String get speed => '閫熷害';
+  @override
+  String get totalTransferred => '鎬讳紶杈撻噺';
+}
+
+// Path: components.subscriptionInfo
+class TranslationsComponentsSubscriptionInfoZhCn extends TranslationsComponentsSubscriptionInfoEn {
+  TranslationsComponentsSubscriptionInfoZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get upload => '涓婁紶';
+  @override
+  String get download => '涓嬭浇';
+  @override
+  String get total => '鎬绘祦閲?;
+  @override
+  String get expireDate => '鍒版湡鏃ユ湡';
+  @override
+  String get expired => '宸茶繃鏈?;
+  @override
+  String get noTraffic => '娴侀噺宸茬敤灏?;
+  @override
+  String get remainingTime => '鍓╀綑鏃堕棿';
+  @override
+  String remainingDuration({required Object duration}) => '鍓╀綑 ${duration} 澶?;
+  @override
+  String remainingDurationNew({required Object duration}) => '${duration} 澶?;
+  @override
+  String remainingTrafficSemanticLabel({required Object consumed, required Object total}) =>
+      '鬲賲 丕爻鬲賴賱丕賰 ${consumed} 賲賳 ${total}';
+  @override
+  String get remainingTraffic => '鍓╀綑娴侀噺';
+  @override
+  String get remainingUsage => '鍓╀綑';
+  @override
+  String get profileSite => '鎻愪緵鍟?;
+  @override
+  String get profileSupport => '鏀寔';
+}
+
+// Path: dialogs.sortProfiles
+class TranslationsDialogsSortProfilesZhCn extends TranslationsDialogsSortProfilesEn {
+  TranslationsDialogsSortProfilesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鎺掑簭鏂瑰紡';
+  @override
+  late final TranslationsDialogsSortProfilesSortZhCn sort = TranslationsDialogsSortProfilesSortZhCn._(_root);
+}
+
+// Path: dialogs.warpLicense
+class TranslationsDialogsWarpLicenseZhCn extends TranslationsDialogsWarpLicenseEn {
+  TranslationsDialogsWarpLicenseZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Cloudflare WARP 鍚屾剰涔?;
+  @override
+  TextSpan description({required InlineSpanBuilder tos, required InlineSpanBuilder privacy}) => TextSpan(
+    children: [
+      const TextSpan(text: 'Cloudflare WARP 賴賵 賲夭賵丿 VPN 賲噩丕賳賷 賱賭 WireGuard. 亘鬲賮毓賷賱 賴匕丕 丕賱禺賷丕乇貙 賮廿賳賰 鬲賵丕賮賯 毓賱賶 '),
+      tos('卮乇賵胤 丕賱禺丿賲丞'),
+      const TextSpan(text: ' 賵 '),
+      privacy('爻賷丕爻丞 丕賱禺氐賵氐賷丞'),
+      const TextSpan(text: ' 丕賱禺丕氐丞 亘賭 Cloudflare WARP.'),
+    ],
+  );
+}
+
+// Path: dialogs.newVersion
+class TranslationsDialogsNewVersionZhCn extends TranslationsDialogsNewVersionEn {
+  TranslationsDialogsNewVersionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鏈夊彲鐢ㄦ洿鏂?;
+  @override
+  String get msg => '@:common.appTitle 鐨勬柊鐗堟湰宸插彂甯冦€傛偍鎯崇幇鍦ㄦ洿鏂板悧锛?;
+  @override
+  String get currentVersion => '褰撳墠鐗堟湰锛?;
+  @override
+  String get newVersion => '鏂扮増鏈細';
+  @override
+  String get updateNow => '绔嬪嵆鏇存柊';
+}
+
+// Path: dialogs.confirmation
+class TranslationsDialogsConfirmationZhCn extends TranslationsDialogsConfirmationEn {
+  TranslationsDialogsConfirmationZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsDialogsConfirmationSettingsZhCn settings = TranslationsDialogsConfirmationSettingsZhCn._(_root);
+  @override
+  late final TranslationsDialogsConfirmationProfileZhCn profile = TranslationsDialogsConfirmationProfileZhCn._(_root);
+  @override
+  late final TranslationsDialogsConfirmationPerAppProxyZhCn perAppProxy = TranslationsDialogsConfirmationPerAppProxyZhCn._(
+    _root,
+  );
+  @override
+  late final TranslationsDialogsConfirmationRouteRuleZhCn routeRule = TranslationsDialogsConfirmationRouteRuleZhCn._(_root);
+}
+
+// Path: dialogs.experimentalNotice
+class TranslationsDialogsExperimentalNoticeZhCn extends TranslationsDialogsExperimentalNoticeEn {
+  TranslationsDialogsExperimentalNoticeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '姝ｅ湪浣跨敤瀹為獙鎬у姛鑳?;
+  @override
+  String get msg =>
+      '賱賯丿 賮毓賾賱鬲 賲賷夭丕鬲 鬲噩乇賷亘賷丞 賯丿 鬲丐孬乇 毓賱賶 噩賵丿丞 丕賱丕鬲氐丕賱 賵鬲爻亘亘 兀禺胤丕亍 睾賷乇 賲鬲賵賯毓丞. 賷賲賰賳賰 丿丕卅賲賸丕 鬲睾賷賷乇 賴匕賴 丕賱禺賷丕乇丕鬲 兀賵 廿毓丕丿丞 鬲毓賷賷賳賴丕 賲賳 氐賮丨丞 丕賱廿毓丿丕丿丕鬲.';
+  @override
+  String get disable => '涓嶅啀鏄剧ず';
+}
+
+// Path: dialogs.noActiveProfile
+class TranslationsDialogsNoActiveProfileZhCn extends TranslationsDialogsNoActiveProfileEn {
+  TranslationsDialogsNoActiveProfileZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '选择一个配置文件';
+  @override
+  String get msg => '让我们从添加一个包含您 VPN 连接详细信息的配置文件开始。\n\n还没有 VPN 服务器？别担心，按照下面的教程，您可以快速免费地设置一个。';
+  @override
+  late final TranslationsDialogsNoActiveProfileHelpBtnZhCn helpBtn = TranslationsDialogsNoActiveProfileHelpBtnZhCn._(_root);
+}
+
+// Path: dialogs.unknownDomainsWarning
+class TranslationsDialogsUnknownDomainsWarningZhCn extends TranslationsDialogsUnknownDomainsWarningEn {
+  TranslationsDialogsUnknownDomainsWarningZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '澶栭儴閾炬帴璀﹀憡';
+  @override
+  String get youAreAboutToVisit => '鎮ㄥ嵆灏嗚闂細';
+  @override
+  String get thisWebsiteIsNotInOurTrustedList => '姝ょ綉绔欎笉鍦ㄦ垜浠殑淇′换鍒楄〃涓€傝璋ㄦ厧鎿嶄綔銆?;
+}
+
+// Path: dialogs.proxyInfo
+class TranslationsDialogsProxyInfoZhCn extends TranslationsDialogsProxyInfoEn {
+  TranslationsDialogsProxyInfoZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get fullTag => '瀹屾暣鏍囩锛?;
+  @override
+  String get type => '绫诲瀷锛?;
+  @override
+  String get testTime => '娴嬭瘯鏃堕棿锛?;
+  @override
+  String get testDelay => '娴嬭瘯寤惰繜锛?;
+  @override
+  String get isSelected => '宸查€夋嫨锛?;
+  @override
+  String get isGroup => '鏄粍';
+  @override
+  String get isSecure => '瀹夊叏锛?;
+  @override
+  String get port => '绔彛锛?;
+  @override
+  String get host => '涓绘満锛?;
+  @override
+  String get ip => 'IP锛?;
+  @override
+  String get countryCode => '鍥藉浠ｇ爜锛?;
+  @override
+  String get region => '鍦板尯锛?;
+  @override
+  String get city => '鍩庡競锛?;
+  @override
+  String get asn => 'ASN锛?;
+  @override
+  String get organization => '缁勭粐锛?;
+  @override
+  String get location => '浣嶇疆锛?;
+  @override
+  String get postalCode => '閭斂缂栫爜锛?;
+}
+
+// Path: dialogs.windowClosing
+class TranslationsDialogsWindowClosingZhCn extends TranslationsDialogsWindowClosingEn {
+  TranslationsDialogsWindowClosingZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get askEachTime => '姣忔璇㈤棶';
+  @override
+  String get alertMessage => '闅愯棌杩樻槸閫€鍑哄簲鐢ㄧ▼搴忥紵';
+  @override
+  String get remember => '璁颁綇鎴戠殑閫夋嫨';
+}
+
+// Path: errors.connection
+class TranslationsErrorsConnectionZhCn extends TranslationsErrorsConnectionEn {
+  TranslationsErrorsConnectionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get unexpected => '鎰忓杩炴帴閿欒';
+  @override
+  String get timeout => '杩炴帴瓒呮椂';
+  @override
+  String get badResponse => '鍝嶅簲閿欒';
+  @override
+  String get connectionError => '杩炴帴閿欒';
+  @override
+  String get badCertificate => '璇佷功鏃犳晥';
+}
+
+// Path: errors.profiles
+class TranslationsErrorsProfilesZhCn extends TranslationsErrorsProfilesEn {
+  TranslationsErrorsProfilesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get unexpected => '鎰忓閿欒';
+  @override
+  String get notFound => '鏈壘鍒伴厤缃枃浠?;
+  @override
+  String get invalidConfig => '閰嶇疆鏃犳晥';
+  @override
+  String get invalidUrl => 'URL 鏃犳晥';
+  @override
+  String get canceledByUser => '鐢ㄦ埛宸插彇娑?;
+}
+
+// Path: errors.connectivity
+class TranslationsErrorsConnectivityZhCn extends TranslationsErrorsConnectivityEn {
+  TranslationsErrorsConnectivityZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get unexpected => '鎰忓澶辫触';
+  @override
+  String get missingVpnPermission => '缂哄皯 VPN 鏉冮檺';
+  @override
+  String get missingNotificationPermission => '缂哄皯閫氱煡鏉冮檺';
+  @override
+  String get core => '鏍稿績閿欒';
+}
+
+// Path: errors.singbox
+class TranslationsErrorsSingboxZhCn extends TranslationsErrorsSingboxEn {
+  TranslationsErrorsSingboxZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get serviceNotRunning => '鏈嶅姟鏈繍琛?;
+  @override
+  String get missingPrivilege => '缂哄皯鏉冮檺';
+  @override
+  String get missingPrivilegeMsg =>
+      '賵囟毓 丕賱賭 VPN 賷鬲胤賱亘 氐賱丕丨賷丕鬲 丕賱賲爻丐賵賱. 賷乇噩賶 廿毓丕丿丞 鬲卮睾賷賱 丕賱鬲胤亘賷賯 賰賲爻丐賵賱 兀賵 鬲睾賷賷乇 賵囟毓 丕賱禺丿賲丞.';
+  @override
+  String get invalidConfigOptions => '閰嶇疆閫夐」鏃犳晥';
+  @override
+  String get invalidConfig => '閰嶇疆鏃犳晥';
+}
+
+// Path: errors.warp
+class TranslationsErrorsWarpZhCn extends TranslationsErrorsWarpEn {
+  TranslationsErrorsWarpZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get missingLicense => 'WARP 璁稿彲璇佺己澶?;
+  @override
+  String get missingLicenseMsg =>
+      '丕賱賲賱賮 丕賱卮禺氐賷 丕賱賲丨丿丿 賷爻鬲禺丿賲 賲賷夭丞 WARP. 賱丕爻鬲禺丿丕賲 賴匕賴 丕賱賲賷夭丞貙 賷噩亘 丕賱賲賵丕賮賯丞 毓賱賶 卮乇賵胤 乇禺氐丞 WARP.';
+}
+
+// Path: common.msg.permission
+class TranslationsCommonMsgPermissionZhCn extends TranslationsCommonMsgPermissionEn {
+  TranslationsCommonMsgPermissionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get denied => '鏉冮檺琚嫆缁?;
+}
+
+// Path: common.msg.export
+class TranslationsCommonMsgExportZhCn extends TranslationsCommonMsgExportEn {
+  TranslationsCommonMsgExportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsCommonMsgExportClipboardZhCn clipboard = TranslationsCommonMsgExportClipboardZhCn._(_root);
+  @override
+  late final TranslationsCommonMsgExportFileZhCn file = TranslationsCommonMsgExportFileZhCn._(_root);
+}
+
+// Path: common.msg.import
+class TranslationsCommonMsgImportZhCn extends TranslationsCommonMsgImportEn {
+  TranslationsCommonMsgImportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get confirm => '纭瀵煎叆';
+  @override
+  String get success => '瀵煎叆鎴愬姛';
+  @override
+  String get failure => '瀵煎叆澶辫触';
+}
+
+// Path: pages.proxies.sortOptions
+class TranslationsPagesProxiesSortOptionsZhCn extends TranslationsPagesProxiesSortOptionsEn {
+  TranslationsPagesProxiesSortOptionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get unsorted => '榛樿';
+  @override
+  String get name => '鎸夊悕绉?;
+  @override
+  String get delay => '鎸夊欢杩?;
+}
+
+// Path: pages.proxies.ipInfo
+class TranslationsPagesProxiesIpInfoZhCn extends TranslationsPagesProxiesIpInfoEn {
+  TranslationsPagesProxiesIpInfoZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get address => 'IP 鍦板潃';
+  @override
+  String get country => '鍥藉';
+  @override
+  String get organization => '缁勭粐';
+}
+
+// Path: pages.proxies.delay
+class TranslationsPagesProxiesDelayZhCn extends TranslationsPagesProxiesDelayEn {
+  TranslationsPagesProxiesDelayZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String result({required Object delay}) => '寤惰繜锛?{delay}姣';
+  @override
+  String get timeout => '寤惰繜娴嬭瘯瓒呮椂';
+  @override
+  String get testing => '寤惰繜锛氭祴璇曚腑...';
+}
+
+// Path: pages.profiles.share
+class TranslationsPagesProfilesShareZhCn extends TranslationsPagesProfilesShareEn {
+  TranslationsPagesProfilesShareZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get urlToClipboard => 'URL 鍒板壀璐存澘';
+  @override
+  String get showUrlQr => '鏄剧ず URL 浜岀淮鐮?;
+  @override
+  String get jsonToClipboard => 'JSON 鍒板壀璐存澘';
+}
+
+// Path: pages.profiles.msg
+class TranslationsPagesProfilesMsgZhCn extends TranslationsPagesProfilesMsgEn {
+  TranslationsPagesProfilesMsgZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsPagesProfilesMsgSaveZhCn save = TranslationsPagesProfilesMsgSaveZhCn._(_root);
+  @override
+  String get invalidUrl => '鏃犳晥鐨?URL';
+  @override
+  late final TranslationsPagesProfilesMsgAddZhCn add = TranslationsPagesProfilesMsgAddZhCn._(_root);
+  @override
+  late final TranslationsPagesProfilesMsgUpdateZhCn update = TranslationsPagesProfilesMsgUpdateZhCn._(_root);
+  @override
+  late final TranslationsPagesProfilesMsgDeleteZhCn delete = TranslationsPagesProfilesMsgDeleteZhCn._(_root);
+}
+
+// Path: pages.profileDetails.form
+class TranslationsPagesProfileDetailsFormZhCn extends TranslationsPagesProfileDetailsFormEn {
+  TranslationsPagesProfileDetailsFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get nameHint => '閰嶇疆鏂囦欢鍚嶇О';
+  @override
+  String get emptyName => '鍚嶇О涓哄繀濉」';
+  @override
+  String get invalidUrl => '鏃犳晥鐨?URL';
+  @override
+  String get urlHint => '瀹屾暣鐨勯厤缃?URL';
+  @override
+  String get disableAutoUpdate => '绂佺敤鑷姩鏇存柊';
+  @override
+  String get autoUpdateInterval => '鑷姩鏇存柊闂撮殧';
+  @override
+  String get loading => '姝ｅ湪娣诲姞閰嶇疆鏂囦欢...';
+}
+
+// Path: pages.settings.options
+class TranslationsPagesSettingsOptionsZhCn extends TranslationsPagesSettingsOptionsEn {
+  TranslationsPagesSettingsOptionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsPagesSettingsOptionsImportZhCn import = TranslationsPagesSettingsOptionsImportZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsOptionsExportZhCn export = TranslationsPagesSettingsOptionsExportZhCn._(_root);
+  @override
+  String get reset => '閲嶇疆閫夐」';
+}
+
+// Path: pages.settings.general
+class TranslationsPagesSettingsGeneralZhCn extends TranslationsPagesSettingsGeneralEn {
+  TranslationsPagesSettingsGeneralZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '閫氱敤';
+  @override
+  String get locale => '璇█';
+  @override
+  String get themeMode => '涓婚妯″紡';
+  @override
+  late final TranslationsPagesSettingsGeneralThemeModesZhCn themeModes = TranslationsPagesSettingsGeneralThemeModesZhCn._(
+    _root,
+  );
+  @override
+  String get enableAnalytics => '鍚敤鍒嗘瀽';
+  @override
+  String get enableAnalyticsMsg => '鍏佽鏀堕泦鍒嗘瀽鏁版嵁鍜屽彂閫佸穿婧冩姤鍛婁互鏀硅繘搴旂敤';
+  @override
+  String get autoIpCheck => '鑷姩妫€鏌ヨ繛鎺?IP';
+  @override
+  String get dynamicNotification => '鍦ㄩ€氱煡涓樉绀洪€熷害';
+  @override
+  String get hapticFeedback => '瑙﹁鍙嶉';
+  @override
+  String get actionAtClosing => '鍏抽棴鏃舵搷浣?;
+  @override
+  String get autoStart => '寮€鏈鸿嚜鍚?;
+  @override
+  String get silentStart => '闈欓粯鍚姩';
+  @override
+  String get ignoreBatteryOptimizations => '蹇界暐鐢垫睜浼樺寲';
+  @override
+  String get ignoreBatteryOptimizationsMsg => '绉婚櫎闄愬埗浠ヨ幏寰楁渶浣?VPN 鎬ц兘';
+  @override
+  String get memoryLimit => '鍐呭瓨闄愬埗';
+  @override
+  String get memoryLimitMsg => '濡傛灉鎮ㄩ亣鍒板唴瀛樹笉瓒抽敊璇垨搴旂敤棰戠箒宕╂簝锛岃鍚敤姝ら€夐」';
+  @override
+  String get debugMode => '璋冭瘯妯″紡';
+  @override
+  String get debugModeMsg => '閲嶅惎搴旂敤浠ュ簲鐢ㄦ鏇存敼';
+  @override
+  String get logLevel => '鏃ュ織绾у埆';
+  @override
+  String get connectionTestUrl => '杩炴帴娴嬭瘯 URL';
+  @override
+  String get urlTestInterval => 'URL 娴嬭瘯闂撮殧';
+  @override
+  String get clashApiPort => 'Clash API 绔彛';
+  @override
+  String get useXrayCoreWhenPossible => '尽可能使用 xray-core';
+  @override
+  String get useXrayCoreWhenPossibleMsg =>
+      '解析订阅链接时使用 xray-core。您需要重新导入订阅链接才能启用此选项';
+}
+
+// Path: pages.settings.routing
+class TranslationsPagesSettingsRoutingZhCn extends TranslationsPagesSettingsRoutingEn {
+  TranslationsPagesSettingsRoutingZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '璺敱';
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyZhCn perAppProxy =
+      TranslationsPagesSettingsRoutingPerAppProxyZhCn._(_root);
+  @override
+  String get region => '鍦板尯';
+  @override
+  late final TranslationsPagesSettingsRoutingRegionsZhCn regions = TranslationsPagesSettingsRoutingRegionsZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingBalancerStrategyZhCn balancerStrategy =
+      TranslationsPagesSettingsRoutingBalancerStrategyZhCn._(_root);
+  @override
+  String get blockAds => '鎷︽埅骞垮憡';
+  @override
+  String get bypassLan => '缁曡繃灞€鍩熺綉';
+  @override
+  String get resolveDestination => '瑙ｆ瀽鐩殑鍦?;
+  @override
+  String get ipv6Route => 'IPv6 璺敱';
+  @override
+  late final TranslationsPagesSettingsRoutingIpv6ModesZhCn ipv6Modes = TranslationsPagesSettingsRoutingIpv6ModesZhCn._(
+    _root,
+  );
+  @override
+  late final TranslationsPagesSettingsRoutingRouteRuleZhCn routeRule = TranslationsPagesSettingsRoutingRouteRuleZhCn._(
+    _root,
+  );
+}
+
+// Path: pages.settings.dns
+class TranslationsPagesSettingsDnsZhCn extends TranslationsPagesSettingsDnsEn {
+  TranslationsPagesSettingsDnsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'DNS';
+  @override
+  String get remoteDns => '杩滅▼ DNS';
+  @override
+  String get remoteDnsDomainStrategy => '杩滅▼ DNS 鍩熷悕绛栫暐';
+  @override
+  String get directDns => '鍑虹珯鏈嶅姟鍣ㄨВ鏋愬櫒锛堢洿杩烇級';
+  @override
+  String get directDnsDomainStrategy => '鍑虹珯鍩熷悕绛栫暐';
+  @override
+  String get enableDnsRouting => '鍚敤 DNS 璺敱';
+  @override
+  String get enableFakeDns => '鍚敤浼€?DNS';
+  @override
+  late final TranslationsPagesSettingsDnsDomainStrategyZhCn domainStrategy =
+      TranslationsPagesSettingsDnsDomainStrategyZhCn._(_root);
+}
+
+// Path: pages.settings.inbound
+class TranslationsPagesSettingsInboundZhCn extends TranslationsPagesSettingsInboundEn {
+  TranslationsPagesSettingsInboundZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鍏ョ珯';
+  @override
+  String get serviceMode => '鏈嶅姟妯″紡';
+  @override
+  late final TranslationsPagesSettingsInboundServiceModesZhCn serviceModes =
+      TranslationsPagesSettingsInboundServiceModesZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsInboundShortServiceModesZhCn shortServiceModes =
+      TranslationsPagesSettingsInboundShortServiceModesZhCn._(_root);
+  @override
+  String get strictRoute => '涓ユ牸璺敱';
+  @override
+  String get tunImplementation => 'TUN 瀹炵幇';
+  @override
+  late final TranslationsPagesSettingsInboundTunImplementationsZhCn tunImplementations =
+      TranslationsPagesSettingsInboundTunImplementationsZhCn._(_root);
+  @override
+  String get mixedPort => '娣峰悎绔彛';
+  @override
+  String get tproxyPort => '閫忔槑浠ｇ悊绔彛';
+  @override
+  String get directPort => '鏈湴 Direct 绔彛';
+  @override
+  String get redirectPort => '閲嶅畾鍚戠鍙?;
+  @override
+  String get allowConnectionFromLan => '鍏佽鏉ヨ嚜灞€鍩熺綉鐨勮繛鎺?;
+}
+
+// Path: pages.settings.tlsTricks
+class TranslationsPagesSettingsTlsTricksZhCn extends TranslationsPagesSettingsTlsTricksEn {
+  TranslationsPagesSettingsTlsTricksZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'TLS 鎶€宸?;
+  @override
+  String get enable => '鍚敤鍒嗙墖';
+  @override
+  String get packets => '鍒嗙墖鏁版嵁鍖?;
+  @override
+  String get packetsTlsHello => 'TLS Hello';
+  @override
+  String get packets1_1 => '1-1';
+  @override
+  String get packets1_2 => '1-2';
+  @override
+  String get packets1_3 => '1-3';
+  @override
+  String get packets1_4 => '1-4';
+  @override
+  String get packets1_5 => '1-5';
+  @override
+  String get size => '鍒嗙墖澶у皬';
+  @override
+  String get sleep => '鍒嗙墖寤惰繜';
+  @override
+  late final TranslationsPagesSettingsTlsTricksMixedSniCaseZhCn mixedSniCase =
+      TranslationsPagesSettingsTlsTricksMixedSniCaseZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsTlsTricksPaddingZhCn padding = TranslationsPagesSettingsTlsTricksPaddingZhCn._(_root);
+}
+
+// Path: pages.settings.warp
+class TranslationsPagesSettingsWarpZhCn extends TranslationsPagesSettingsWarpEn {
+  TranslationsPagesSettingsWarpZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'WARP';
+  @override
+  String get enable => '鍚敤 WARP';
+  @override
+  String get generateConfig => '鐢熸垚 WARP 閰嶇疆';
+  @override
+  String get configGenerated => 'WARP 閰嶇疆宸茬敓鎴?;
+  @override
+  String get missingConfig => 'WARP 閰嶇疆缂哄け';
+  @override
+  String get detourMode => 'WARP 璺敱妯″紡';
+  @override
+  late final TranslationsPagesSettingsWarpDetourModesZhCn detourModes = TranslationsPagesSettingsWarpDetourModesZhCn._(
+    _root,
+  );
+  @override
+  String get licenseKey => '璁稿彲璇佸瘑閽?;
+  @override
+  String get cleanIp => '浼橀€?IP';
+  @override
+  String get port => '绔彛';
+  @override
+  late final TranslationsPagesSettingsWarpNoiseZhCn noise = TranslationsPagesSettingsWarpNoiseZhCn._(_root);
+}
+
+// Path: dialogs.sortProfiles.sort
+class TranslationsDialogsSortProfilesSortZhCn extends TranslationsDialogsSortProfilesSortEn {
+  TranslationsDialogsSortProfilesSortZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get name => '鎸夊瓧姣嶉『搴?;
+  @override
+  String get lastUpdate => '鏈€杩戞洿鏂?;
+}
+
+// Path: dialogs.confirmation.settings
+class TranslationsDialogsConfirmationSettingsZhCn extends TranslationsDialogsConfirmationSettingsEn {
+  TranslationsDialogsConfirmationSettingsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsDialogsConfirmationSettingsImportZhCn import = TranslationsDialogsConfirmationSettingsImportZhCn._(
+    _root,
+  );
+}
+
+// Path: dialogs.confirmation.profile
+class TranslationsDialogsConfirmationProfileZhCn extends TranslationsDialogsConfirmationProfileEn {
+  TranslationsDialogsConfirmationProfileZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsDialogsConfirmationProfileDeleteZhCn delete = TranslationsDialogsConfirmationProfileDeleteZhCn._(
+    _root,
+  );
+}
+
+// Path: dialogs.confirmation.perAppProxy
+class TranslationsDialogsConfirmationPerAppProxyZhCn extends TranslationsDialogsConfirmationPerAppProxyEn {
+  TranslationsDialogsConfirmationPerAppProxyZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsDialogsConfirmationPerAppProxyShareOnGithubZhCn shareOnGithub =
+      TranslationsDialogsConfirmationPerAppProxyShareOnGithubZhCn._(_root);
+  @override
+  late final TranslationsDialogsConfirmationPerAppProxyImportZhCn import =
+      TranslationsDialogsConfirmationPerAppProxyImportZhCn._(_root);
+}
+
+// Path: dialogs.confirmation.routeRule
+class TranslationsDialogsConfirmationRouteRuleZhCn extends TranslationsDialogsConfirmationRouteRuleEn {
+  TranslationsDialogsConfirmationRouteRuleZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsDialogsConfirmationRouteRuleDeleteZhCn delete =
+      TranslationsDialogsConfirmationRouteRuleDeleteZhCn._(_root);
+}
+
+// Path: dialogs.noActiveProfile.helpBtn
+class TranslationsDialogsNoActiveProfileHelpBtnZhCn extends TranslationsDialogsNoActiveProfileHelpBtnEn {
+  TranslationsDialogsNoActiveProfileHelpBtnZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get label => '告诉我如何操作';
+  @override
+  String get url => 'https://hiddify.com/manager/';
+}
+
+// Path: common.msg.export.clipboard
+class TranslationsCommonMsgExportClipboardZhCn extends TranslationsCommonMsgExportClipboardEn {
+  TranslationsCommonMsgExportClipboardZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get success => '宸叉垚鍔熸坊鍔犲埌鍓创鏉?;
+  @override
+  String get failure => '澶嶅埗鍒板壀璐存澘澶辫触';
+  @override
+  String get contentTooLarge => '鍐呭杩囧ぇ锛岃浣跨敤瀵煎嚭鏂囦欢';
+}
+
+// Path: common.msg.export.file
+class TranslationsCommonMsgExportFileZhCn extends TranslationsCommonMsgExportFileEn {
+  TranslationsCommonMsgExportFileZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get success => 'JSON 鏂囦欢鍒涘缓鎴愬姛';
+  @override
+  String get failure => '鍒涘缓鏂囦欢澶辫触';
+}
+
+// Path: pages.profiles.msg.save
+class TranslationsPagesProfilesMsgSaveZhCn extends TranslationsPagesProfilesMsgSaveEn {
+  TranslationsPagesProfilesMsgSaveZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get success => '閰嶇疆鏂囦欢淇濆瓨鎴愬姛';
+}
+
+// Path: pages.profiles.msg.add
+class TranslationsPagesProfilesMsgAddZhCn extends TranslationsPagesProfilesMsgAddEn {
+  TranslationsPagesProfilesMsgAddZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get failure => '娣诲姞閰嶇疆鏂囦欢澶辫触';
+}
+
+// Path: pages.profiles.msg.update
+class TranslationsPagesProfilesMsgUpdateZhCn extends TranslationsPagesProfilesMsgUpdateEn {
+  TranslationsPagesProfilesMsgUpdateZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get success => '閰嶇疆鏂囦欢鏇存柊鎴愬姛';
+  @override
+  String successNamed({required Object name}) => '"${name}" 鏇存柊鎴愬姛';
+  @override
+  String get failure => '鏇存柊閰嶇疆鏂囦欢澶辫触';
+  @override
+  String failureNamed({required Object name}) => '鏇存柊 "${name}" 澶辫触';
+}
+
+// Path: pages.profiles.msg.delete
+class TranslationsPagesProfilesMsgDeleteZhCn extends TranslationsPagesProfilesMsgDeleteEn {
+  TranslationsPagesProfilesMsgDeleteZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get success => '閰嶇疆鏂囦欢鍒犻櫎鎴愬姛';
+}
+
+// Path: pages.settings.options.import
+class TranslationsPagesSettingsOptionsImportZhCn extends TranslationsPagesSettingsOptionsImportEn {
+  TranslationsPagesSettingsOptionsImportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get clipboard => '浠庡壀璐存澘瀵煎叆閫夐」';
+  @override
+  String get file => '浠庢枃浠跺鍏ラ€夐」';
+}
+
+// Path: pages.settings.options.export
+class TranslationsPagesSettingsOptionsExportZhCn extends TranslationsPagesSettingsOptionsExportEn {
+  TranslationsPagesSettingsOptionsExportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get anonymousToClipboard => '澶嶅埗鍖垮悕閫夐」鍒板壀璐存澘';
+  @override
+  String get anonymousToFile => '瀵煎嚭鍖垮悕閫夐」鍒版枃浠?;
+  @override
+  String get allToClipboard => '澶嶅埗鎵€鏈夐€夐」鍒板壀璐存澘';
+  @override
+  String get allToFile => '瀵煎嚭鎵€鏈夐€夐」鍒版枃浠?;
+}
+
+// Path: pages.settings.general.themeModes
+class TranslationsPagesSettingsGeneralThemeModesZhCn extends TranslationsPagesSettingsGeneralThemeModesEn {
+  TranslationsPagesSettingsGeneralThemeModesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get system => '璺熼殢绯荤粺';
+  @override
+  String get dark => '娣辫壊妯″紡';
+  @override
+  String get light => '娴呰壊妯″紡';
+  @override
+  String get black => '绾粦妯″紡';
+}
+
+// Path: pages.settings.routing.perAppProxy
+class TranslationsPagesSettingsRoutingPerAppProxyZhCn extends TranslationsPagesSettingsRoutingPerAppProxyEn {
+  TranslationsPagesSettingsRoutingPerAppProxyZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鍒嗗簲鐢ㄤ唬鐞?;
+  @override
+  String get hideSysApps => '闅愯棌绯荤粺搴旂敤';
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyOptionsZhCn options =
+      TranslationsPagesSettingsRoutingPerAppProxyOptionsZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyModesZhCn modes =
+      TranslationsPagesSettingsRoutingPerAppProxyModesZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionZhCn autoSelection =
+      TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionZhCn._(_root);
+}
+
+// Path: pages.settings.routing.regions
+class TranslationsPagesSettingsRoutingRegionsZhCn extends TranslationsPagesSettingsRoutingRegionsEn {
+  TranslationsPagesSettingsRoutingRegionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get ir => '浼婃湕 (ir)';
+  @override
+  String get cn => '涓浗 (cn)';
+  @override
+  String get ru => '淇勭綏鏂?(ru)';
+  @override
+  String get af => '闃垮瘜姹?(af)';
+  @override
+  String get id => '鍗板害灏艰タ浜?(id)';
+  @override
+  String get tr => '鍦熻€冲叾 (tr)';
+  @override
+  String get br => '宸磋タ (br)';
+  @override
+  String get other => '鍏朵粬';
+}
+
+// Path: pages.settings.routing.balancerStrategy
+class TranslationsPagesSettingsRoutingBalancerStrategyZhCn extends TranslationsPagesSettingsRoutingBalancerStrategyEn {
+  TranslationsPagesSettingsRoutingBalancerStrategyZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Balancer 绛栫暐';
+  @override
+  String get roundRobin => 'Round robin';
+  @override
+  String get consistentHash => 'Consistent hash';
+  @override
+  String get stickySession => 'Sticky session';
+}
+
+// Path: pages.settings.routing.ipv6Modes
+class TranslationsPagesSettingsRoutingIpv6ModesZhCn extends TranslationsPagesSettingsRoutingIpv6ModesEn {
+  TranslationsPagesSettingsRoutingIpv6ModesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get disable => '绂佺敤';
+  @override
+  String get enable => '鍚敤';
+  @override
+  String get prefer => '棣栭€?;
+  @override
+  String get only => '浠?;
+}
+
+// Path: pages.settings.routing.routeRule
+class TranslationsPagesSettingsRoutingRouteRuleZhCn extends TranslationsPagesSettingsRoutingRouteRuleEn {
+  TranslationsPagesSettingsRoutingRouteRuleZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '璺敱瑙勫垯';
+  @override
+  late final TranslationsPagesSettingsRoutingRouteRuleOptionsZhCn options =
+      TranslationsPagesSettingsRoutingRouteRuleOptionsZhCn._(_root);
+  @override
+  String get deleteRule => '鍒犻櫎瑙勫垯';
+  @override
+  String get createRule => '鍒涘缓鏂拌鍒?;
+  @override
+  late final TranslationsPagesSettingsRoutingRouteRuleRuleZhCn rule = TranslationsPagesSettingsRoutingRouteRuleRuleZhCn._(
+    _root,
+  );
+  @override
+  late final TranslationsPagesSettingsRoutingRouteRuleGenericListZhCn genericList =
+      TranslationsPagesSettingsRoutingRouteRuleGenericListZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingRouteRuleAndroidAppsZhCn androidApps =
+      TranslationsPagesSettingsRoutingRouteRuleAndroidAppsZhCn._(_root);
+}
+
+// Path: pages.settings.dns.domainStrategy
+class TranslationsPagesSettingsDnsDomainStrategyZhCn extends TranslationsPagesSettingsDnsDomainStrategyEn {
+  TranslationsPagesSettingsDnsDomainStrategyZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get auto => '鑷姩';
+  @override
+  String get preferIpv6 => '鍋忓ソ IPv6';
+  @override
+  String get preferIpv4 => '鍋忓ソ IPv4';
+  @override
+  String get ipv4Only => '浠?IPv4';
+  @override
+  String get ipv6Only => '浠?IPv6';
+}
+
+// Path: pages.settings.inbound.serviceModes
+class TranslationsPagesSettingsInboundServiceModesZhCn extends TranslationsPagesSettingsInboundServiceModesEn {
+  TranslationsPagesSettingsInboundServiceModesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get proxy => '浠呬唬鐞嗘湇鍔?;
+  @override
+  String get systemProxy => '璁剧疆绯荤粺浠ｇ悊';
+  @override
+  String get tun => 'VPN';
+  @override
+  String get tunService => 'VPN 鏈嶅姟';
+}
+
+// Path: pages.settings.inbound.shortServiceModes
+class TranslationsPagesSettingsInboundShortServiceModesZhCn extends TranslationsPagesSettingsInboundShortServiceModesEn {
+  TranslationsPagesSettingsInboundShortServiceModesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get proxy => '浠ｇ悊';
+  @override
+  String get systemProxy => '绯荤粺浠ｇ悊';
+  @override
+  String get tun => 'VPN';
+  @override
+  String get tunService => 'VPN 鏈嶅姟';
+}
+
+// Path: pages.settings.inbound.tunImplementations
+class TranslationsPagesSettingsInboundTunImplementationsZhCn
+    extends TranslationsPagesSettingsInboundTunImplementationsEn {
+  TranslationsPagesSettingsInboundTunImplementationsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get mixed => '娣峰悎';
+  @override
+  String get system => '绯荤粺';
+  @override
+  String get gvisor => 'gVisor';
+}
+
+// Path: pages.settings.tlsTricks.mixedSniCase
+class TranslationsPagesSettingsTlsTricksMixedSniCaseZhCn extends TranslationsPagesSettingsTlsTricksMixedSniCaseEn {
+  TranslationsPagesSettingsTlsTricksMixedSniCaseZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get enable => '鍚敤娣峰悎澶у皬鍐?SNI';
+}
+
+// Path: pages.settings.tlsTricks.padding
+class TranslationsPagesSettingsTlsTricksPaddingZhCn extends TranslationsPagesSettingsTlsTricksPaddingEn {
+  TranslationsPagesSettingsTlsTricksPaddingZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get enable => '鍚敤濉厖';
+  @override
+  String get size => '濉厖澶у皬';
+}
+
+// Path: pages.settings.warp.detourModes
+class TranslationsPagesSettingsWarpDetourModesZhCn extends TranslationsPagesSettingsWarpDetourModesEn {
+  TranslationsPagesSettingsWarpDetourModesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get proxyOverWarp => '閫氳繃 WARP 璺敱浠ｇ悊';
+  @override
+  String get warpOverProxy => '閫氳繃浠ｇ悊璺敱 WARP';
+  @override
+  String get proxyOverWarpExplain => '閫氳繃 WARP 瑙ｉ攣浠ｇ悊';
+  @override
+  String get warpOverProxyExplain => '閫氳繃 WARP 澧炲己瀹夊叏鎬?;
+}
+
+// Path: pages.settings.warp.noise
+class TranslationsPagesSettingsWarpNoiseZhCn extends TranslationsPagesSettingsWarpNoiseEn {
+  TranslationsPagesSettingsWarpNoiseZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get count => '鍣０鏁伴噺';
+  @override
+  String get mode => '鍣０妯″紡';
+  @override
+  String get size => '鍣０澶у皬';
+  @override
+  String get delay => '鍣０寤惰繜';
+}
+
+// Path: dialogs.confirmation.settings.import
+class TranslationsDialogsConfirmationSettingsImportZhCn extends TranslationsDialogsConfirmationSettingsImportEn {
+  TranslationsDialogsConfirmationSettingsImportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get msg => '杩欏皢鐢ㄦ彁渚涚殑鍊艰鐩栨墍鏈夐厤缃€夐」銆傛偍纭畾鍚楋紵';
+}
+
+// Path: dialogs.confirmation.profile.delete
+class TranslationsDialogsConfirmationProfileDeleteZhCn extends TranslationsDialogsConfirmationProfileDeleteEn {
+  TranslationsDialogsConfirmationProfileDeleteZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鍒犻櫎閰嶇疆鏂囦欢';
+  @override
+  String get msg => '鎮ㄧ‘瀹氳姘镐箙鍒犻櫎姝ら厤缃枃浠跺悧锛?;
+}
+
+// Path: dialogs.confirmation.perAppProxy.shareOnGithub
+class TranslationsDialogsConfirmationPerAppProxyShareOnGithubZhCn
+    extends TranslationsDialogsConfirmationPerAppProxyShareOnGithubEn {
+  TranslationsDialogsConfirmationPerAppProxyShareOnGithubZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鏀硅繘鑷姩閫夋嫨';
+  @override
+  String get msg => '閫氳繃鍒嗕韩鎮ㄩ€夋嫨鐨勫簲鐢紝鍙互甯姪瀹屽杽鈥滆嚜鍔ㄩ€夋嫨鈥濆垪琛?;
+}
+
+// Path: dialogs.confirmation.perAppProxy.import
+class TranslationsDialogsConfirmationPerAppProxyImportZhCn extends TranslationsDialogsConfirmationPerAppProxyImportEn {
+  TranslationsDialogsConfirmationPerAppProxyImportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get msg => '杩欏皢鏇挎崲鎮ㄥ綋鍓嶆墍鏈夌殑鍒嗗簲鐢ㄤ唬鐞嗛€夋嫨銆傛偍纭畾瑕佺户缁悧锛?;
+}
+
+// Path: dialogs.confirmation.routeRule.delete
+class TranslationsDialogsConfirmationRouteRuleDeleteZhCn extends TranslationsDialogsConfirmationRouteRuleDeleteEn {
+  TranslationsDialogsConfirmationRouteRuleDeleteZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鍒犻櫎瑙勫垯';
+  @override
+  String msg({required Object rulename}) => '鎮ㄧ‘瀹氳鍒犻櫎瑙勫垯 "\$\{rulename\}" 鍚楋紵';
+}
+
+// Path: pages.settings.routing.perAppProxy.options
+class TranslationsPagesSettingsRoutingPerAppProxyOptionsZhCn
+    extends TranslationsPagesSettingsRoutingPerAppProxyOptionsEn {
+  TranslationsPagesSettingsRoutingPerAppProxyOptionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyOptionsImportZhCn import =
+      TranslationsPagesSettingsRoutingPerAppProxyOptionsImportZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyOptionsExportZhCn export =
+      TranslationsPagesSettingsRoutingPerAppProxyOptionsExportZhCn._(_root);
+  @override
+  String get shareToAll => '鍒嗕韩缁欐墍鏈変汉';
+  @override
+  String get clearAllSelections => '娓呴櫎鎵€鏈夐€夋嫨';
+}
+
+// Path: pages.settings.routing.perAppProxy.modes
+class TranslationsPagesSettingsRoutingPerAppProxyModesZhCn extends TranslationsPagesSettingsRoutingPerAppProxyModesEn {
+  TranslationsPagesSettingsRoutingPerAppProxyModesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get all => '鍏ㄩ儴';
+  @override
+  String get proxy => '浠ｇ悊';
+  @override
+  String get bypass => '缁曡繃';
+  @override
+  String get allMsg => '浠ｇ悊鎵€鏈夊簲鐢?;
+  @override
+  String get proxyMsg => '浠呬唬鐞嗛€夊畾搴旂敤';
+  @override
+  String get bypassMsg => '涓嶄唬鐞嗛€夊畾搴旂敤';
+}
+
+// Path: pages.settings.routing.perAppProxy.autoSelection
+class TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionZhCn
+    extends TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionEn {
+  TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鑷姩閫夋嫨';
+  @override
+  String get performNow => '绔嬪嵆鎵ц';
+  @override
+  String get resetToDefault => '閲嶇疆涓洪粯璁?;
+  @override
+  String get autoUpdateInterval => '鑷姩鏇存柊闂撮殧';
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionToastZhCn toast =
+      TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionToastZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionDialogZhCn dialog =
+      TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionDialogZhCn._(_root);
+}
+
+// Path: pages.settings.routing.routeRule.options
+class TranslationsPagesSettingsRoutingRouteRuleOptionsZhCn extends TranslationsPagesSettingsRoutingRouteRuleOptionsEn {
+  TranslationsPagesSettingsRoutingRouteRuleOptionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final TranslationsPagesSettingsRoutingRouteRuleOptionsImportZhCn import =
+      TranslationsPagesSettingsRoutingRouteRuleOptionsImportZhCn._(_root);
+  @override
+  late final TranslationsPagesSettingsRoutingRouteRuleOptionsExportZhCn export =
+      TranslationsPagesSettingsRoutingRouteRuleOptionsExportZhCn._(_root);
+  @override
+  String get reset => '閲嶇疆瑙勫垯';
+}
+
+// Path: pages.settings.routing.routeRule.rule
+class TranslationsPagesSettingsRoutingRouteRuleRuleZhCn extends TranslationsPagesSettingsRoutingRouteRuleRuleEn {
+  TranslationsPagesSettingsRoutingRouteRuleRuleZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '瑙勫垯';
+  @override
+  String get ruleChanged => '瑙勫垯宸叉洿鏀?;
+  @override
+  String get ruleChangedMsg => '鎮ㄦ兂淇濆瓨鎮ㄧ殑缂栬緫鍚楋紵';
+  @override
+  String get onlyTunMode => '浠呭湪 TUN 妯″紡涓嬪彲鐢?;
+  @override
+  String get notAvailabeInThisPlatform => '鍦ㄦ骞冲彴涓婁笉鍙敤';
+  @override
+  String get canNotBeEmpty => '涓嶈兘涓虹┖';
+  @override
+  String get validUrlEx => 'https://example.com';
+  @override
+  String get validUrl => '鏈夋晥鐨?"URL"锛屼緥濡俓n@:pages.settings.routing.routeRule.rule.validUrlEx';
+  @override
+  String get validProcessNameEx => 'Chrome.exe 鎴?google chrome 鎴?chrome';
+  @override
+  String get validProcessName =>
+      '"丕爻賲 丕賱毓賲賱賷丞" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validProcessNameEx}';
+  @override
+  String get validProcessPathEx => 'C:\\Pro...\\chrome.exe\n/App.../Google Chrome\n/usr/lib.../chrome';
+  @override
+  String get validProcessPath =>
+      '"賲爻丕乇 丕賱毓賲賱賷丞" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validProcessPathEx}';
+  @override
+  String get validPortRangeEx => '80 鎴?1-65000';
+  @override
+  String get validPortRange =>
+      '"賲賳賮匕" 兀賵 "賳胤丕賯 賲賳丕賮匕" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validPortRangeEx}';
+  @override
+  String get validIpCidrEx => '8.8.8.8 鎴?10.0.0.0/24';
+  @override
+  String get validIpCidr => '鏈夋晥鐨?IP CIDR锛屼緥濡俓n@:pages.settings.routing.routeRule.rule.validIpCidrEx';
+  @override
+  String get validDomainEx => 'Google.com 鎴?dl.google.com';
+  @override
+  String get validDomain => '鏈夋晥鐨?"鍩熷悕"锛屼緥濡俓n@:pages.settings.routing.routeRule.rule.validDomainEx';
+  @override
+  String get validDomainSuffixEx => '.com 鎴?.cn';
+  @override
+  String get validDomainSuffix =>
+      '"賱丕丨賯丞 賳胤丕賯" 氐丕賱丨丞 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validDomainSuffixEx}';
+  @override
+  Map<String, String> get tileTitle => {
+    'name': '丕賱丕爻賲',
+    'outbound': '丕賱鬲賵噩賷賴 毓賳丿 丕賱鬲胤丕亘賯',
+    'rule_set': '乇丕亘胤 賲噩賲賵毓丞 丕賱賯賵丕毓丿',
+    'package_name': '兀爻賲丕亍 丕賱丨夭賲',
+    'process_name': '兀爻賲丕亍 丕賱毓賲賱賷丕鬲',
+    'process_path': '賲爻丕乇丕鬲 丕賱毓賲賱賷丕鬲',
+    'network': '丕賱卮亘賰丕鬲',
+    'port_range': '賲賳丕賮匕 丕賱賵噩賴丞',
+    'source_port_range': '賲賳丕賮匕 丕賱賲氐丿乇',
+    'protocol': '丕賱亘乇賵鬲賵賰賵賱',
+    'ip_cidr': 'IP CIDR 丕賱賵噩賴丞',
+    'source_ip_cidr': 'IP CIDR 丕賱賲氐丿乇',
+    'domain': '丕賱賳胤丕賯',
+    'domain_suffixe': '賱丕丨賯丞 丕賱賳胤丕賯',
+    'domain_keyword': '賰賱賲丞 賲賮鬲丕丨賷丞 賱賱賳胤丕賯',
+    'domain_regex': '鬲毓亘賷乇 賳賲胤賷 賱賱賳胤丕賯',
+  };
+  @override
+  Map<String, String> get outbound => {
+    'proxy': '亘乇賵賰爻賷',
+    'direct': '賲亘丕卮乇',
+    'direct_with_fragment': '賲亘丕卮乇 賲毓 Fragment',
+    'block': '丨馗乇',
+  };
+  @override
+  Map<String, String> get network => {'all': '丕賱賰賱', 'tcp': 'TCP', 'udp': 'UDP'};
+  @override
+  Map<String, String> get protocol => {
+    '': '丕賱賰賱',
+    'tls': 'TLS',
+    'http': 'HTTP',
+    'quic': 'QUIC',
+    'stun': 'STUN',
+    'dns': 'DNS',
+    'bittorrent': 'BitTorrent',
+  };
+}
+
+// Path: pages.settings.routing.routeRule.genericList
+class TranslationsPagesSettingsRoutingRouteRuleGenericListZhCn
+    extends TranslationsPagesSettingsRoutingRouteRuleGenericListEn {
+  TranslationsPagesSettingsRoutingRouteRuleGenericListZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get addNew => '娣诲姞鏂板€?;
+  @override
+  String get update => '鏇存柊鍊?;
+  @override
+  String get clearList => '娓呯┖鍒楄〃';
+  @override
+  String get clearListMsg => '鎵€鏈夐」鐩凡鍒犻櫎';
+}
+
+// Path: pages.settings.routing.routeRule.androidApps
+class TranslationsPagesSettingsRoutingRouteRuleAndroidAppsZhCn
+    extends TranslationsPagesSettingsRoutingRouteRuleAndroidAppsEn {
+  TranslationsPagesSettingsRoutingRouteRuleAndroidAppsZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get pageTitle => '瀹夊崜搴旂敤';
+  @override
+  String get showSystemApps => '鏄剧ず绯荤粺搴旂敤';
+  @override
+  String get hideSystemApps => '闅愯棌绯荤粺搴旂敤';
+  @override
+  String get clearSelection => '娓呴櫎閫夋嫨';
+  @override
+  String get uninstalled => '宸插嵏杞?;
+}
+
+// Path: pages.settings.routing.perAppProxy.options.import
+class TranslationsPagesSettingsRoutingPerAppProxyOptionsImportZhCn
+    extends TranslationsPagesSettingsRoutingPerAppProxyOptionsImportEn {
+  TranslationsPagesSettingsRoutingPerAppProxyOptionsImportZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get clipboard => '浠庡壀璐存澘瀵煎叆閫夋嫨';
+  @override
+  String get file => '浠庢枃浠跺鍏ラ€夋嫨';
+  @override
+  String get msg => '瀵煎叆灏嗘浛鎹㈡偍褰撳墠鐨勯€夋嫨銆傜‘瀹氳缁х画鍚楋紵';
+}
+
+// Path: pages.settings.routing.perAppProxy.options.export
+class TranslationsPagesSettingsRoutingPerAppProxyOptionsExportZhCn
+    extends TranslationsPagesSettingsRoutingPerAppProxyOptionsExportEn {
+  TranslationsPagesSettingsRoutingPerAppProxyOptionsExportZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get clipboard => '澶嶅埗閫夋嫨鍒板壀璐存澘';
+  @override
+  String get file => '瀵煎嚭閫夋嫨鍒版枃浠?;
+}
+
+// Path: pages.settings.routing.perAppProxy.autoSelection.toast
+class TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionToastZhCn
+    extends TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionToastEn {
+  TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionToastZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get success => '鑷姩閫夋嫨搴旂敤鎴愬姛瀹屾垚';
+  @override
+  String get failure => '鑷姩閫夋嫨澶辫触';
+  @override
+  String regionNotFound({required Object region}) => '鏈壘鍒?"${region}" 鍦板尯鐨勮嚜鍔ㄩ€夋嫨';
+  @override
+  String get alreadyInAuto => '鎮ㄧ殑閫夋嫨宸插湪鑷姩鍒楄〃涓?;
+}
+
+// Path: pages.settings.routing.perAppProxy.autoSelection.dialog
+class TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionDialogZhCn
+    extends TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionDialogEn {
+  TranslationsPagesSettingsRoutingPerAppProxyAutoSelectionDialogZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '鑷姩閫夋嫨搴旂敤';
+  @override
+  String msg({required Object region}) => '鐢变簬鍦板尯鏇存敼涓?"${region}"锛屽垎搴旂敤浠ｇ悊鐨勮嚜鍔ㄩ€夋嫨鍔熻兘宸茶绂佺敤';
+}
+
+// Path: pages.settings.routing.routeRule.options.import
+class TranslationsPagesSettingsRoutingRouteRuleOptionsImportZhCn
+    extends TranslationsPagesSettingsRoutingRouteRuleOptionsImportEn {
+  TranslationsPagesSettingsRoutingRouteRuleOptionsImportZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get clipboard => '浠庡壀璐存澘瀵煎叆瑙勫垯';
+  @override
+  String get file => '浠庢枃浠跺鍏ヨ鍒?;
+}
+
+// Path: pages.settings.routing.routeRule.options.export
+class TranslationsPagesSettingsRoutingRouteRuleOptionsExportZhCn
+    extends TranslationsPagesSettingsRoutingRouteRuleOptionsExportEn {
+  TranslationsPagesSettingsRoutingRouteRuleOptionsExportZhCn._(TranslationsZhCn root)
+    : this._root = root,
+      super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get clipboard => '澶嶅埗瑙勫垯鍒板壀璐存澘';
+  @override
+  String get file => '淇濆瓨瑙勫垯鍒版枃浠?;
+}
+
+/// Flat map(s) containing all translations.
+/// Only for edge cases! For simple maps, use the map function of this library.
+extension on TranslationsZhCn {
+  dynamic _flatMapFunction(String path) {
+    switch (path) {
+      case 'common.appTitle':
+        return 'Hiddify';
+      case 'common.start':
+        return '丕亘丿兀';
+      case 'common.version':
+        return '丕賱廿氐丿丕乇';
+      case 'common.ok':
+        return '賲賵丕賮賯';
+      case 'common.cancel':
+        return '廿賱睾丕亍';
+      case 'common.kContinue':
+        return '賲鬲丕亘毓丞';
+      case 'common.showMore':
+        return '毓乇囟 丕賱賲夭賷丿';
+      case 'common.showLess':
+        return '毓乇囟 兀賯賱';
+      case 'common.filter':
+        return '鬲氐賮賷丞';
+      case 'common.all':
+        return '丕賱賰賱';
+      case 'common.pause':
+        return '廿賷賯丕賮 賲丐賯鬲';
+      case 'common.resume':
+        return '丕爻鬲卅賳丕賮';
+      case 'common.clear':
+        return '賲爻丨';
+      case 'common.close':
+        return '廿睾賱丕賯';
+      case 'common.auto':
+        return '鬲賱賯丕卅賷';
+      case 'common.manually':
+        return '賷丿賵賷';
+      case 'common.name':
+        return '丕賱丕爻賲';
+      case 'common.url':
+        return '丕賱乇丕亘胤';
+      case 'common.add':
+        return '廿囟丕賮丞';
+      case 'common.clipboard':
+        return '丕賱丨丕賮馗丞';
+      case 'common.addToClipboard':
+        return '廿囟丕賮丞 廿賱賶 丕賱丨丕賮馗丞';
+      case 'common.scanQr':
+        return '賲爻丨 乇賲夭 QR';
+      case 'common.free':
+        return '賲噩丕賳賷';
+      case 'common.warp':
+        return 'WARP';
+      case 'common.fragment':
+        return 'Fragment';
+      case 'common.help':
+        return '賲爻丕毓丿丞';
+      case 'common.save':
+        return '丨賮馗';
+      case 'common.update':
+        return '鬲丨丿賷孬';
+      case 'common.share':
+        return '賲卮丕乇賰丞';
+      case 'common.edit':
+        return '鬲毓丿賷賱';
+      case 'common.delete':
+        return '丨匕賮';
+      case 'common.discard':
+        return '鬲噩丕賴賱';
+      case 'common.import':
+        return '丕爻鬲賷乇丕丿';
+      case 'common.export':
+        return '鬲氐丿賷乇';
+      case 'common.later':
+        return '賱丕丨賯賸丕';
+      case 'common.ignore':
+        return '鬲噩丕賴賱';
+      case 'common.quit':
+        return '禺乇賵噩';
+      case 'common.notSet':
+        return '睾賷乇 賲丨丿丿';
+      case 'common.hide':
+        return '廿禺賮丕亍';
+      case 'common.exit':
+        return '禺乇賵噩';
+      case 'common.reset':
+        return '廿毓丕丿丞 鬲毓賷賷賳';
+      case 'common.done':
+        return '鬲賲';
+      case 'common.search':
+        return '亘丨孬';
+      case 'common.decline':
+        return '乇賮囟';
+      case 'common.agree':
+        return '兀賵丕賮賯';
+      case 'common.empty':
+        return '賮丕乇睾';
+      case 'common.unknown':
+        return '睾賷乇 賲毓乇賵賮';
+      case 'common.hidden':
+        return '賲禺賮賷';
+      case 'common.timeout':
+        return '丕賳鬲賴賶 丕賱賵賯鬲';
+      case 'common.sort':
+        return '賮乇夭';
+      case 'common.dashboard':
+        return '賱賵丨丞 丕賱鬲丨賰賲';
+      case 'common.interval.day':
+        return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
+          n,
+          zero: '',
+          one: '賷賵賲 賵丕丨丿',
+          two: '賷賵賲丕賳',
+          few: '${n} 兀賷丕賲',
+          many: '${n} 賷賵賲賸丕',
+          other: '${n} 賷賵賲',
+        );
+      case 'common.interval.hour':
+        return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
+          n,
+          zero: '',
+          one: '爻丕毓丞 賵丕丨丿丞',
+          two: '爻丕毓鬲丕賳',
+          few: '${n} 爻丕毓丕鬲',
+          many: '${n} 爻丕毓丞',
+          other: '${n} 爻丕毓丞',
+        );
+      case 'common.msg.permission.denied':
+        return '鬲賲 乇賮囟 丕賱廿匕賳';
+      case 'common.msg.export.clipboard.success':
+        return '鬲賲鬲 丕賱廿囟丕賮丞 廿賱賶 丕賱丨丕賮馗丞 亘賳噩丕丨';
+      case 'common.msg.export.clipboard.failure':
+        return '賮卮賱 丕賱賳爻禺 廿賱賶 丕賱丨丕賮馗丞';
+      case 'common.msg.export.clipboard.contentTooLarge':
+        return '丕賱賲丨鬲賵賶 賰亘賷乇 噩丿賸丕. 丕爻鬲禺丿賲 鬲氐丿賷乇 丕賱賲賱賮 亘丿賱丕賸 賲賳 匕賱賰';
+      case 'common.msg.export.file.success':
+        return '鬲賲 廿賳卮丕亍 賲賱賮 JSON 亘賳噩丕丨';
+      case 'common.msg.export.file.failure':
+        return '賮卮賱 廿賳卮丕亍 丕賱賲賱賮';
+      case 'common.msg.import.confirm':
+        return '鬲兀賰賷丿 丕賱丕爻鬲賷乇丕丿';
+      case 'common.msg.import.success':
+        return '鬲賲 丕賱丕爻鬲賷乇丕丿 亘賳噩丕丨';
+      case 'common.msg.import.failure':
+        return '賮卮賱 丕賱丕爻鬲賷乇丕丿';
+      case 'intro.banner':
+        return '賰賱 賲丕 鬲丨鬲丕噩賴 賱廿賳鬲乇賳鬲 亘賱丕 賯賷賵丿';
+      case 'intro.termsAndPolicyCaution':
+        return ({required InlineSpanBuilder tap}) => TextSpan(
+          children: [
+            const TextSpan(text: '亘丕賱丕爻鬲賲乇丕乇貙 兀賳鬲 鬲賵丕賮賯 毓賱賶 '),
+            tap(_root.pages.about.termsAndConditions),
+          ],
+        );
+      case 'intro.info':
+        return ({required InlineSpanBuilder tap_source, required InlineSpanBuilder tap_license}) => TextSpan(
+          children: [
+            const TextSpan(text: '氐購賳毓 亘賭 鉂わ笍 亘賵丕爻胤丞 Hiddify - '),
+            tap_source('賲賮鬲賵丨 丕賱賲氐丿乇'),
+            const TextSpan(text: ' ('),
+            tap_license('丕賱乇禺氐丞'),
+            const TextSpan(text: ')'),
+          ],
+        );
+      case 'pages.home.title':
+        return '丕賱乇卅賷爻賷丞';
+      case 'pages.home.quickSettings':
+        return '丕賱廿毓丿丕丿丕鬲 丕賱爻乇賷毓丞';
+      case 'pages.proxies.title':
+        return '丕賱亘乇賵賰爻賷丕鬲';
+      case 'pages.proxies.sort':
+        return '賮乇夭 丕賱亘乇賵賰爻賷丕鬲';
+      case 'pages.proxies.testDelay':
+        return '丕禺鬲亘丕乇 丕賱鬲兀禺賷乇';
+      case 'pages.proxies.empty':
+        return '賱丕 鬲賵噩丿 亘乇賵賰爻賷丕鬲 賲鬲丕丨丞';
+      case 'pages.proxies.activeProxy':
+        return '丕賱亘乇賵賰爻賷 丕賱賳卮胤';
+      case 'pages.proxies.unknownIp':
+        return 'IP 睾賷乇 賲毓乇賵賮';
+      case 'pages.proxies.sortOptions.unsorted':
+        return '丕賱丕賮鬲乇丕囟賷';
+      case 'pages.proxies.sortOptions.name':
+        return '兀亘噩丿賷賸丕';
+      case 'pages.proxies.sortOptions.delay':
+        return '丨爻亘 丕賱鬲兀禺賷乇';
+      case 'pages.proxies.ipInfo.address':
+        return '毓賳賵丕賳 IP';
+      case 'pages.proxies.ipInfo.country':
+        return '丕賱丿賵賱丞';
+      case 'pages.proxies.ipInfo.organization':
+        return '丕賱賲購賳馗賲丞';
+      case 'pages.proxies.delay.result':
+        return ({required Object delay}) => '丕賱鬲兀禺賷乇: ${delay} 賲賱賱賷 孬丕賳賷丞';
+      case 'pages.proxies.delay.timeout':
+        return '丕賳鬲賴賶 賵賯鬲 丕禺鬲亘丕乇 丕賱鬲兀禺賷乇';
+      case 'pages.proxies.delay.testing':
+        return '丕賱鬲兀禺賷乇: 賯賷丿 丕賱丕禺鬲亘丕乇...';
+      case 'pages.profiles.title':
+        return '丕賱賲賱賮丕鬲 丕賱卮禺氐賷丞';
+      case 'pages.profiles.add':
+        return '廿囟丕賮丞 賲賱賮 卮禺氐賷';
+      case 'pages.profiles.update':
+        return '鬲丨丿賷孬 丕賱賲賱賮 丕賱卮禺氐賷';
+      case 'pages.profiles.viewAllProfiles':
+        return '毓乇囟 噩賲賷毓 丕賱賲賱賮丕鬲 丕賱卮禺氐賷丞';
+      case 'pages.profiles.activeProfileName':
+        return ({required Object name}) => '丕爻賲 丕賱賲賱賮 丕賱賳卮胤: "${name}".';
+      case 'pages.profiles.nonActiveProfileName':
+        return ({required Object name}) => '鬲丨丿賷丿 "${name}" 賰賲賱賮 賳卮胤';
+      case 'pages.profiles.freeSubNotFound':
+        return '賱賲 賷鬲賲 丕賱毓孬賵乇 毓賱賶 丕卮鬲乇丕賰 賲噩丕賳賷';
+      case 'pages.profiles.freeSubNotFoundForRegion':
+        return ({required Object region}) => '賱賲 賷鬲賲 丕賱毓孬賵乇 毓賱賶 丕卮鬲乇丕賰 賲噩丕賳賷 賱賲賳胤賯丞 "${region}"';
+      case 'pages.profiles.failedToLoad':
+        return '賮卮賱 丕賱鬲丨賲賷賱';
+      case 'pages.profiles.updateSubscriptions':
+        return '鬲丨丿賷孬 丕賱丕卮鬲乇丕賰丕鬲';
+      case 'pages.profiles.share.urlToClipboard':
+        return '乇丕亘胤 URL 廿賱賶 丕賱丨丕賮馗丞';
+      case 'pages.profiles.share.showUrlQr':
+        return '毓乇囟 乇賲夭 QR 賱賱乇丕亘胤';
+      case 'pages.profiles.share.jsonToClipboard':
+        return 'JSON 廿賱賶 丕賱丨丕賮馗丞';
+      case 'pages.profiles.msg.save.success':
+        return '鬲賲 丨賮馗 丕賱賲賱賮 丕賱卮禺氐賷 亘賳噩丕丨';
+      case 'pages.profiles.msg.invalidUrl':
+        return '乇丕亘胤 睾賷乇 氐丕賱丨';
+      case 'pages.profiles.msg.add.failure':
+        return '賮卮賱 廿囟丕賮丞 丕賱賲賱賮 丕賱卮禺氐賷';
+      case 'pages.profiles.msg.update.success':
+        return '鬲賲 鬲丨丿賷孬 丕賱賲賱賮 丕賱卮禺氐賷 亘賳噩丕丨';
+      case 'pages.profiles.msg.update.successNamed':
+        return ({required Object name}) => '鬲賲 鬲丨丿賷孬 "${name}" 亘賳噩丕丨';
+      case 'pages.profiles.msg.update.failure':
+        return '賮卮賱 鬲丨丿賷孬 丕賱賲賱賮 丕賱卮禺氐賷';
+      case 'pages.profiles.msg.update.failureNamed':
+        return ({required Object name}) => '賮卮賱 鬲丨丿賷孬 "${name}"';
+      case 'pages.profiles.msg.delete.success':
+        return '鬲賲 丨匕賮 丕賱賲賱賮 丕賱卮禺氐賷 亘賳噩丕丨';
+      case 'pages.profileDetails.title':
+        return '丕賱賲賱賮 丕賱卮禺氐賷';
+      case 'pages.profileDetails.lastUpdate':
+        return '丌禺乇 鬲丨丿賷孬';
+      case 'pages.profileDetails.form.nameHint':
+        return '丕爻賲 丕賱賲賱賮 丕賱卮禺氐賷';
+      case 'pages.profileDetails.form.emptyName':
+        return '丕賱丕爻賲 賲胤賱賵亘';
+      case 'pages.profileDetails.form.invalidUrl':
+        return '乇丕亘胤 睾賷乇 氐丕賱丨';
+      case 'pages.profileDetails.form.urlHint':
+        return '乇丕亘胤 丕賱廿毓丿丕丿丕鬲 丕賱賰丕賲賱';
+      case 'pages.profileDetails.form.disableAutoUpdate':
+        return '鬲毓胤賷賱 丕賱鬲丨丿賷孬 丕賱鬲賱賯丕卅賷';
+      case 'pages.profileDetails.form.autoUpdateInterval':
+        return '賮丕氐賱 丕賱鬲丨丿賷孬 丕賱鬲賱賯丕卅賷';
+      case 'pages.profileDetails.form.loading':
+        return '噩丕乇賷 廿囟丕賮丞 丕賱賲賱賮 丕賱卮禺氐賷...';
+      case 'pages.logs.title':
+        return '丕賱爻噩賱丕鬲';
+      case 'pages.logs.shareCoreLogs':
+        return '賲卮丕乇賰丞 爻噩賱丕鬲 丕賱賳賵丕丞';
+      case 'pages.logs.shareAppLogs':
+        return '賲卮丕乇賰丞 爻噩賱丕鬲 丕賱鬲胤亘賷賯';
+      case 'pages.about.title':
+        return '丨賵賱 丕賱鬲胤亘賷賯';
+      case 'pages.about.notAvailableMsg':
+        return '兀賳鬲 鬲爻鬲禺丿賲 兀丨丿孬 廿氐丿丕乇 亘丕賱賮毓賱';
+      case 'pages.about.checkForUpdate':
+        return '丕賱鬲丨賯賯 賲賳 賵噩賵丿 鬲丨丿賷孬丕鬲';
+      case 'pages.about.openWorkingDir':
+        return '賮鬲丨 賲噩賱丿 丕賱毓賲賱';
+      case 'pages.about.sourceCode':
+        return '丕賱賰賵丿 丕賱賲氐丿乇賷';
+      case 'pages.about.telegramChannel':
+        return '賯賳丕丞 丕賱鬲賷賱賷噩乇丕賲';
+      case 'pages.about.termsAndConditions':
+        return '丕賱卮乇賵胤 賵丕賱兀丨賰丕賲';
+      case 'pages.about.privacyPolicy':
+        return '爻賷丕爻丞 丕賱禺氐賵氐賷丞';
+      case 'pages.settings.title':
+        return '丕賱廿毓丿丕丿丕鬲';
+      case 'pages.settings.resetTunnel':
+        return '廿毓丕丿丞 鬲毓賷賷賳 賲賱賮 VPN';
+      case 'pages.settings.options.import.clipboard':
+        return '丕爻鬲賷乇丕丿 丕賱禺賷丕乇丕鬲 賲賳 丕賱丨丕賮馗丞';
+      case 'pages.settings.options.import.file':
+        return '丕爻鬲賷乇丕丿 丕賱禺賷丕乇丕鬲 賲賳 賲賱賮';
+      case 'pages.settings.options.export.anonymousToClipboard':
+        return '賳爻禺 丕賱禺賷丕乇丕鬲 丕賱賲噩賴賵賱丞 廿賱賶 丕賱丨丕賮馗丞';
+      case 'pages.settings.options.export.anonymousToFile':
+        return '鬲氐丿賷乇 丕賱禺賷丕乇丕鬲 丕賱賲噩賴賵賱丞 廿賱賶 賲賱賮';
+      case 'pages.settings.options.export.allToClipboard':
+        return '賳爻禺 噩賲賷毓 丕賱禺賷丕乇丕鬲 廿賱賶 丕賱丨丕賮馗丞';
+      case 'pages.settings.options.export.allToFile':
+        return '鬲氐丿賷乇 噩賲賷毓 丕賱禺賷丕乇丕鬲 廿賱賶 賲賱賮';
+      case 'pages.settings.options.reset':
+        return '廿毓丕丿丞 鬲毓賷賷賳 丕賱禺賷丕乇丕鬲';
+      case 'pages.settings.general.title':
+        return '毓丕賲';
+      case 'pages.settings.general.locale':
+        return '丕賱賱睾丞';
+      case 'pages.settings.general.themeMode':
+        return '丕賱爻賲丞';
+      case 'pages.settings.general.themeModes.system':
+        return '爻賲丞 丕賱賳馗丕賲 丕賱丕賮鬲乇丕囟賷丞';
+      case 'pages.settings.general.themeModes.dark':
+        return '丕賱賵囟毓 丕賱丿丕賰賳';
+      case 'pages.settings.general.themeModes.light':
+        return '丕賱賵囟毓 丕賱賮丕鬲丨';
+      case 'pages.settings.general.themeModes.black':
+        return '丕賱賵囟毓 丕賱兀爻賵丿';
+      case 'pages.settings.general.enableAnalytics':
+        return '鬲賮毓賷賱 丕賱鬲丨賱賷賱丕鬲';
+      case 'pages.settings.general.enableAnalyticsMsg':
+        return '丕賱爻賲丕丨 亘噩賲毓 亘賷丕賳丕鬲 丕賱鬲丨賱賷賱 賵鬲賯丕乇賷乇 丕賱兀毓胤丕賱 賱鬲丨爻賷賳 丕賱鬲胤亘賷賯';
+      case 'pages.settings.general.autoIpCheck':
+        return '丕賱鬲丨賯賯 丕賱鬲賱賯丕卅賷 賲賳 IP 丕賱丕鬲氐丕賱';
+      case 'pages.settings.general.dynamicNotification':
+        return '毓乇囟 丕賱爻乇毓丞 賮賷 丕賱廿卮毓丕乇';
+      case 'pages.settings.general.hapticFeedback':
+        return '乇丿賵丿 丕賱賮毓賱 丕賱賱賲爻賷丞';
+      case 'pages.settings.general.actionAtClosing':
+        return '丕賱廿噩乇丕亍 毓賳丿 丕賱廿睾賱丕賯';
+      case 'pages.settings.general.autoStart':
+        return '丕賱亘丿亍 毓賳丿 鬲爻噩賷賱 丕賱丿禺賵賱';
+      case 'pages.settings.general.silentStart':
+        return '丕賱亘丿亍 賮賷 丕賱禺賱賮賷丞';
+      case 'pages.settings.general.ignoreBatteryOptimizations':
+        return '鬲噩丕賴賱 鬲丨爻賷賳丕鬲 丕賱亘胤丕乇賷丞';
+      case 'pages.settings.general.ignoreBatteryOptimizationsMsg':
+        return '廿夭丕賱丞 丕賱賯賷賵丿 賱賱丨氐賵賱 毓賱賶 兀賮囟賱 兀丿丕亍 賱賱賭 VPN';
+      case 'pages.settings.general.memoryLimit':
+        return '丨丿 丕賱匕丕賰乇丞';
+      case 'pages.settings.general.memoryLimitMsg':
+        return '賯賲 亘鬲賮毓賷賱 賴匕丕 丕賱禺賷丕乇 廿匕丕 賰賳鬲 鬲賵丕噩賴 兀禺胤丕亍 賳賮丕丿 丕賱匕丕賰乇丞 兀賵 鬲毓胤賱 丕賱鬲胤亘賷賯 亘卮賰賱 賲鬲賰乇乇';
+      case 'pages.settings.general.debugMode':
+        return '賵囟毓 丕賱鬲氐丨賷丨';
+      case 'pages.settings.general.debugModeMsg':
+        return '兀毓丿 鬲卮睾賷賱 丕賱鬲胤亘賷賯 賱鬲胤亘賷賯 賴匕丕 丕賱鬲睾賷賷乇';
+      case 'pages.settings.general.logLevel':
+        return '賲爻鬲賵賶 丕賱爻噩賱';
+      case 'pages.settings.general.connectionTestUrl':
+        return '乇丕亘胤 丕禺鬲亘丕乇 丕賱丕鬲氐丕賱';
+      case 'pages.settings.general.urlTestInterval':
+        return '賮丕氐賱 丕禺鬲亘丕乇 丕賱乇丕亘胤';
+      case 'pages.settings.general.clashApiPort':
+        return '賲賳賮匕 Clash API';
+      case 'pages.settings.general.useXrayCoreWhenPossible':
+        return '尽可能使用 xray-core';
+      case 'pages.settings.general.useXrayCoreWhenPossibleMsg':
+        return '解析订阅链接时使用 xray-core。您需要重新导入订阅链接才能启用此选项';
+      case 'pages.settings.routing.title':
+        return '丕賱鬲賵噩賷賴';
+      case 'pages.settings.routing.perAppProxy.title':
+        return '亘乇賵賰爻賷 賱賰賱 鬲胤亘賷賯';
+      case 'pages.settings.routing.perAppProxy.hideSysApps':
+        return '廿禺賮丕亍 鬲胤亘賷賯丕鬲 丕賱賳馗丕賲';
+      case 'pages.settings.routing.perAppProxy.options.import.clipboard':
+        return '丕爻鬲賷乇丕丿 丕賱鬲丨丿賷丿 賲賳 丕賱丨丕賮馗丞';
+      case 'pages.settings.routing.perAppProxy.options.import.file':
+        return '丕爻鬲賷乇丕丿 丕賱鬲丨丿賷丿 賲賳 賲賱賮';
+      case 'pages.settings.routing.perAppProxy.options.import.msg':
+        return '爻賷丐丿賷 丕賱丕爻鬲賷乇丕丿 廿賱賶 丕爻鬲亘丿丕賱 鬲丨丿賷丿丕鬲賰 丕賱丨丕賱賷丞. 賴賱 兀賳鬲 賲鬲兀賰丿 賲賳 乇睾亘鬲賰 賮賷 丕賱賲鬲丕亘毓丞責';
+      case 'pages.settings.routing.perAppProxy.options.export.clipboard':
+        return '賳爻禺 丕賱鬲丨丿賷丿 廿賱賶 丕賱丨丕賮馗丞';
+      case 'pages.settings.routing.perAppProxy.options.export.file':
+        return '鬲氐丿賷乇 丕賱鬲丨丿賷丿 廿賱賶 賲賱賮';
+      case 'pages.settings.routing.perAppProxy.options.shareToAll':
+        return '賲卮丕乇賰丞 賲毓 丕賱噩賲賷毓';
+      case 'pages.settings.routing.perAppProxy.options.clearAllSelections':
+        return '賲爻丨 噩賲賷毓 丕賱鬲丨丿賷丿丕鬲';
+      case 'pages.settings.routing.perAppProxy.modes.all':
+        return '丕賱賰賱';
+      case 'pages.settings.routing.perAppProxy.modes.proxy':
+        return '亘乇賵賰爻賷';
+      case 'pages.settings.routing.perAppProxy.modes.bypass':
+        return '鬲噩丕賵夭';
+      case 'pages.settings.routing.perAppProxy.modes.allMsg':
+        return '丕爻鬲禺丿丕賲 丕賱亘乇賵賰爻賷 賱噩賲賷毓 丕賱鬲胤亘賷賯丕鬲';
+      case 'pages.settings.routing.perAppProxy.modes.proxyMsg':
+        return '丕爻鬲禺丿丕賲 丕賱亘乇賵賰爻賷 賱賱鬲胤亘賷賯丕鬲 丕賱賲丨丿丿丞 賮賯胤';
+      case 'pages.settings.routing.perAppProxy.modes.bypassMsg':
+        return '毓丿賲 丕爻鬲禺丿丕賲 丕賱亘乇賵賰爻賷 賱賱鬲胤亘賷賯丕鬲 丕賱賲丨丿丿丞';
+      case 'pages.settings.routing.perAppProxy.autoSelection.title':
+        return '丕賱丕禺鬲賷丕乇 丕賱鬲賱賯丕卅賷';
+      case 'pages.settings.routing.perAppProxy.autoSelection.performNow':
+        return '鬲賳賮賷匕 丕賱丌賳';
+      case 'pages.settings.routing.perAppProxy.autoSelection.resetToDefault':
+        return '廿毓丕丿丞 丕賱鬲毓賷賷賳 廿賱賶 丕賱丕賮鬲乇丕囟賷';
+      case 'pages.settings.routing.perAppProxy.autoSelection.autoUpdateInterval':
+        return '賮丕氐賱 丕賱鬲丨丿賷孬 丕賱鬲賱賯丕卅賷';
+      case 'pages.settings.routing.perAppProxy.autoSelection.toast.success':
+        return '丕賰鬲賲賱 丕賱丕禺鬲賷丕乇 丕賱鬲賱賯丕卅賷 賱賱鬲胤亘賷賯丕鬲 亘賳噩丕丨';
+      case 'pages.settings.routing.perAppProxy.autoSelection.toast.failure':
+        return '賮卮賱 丕賱丕禺鬲賷丕乇 丕賱鬲賱賯丕卅賷';
+      case 'pages.settings.routing.perAppProxy.autoSelection.toast.regionNotFound':
+        return ({required Object region}) => '賱賲 賷鬲賲 丕賱毓孬賵乇 毓賱賶 丕禺鬲賷丕乇 鬲賱賯丕卅賷 賱賲賳胤賯丞 "${region}"';
+      case 'pages.settings.routing.perAppProxy.autoSelection.toast.alreadyInAuto':
+        return '丕禺鬲賷丕乇丕鬲賰 賲賵噩賵丿丞 亘丕賱賮毓賱 賮賷 丕賱賯丕卅賲丞 丕賱鬲賱賯丕卅賷丞';
+      case 'pages.settings.routing.perAppProxy.autoSelection.dialog.title':
+        return '丕賱丕禺鬲賷丕乇 丕賱鬲賱賯丕卅賷 賱賱鬲胤亘賷賯丕鬲';
+      case 'pages.settings.routing.perAppProxy.autoSelection.dialog.msg':
+        return ({required Object region}) =>
+            '鬲賲 鬲毓胤賷賱 賲賷夭丞 丕賱丕禺鬲賷丕乇 丕賱鬲賱賯丕卅賷 賱賱亘乇賵賰爻賷 亘爻亘亘 鬲睾賷賷乇 丕賱賲賳胤賯丞 廿賱賶 "${region}"';
+      case 'pages.settings.routing.region':
+        return '丕賱賲賳胤賯丞';
+      case 'pages.settings.routing.regions.ir':
+        return '廿賷乇丕賳 (ir)';
+      case 'pages.settings.routing.regions.cn':
+        return '丕賱氐賷賳 (cn)';
+      case 'pages.settings.routing.regions.ru':
+        return '乇賵爻賷丕 (ru)';
+      case 'pages.settings.routing.regions.af':
+        return '兀賮睾丕賳爻鬲丕賳 (af)';
+      case 'pages.settings.routing.regions.id':
+        return '廿賳丿賵賳賷爻賷丕 (id)';
+      case 'pages.settings.routing.regions.tr':
+        return '鬲乇賰賷丕 (tr)';
+      case 'pages.settings.routing.regions.br':
+        return '丕賱亘乇丕夭賷賱 (br)';
+      case 'pages.settings.routing.regions.other':
+        return '兀禺乇賶';
+      case 'pages.settings.routing.balancerStrategy.title':
+        return '丕爻鬲乇丕鬲賷噩賷丞 Balancer';
+      case 'pages.settings.routing.balancerStrategy.roundRobin':
+        return 'Round robin';
+      case 'pages.settings.routing.balancerStrategy.consistentHash':
+        return 'Consistent hash';
+      case 'pages.settings.routing.balancerStrategy.stickySession':
+        return 'Sticky session';
+      case 'pages.settings.routing.blockAds':
+        return '丨馗乇 丕賱廿毓賱丕賳丕鬲';
+      case 'pages.settings.routing.bypassLan':
+        return '鬲噩丕賵夭 丕賱卮亘賰丞 丕賱賲丨賱賷丞';
+      case 'pages.settings.routing.resolveDestination':
+        return '鬲丨丿賷丿 賵噩賴丞 丕賱丕鬲氐丕賱';
+      case 'pages.settings.routing.ipv6Route':
+        return '鬲賵噩賷賴 IPv6';
+      case 'pages.settings.routing.ipv6Modes.disable':
+        return '鬲毓胤賷賱';
+      case 'pages.settings.routing.ipv6Modes.enable':
+        return '鬲賮毓賷賱';
+      case 'pages.settings.routing.ipv6Modes.prefer':
+        return '賲賮囟賱';
+      case 'pages.settings.routing.ipv6Modes.only':
+        return '賮賯胤';
+      case 'pages.settings.routing.routeRule.title':
+        return '賯賵丕毓丿 丕賱鬲賵噩賷賴';
+      case 'pages.settings.routing.routeRule.options.import.clipboard':
+        return '丕爻鬲賷乇丕丿 丕賱賯賵丕毓丿 賲賳 丕賱丨丕賮馗丞';
+      case 'pages.settings.routing.routeRule.options.import.file':
+        return '丕爻鬲賷乇丕丿 丕賱賯賵丕毓丿 賲賳 賲賱賮';
+      case 'pages.settings.routing.routeRule.options.export.clipboard':
+        return '賳爻禺 丕賱賯賵丕毓丿 廿賱賶 丕賱丨丕賮馗丞';
+      case 'pages.settings.routing.routeRule.options.export.file':
+        return '丨賮馗 丕賱賯賵丕毓丿 賮賷 賲賱賮';
+      case 'pages.settings.routing.routeRule.options.reset':
+        return '廿毓丕丿丞 鬲毓賷賷賳 丕賱賯賵丕毓丿';
+      case 'pages.settings.routing.routeRule.deleteRule':
+        return '丨匕賮 丕賱賯丕毓丿丞';
+      case 'pages.settings.routing.routeRule.createRule':
+        return '廿賳卮丕亍 賯丕毓丿丞 噩丿賷丿丞';
+      case 'pages.settings.routing.routeRule.rule.title':
+        return '賯丕毓丿丞';
+      case 'pages.settings.routing.routeRule.rule.ruleChanged':
+        return '鬲賲 鬲睾賷賷乇 丕賱賯丕毓丿丞';
+      case 'pages.settings.routing.routeRule.rule.ruleChangedMsg':
+        return '賴賱 鬲乇賷丿 丨賮馗 鬲毓丿賷賱丕鬲賰責';
+      case 'pages.settings.routing.routeRule.rule.onlyTunMode':
+        return '賲鬲賵賮乇 賮賯胤 賮賷 賵囟毓 TUN';
+      case 'pages.settings.routing.routeRule.rule.notAvailabeInThisPlatform':
+        return '睾賷乇 賲鬲賵賮乇 毓賱賶 賴匕丕 丕賱賳馗丕賲';
+      case 'pages.settings.routing.routeRule.rule.canNotBeEmpty':
+        return '賱丕 賷賲賰賳 兀賳 賷賰賵賳 賮丕乇睾賸丕';
+      case 'pages.settings.routing.routeRule.rule.validUrlEx':
+        return 'https://example.com';
+      case 'pages.settings.routing.routeRule.rule.validUrl':
+        return '"URL" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validUrlEx}';
+      case 'pages.settings.routing.routeRule.rule.validProcessNameEx':
+        return 'Chrome.exe or google chrome or chrome';
+      case 'pages.settings.routing.routeRule.rule.validProcessName':
+        return '"丕爻賲 丕賱毓賲賱賷丞" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validProcessNameEx}';
+      case 'pages.settings.routing.routeRule.rule.validProcessPathEx':
+        return 'C:\Pro...\chrome.exe\n/App.../Google Chrome\n/usr/lib.../chrome';
+      case 'pages.settings.routing.routeRule.rule.validProcessPath':
+        return '"賲爻丕乇 丕賱毓賲賱賷丞" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validProcessPathEx}';
+      case 'pages.settings.routing.routeRule.rule.validPortRangeEx':
+        return '80 or 1-65000';
+      case 'pages.settings.routing.routeRule.rule.validPortRange':
+        return '"賲賳賮匕" 兀賵 "賳胤丕賯 賲賳丕賮匕" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validPortRangeEx}';
+      case 'pages.settings.routing.routeRule.rule.validIpCidrEx':
+        return '8.8.8.8 or 10.0.0.0/24';
+      case 'pages.settings.routing.routeRule.rule.validIpCidr':
+        return 'IP CIDR 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validIpCidrEx}';
+      case 'pages.settings.routing.routeRule.rule.validDomainEx':
+        return 'Google.com or dl.google.com';
+      case 'pages.settings.routing.routeRule.rule.validDomain':
+        return '"賳胤丕賯" 氐丕賱丨 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validDomainEx}';
+      case 'pages.settings.routing.routeRule.rule.validDomainSuffixEx':
+        return '.com or .ir';
+      case 'pages.settings.routing.routeRule.rule.validDomainSuffix':
+        return '"賱丕丨賯丞 賳胤丕賯" 氐丕賱丨丞 賲孬賱\n${_root.pages.settings.routing.routeRule.rule.validDomainSuffixEx}';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.name':
+        return '丕賱丕爻賲';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.outbound':
+        return '丕賱鬲賵噩賷賴 毓賳丿 丕賱鬲胤丕亘賯';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.rule_set':
+        return '乇丕亘胤 賲噩賲賵毓丞 丕賱賯賵丕毓丿';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.package_name':
+        return '兀爻賲丕亍 丕賱丨夭賲';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.process_name':
+        return '兀爻賲丕亍 丕賱毓賲賱賷丕鬲';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.process_path':
+        return '賲爻丕乇丕鬲 丕賱毓賲賱賷丕鬲';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.network':
+        return '丕賱卮亘賰丕鬲';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.port_range':
+        return '賲賳丕賮匕 丕賱賵噩賴丞';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.source_port_range':
+        return '賲賳丕賮匕 丕賱賲氐丿乇';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.protocol':
+        return '丕賱亘乇賵鬲賵賰賵賱';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.ip_cidr':
+        return 'IP CIDR 丕賱賵噩賴丞';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.source_ip_cidr':
+        return 'IP CIDR 丕賱賲氐丿乇';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.domain':
+        return '丕賱賳胤丕賯';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.domain_suffixe':
+        return '賱丕丨賯丞 丕賱賳胤丕賯';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.domain_keyword':
+        return '賰賱賲丞 賲賮鬲丕丨賷丞 賱賱賳胤丕賯';
+      case 'pages.settings.routing.routeRule.rule.tileTitle.domain_regex':
+        return '鬲毓亘賷乇 賳賲胤賷 賱賱賳胤丕賯';
+      case 'pages.settings.routing.routeRule.rule.outbound.proxy':
+        return '亘乇賵賰爻賷';
+      case 'pages.settings.routing.routeRule.rule.outbound.direct':
+        return '賲亘丕卮乇';
+      case 'pages.settings.routing.routeRule.rule.outbound.direct_with_fragment':
+        return '賲亘丕卮乇 賲毓 Fragment';
+      case 'pages.settings.routing.routeRule.rule.outbound.block':
+        return '丨馗乇';
+      case 'pages.settings.routing.routeRule.rule.network.all':
+        return '丕賱賰賱';
+      case 'pages.settings.routing.routeRule.rule.network.tcp':
+        return 'TCP';
+      case 'pages.settings.routing.routeRule.rule.network.udp':
+        return 'UDP';
+      case 'pages.settings.routing.routeRule.rule.protocol.':
+        return '丕賱賰賱';
+      case 'pages.settings.routing.routeRule.rule.protocol.tls':
+        return 'TLS';
+      case 'pages.settings.routing.routeRule.rule.protocol.http':
+        return 'HTTP';
+      case 'pages.settings.routing.routeRule.rule.protocol.quic':
+        return 'QUIC';
+      case 'pages.settings.routing.routeRule.rule.protocol.stun':
+        return 'STUN';
+      case 'pages.settings.routing.routeRule.rule.protocol.dns':
+        return 'DNS';
+      case 'pages.settings.routing.routeRule.rule.protocol.bittorrent':
+        return 'BitTorrent';
+      case 'pages.settings.routing.routeRule.genericList.addNew':
+        return '廿囟丕賮丞 賯賷賲丞 噩丿賷丿丞';
+      case 'pages.settings.routing.routeRule.genericList.update':
+        return '鬲丨丿賷孬 丕賱賯賷賲丞';
+      case 'pages.settings.routing.routeRule.genericList.clearList':
+        return '賲爻丨 丕賱賯丕卅賲丞';
+      case 'pages.settings.routing.routeRule.genericList.clearListMsg':
+        return '鬲賲 丨匕賮 噩賲賷毓 丕賱毓賳丕氐乇';
+      case 'pages.settings.routing.routeRule.androidApps.pageTitle':
+        return '鬲胤亘賷賯丕鬲 兀賳丿乇賵賷丿';
+      case 'pages.settings.routing.routeRule.androidApps.showSystemApps':
+        return '毓乇囟 鬲胤亘賷賯丕鬲 丕賱賳馗丕賲';
+      case 'pages.settings.routing.routeRule.androidApps.hideSystemApps':
+        return '廿禺賮丕亍 鬲胤亘賷賯丕鬲 丕賱賳馗丕賲';
+      case 'pages.settings.routing.routeRule.androidApps.clearSelection':
+        return '賲爻丨 丕賱鬲丨丿賷丿';
+      case 'pages.settings.routing.routeRule.androidApps.uninstalled':
+        return '睾賷乇 賲孬亘鬲';
+      case 'pages.settings.dns.title':
+        return 'DNS';
+      case 'pages.settings.dns.remoteDns':
+        return 'DNS 丕賱亘毓賷丿';
+      case 'pages.settings.dns.remoteDnsDomainStrategy':
+        return '丕爻鬲乇丕鬲賷噩賷丞 賳胤丕賯 DNS 丕賱亘毓賷丿';
+      case 'pages.settings.dns.directDns':
+        return '賲丨賱賱 禺丕丿賲 丕賱氐丕丿乇 (賲亘丕卮乇)';
+      case 'pages.settings.dns.directDnsDomainStrategy':
+        return '丕爻鬲乇丕鬲賷噩賷丞 丕賱賳胤丕賯 丕賱氐丕丿乇';
+      case 'pages.settings.dns.enableDnsRouting':
+        return '鬲賲賰賷賳 鬲賵噩賷賴 DNS';
+      case 'pages.settings.dns.enableFakeDns':
+        return '鬲賲賰賷賳 DNS 丕賱賵賴賲賷';
+      case 'pages.settings.dns.domainStrategy.auto':
+        return '鬲賱賯丕卅賷';
+      case 'pages.settings.dns.domainStrategy.preferIpv6':
+        return '鬲賮囟賷賱 IPv6';
+      case 'pages.settings.dns.domainStrategy.preferIpv4':
+        return '鬲賮囟賷賱 IPv4';
+      case 'pages.settings.dns.domainStrategy.ipv4Only':
+        return 'IPv4 賮賯胤';
+      case 'pages.settings.dns.domainStrategy.ipv6Only':
+        return 'IPv6 賮賯胤';
+      case 'pages.settings.inbound.title':
+        return '丕賱賵丕乇丿';
+      case 'pages.settings.inbound.serviceMode':
+        return '賵囟毓 丕賱禺丿賲丞';
+      case 'pages.settings.inbound.serviceModes.proxy':
+        return '禺丿賲丞 丕賱亘乇賵賰爻賷 賮賯胤';
+      case 'pages.settings.inbound.serviceModes.systemProxy':
+        return '鬲毓賷賷賳 亘乇賵賰爻賷 丕賱賳馗丕賲';
+      case 'pages.settings.inbound.serviceModes.tun':
+        return 'VPN';
+      case 'pages.settings.inbound.serviceModes.tunService':
+        return '禺丿賲丞 VPN';
+      case 'pages.settings.inbound.shortServiceModes.proxy':
+        return '亘乇賵賰爻賷';
+      case 'pages.settings.inbound.shortServiceModes.systemProxy':
+        return '亘乇賵賰爻賷 丕賱賳馗丕賲';
+      case 'pages.settings.inbound.shortServiceModes.tun':
+        return 'VPN';
+      case 'pages.settings.inbound.shortServiceModes.tunService':
+        return '禺丿賲丞 VPN';
+      case 'pages.settings.inbound.strictRoute':
+        return '鬲賵噩賷賴 氐丕乇賲';
+      case 'pages.settings.inbound.tunImplementation':
+        return '鬲賳賮賷匕 Tun';
+      case 'pages.settings.inbound.tunImplementations.mixed':
+        return '賲禺鬲賱胤';
+      case 'pages.settings.inbound.tunImplementations.system':
+        return '丕賱賳馗丕賲';
+      case 'pages.settings.inbound.tunImplementations.gvisor':
+        return 'gVisor';
+      case 'pages.settings.inbound.mixedPort':
+        return '賲賳賮匕 賲禺鬲賱胤';
+      case 'pages.settings.inbound.tproxyPort':
+        return '賲賳賮匕 丕賱亘乇賵賰爻賷 丕賱卮賮丕賮';
+      case 'pages.settings.inbound.directPort':
+        return '賲賳賮匕 賲亘丕卮乇';
+      case 'pages.settings.inbound.redirectPort':
+        return '賲賳賮匕 廿毓丕丿丞 丕賱鬲賵噩賷賴';
+      case 'pages.settings.inbound.allowConnectionFromLan':
+        return '賲卮丕乇賰丞 VPN 毓賱賶 丕賱卮亘賰丞 丕賱賲丨賱賷丞';
+      case 'pages.settings.tlsTricks.title':
+        return '丨賷賱 TLS';
+      case 'pages.settings.tlsTricks.enable':
+        return '鬲賮毓賷賱 fragment';
+      case 'pages.settings.tlsTricks.packets':
+        return '丨夭賲 丕賱鬲噩夭卅丞';
+      case 'pages.settings.tlsTricks.packetsTlsHello':
+        return 'TLS Hello';
+      case 'pages.settings.tlsTricks.packets1_1':
+        return '1-1';
+      case 'pages.settings.tlsTricks.packets1_2':
+        return '1-2';
+      case 'pages.settings.tlsTricks.packets1_3':
+        return '1-3';
+      case 'pages.settings.tlsTricks.packets1_4':
+        return '1-4';
+      case 'pages.settings.tlsTricks.packets1_5':
+        return '1-5';
+      case 'pages.settings.tlsTricks.size':
+        return '丨噩賲 fragment';
+      case 'pages.settings.tlsTricks.sleep':
+        return '鬲兀禺賷乇 fragment';
+      case 'pages.settings.tlsTricks.mixedSniCase.enable':
+        return '鬲賮毓賷賱 丕賱兀丨乇賮 丕賱賲禺鬲賱胤丞 賱賭 SNI';
+      case 'pages.settings.tlsTricks.padding.enable':
+        return '鬲賮毓賷賱 padding';
+      case 'pages.settings.tlsTricks.padding.size':
+        return '丨噩賲 padding';
+      case 'pages.settings.warp.title':
+        return 'WARP';
+      case 'pages.settings.warp.enable':
+        return '鬲賮毓賷賱 WARP';
+      case 'pages.settings.warp.generateConfig':
+        return '廿賳卮丕亍 鬲賰賵賷賳 WARP';
+      case 'pages.settings.warp.configGenerated':
+        return '鬲賲 廿賳卮丕亍 鬲賰賵賷賳 WARP';
+      case 'pages.settings.warp.missingConfig':
+        return '鬲賰賵賷賳 WARP 賲賮賯賵丿';
+      case 'pages.settings.warp.detourMode':
+        return '賵囟毓 鬲賵噩賷賴 WARP';
+      case 'pages.settings.warp.detourModes.proxyOverWarp':
+        return '鬲賵噩賷賴 丕賱亘乇賵賰爻賷丕鬲 毓亘乇 WARP';
+      case 'pages.settings.warp.detourModes.warpOverProxy':
+        return '鬲賵噩賷賴 WARP 毓亘乇 丕賱亘乇賵賰爻賷丕鬲';
+      case 'pages.settings.warp.detourModes.proxyOverWarpExplain':
+        return '賱廿賱睾丕亍 丨馗乇 丕賱亘乇賵賰爻賷丕鬲 亘賵丕爻胤丞 WARP';
+      case 'pages.settings.warp.detourModes.warpOverProxyExplain':
+        return '賱兀賲丕賳 廿囟丕賮賷 亘賵丕爻胤丞 WARP';
+      case 'pages.settings.warp.licenseKey':
+        return '賲賮鬲丕丨 丕賱鬲乇禺賷氐';
+      case 'pages.settings.warp.cleanIp':
+        return 'IP 賳馗賷賮';
+      case 'pages.settings.warp.port':
+        return '丕賱賲賳賮匕';
+      case 'pages.settings.warp.noise.count':
+        return '毓丿丿 丕賱囟賵囟丕亍';
+      case 'pages.settings.warp.noise.mode':
+        return '賵囟毓 丕賱囟賵囟丕亍';
+      case 'pages.settings.warp.noise.size':
+        return '丨噩賲 丕賱囟賵囟丕亍';
+      case 'pages.settings.warp.noise.delay':
+        return '鬲兀禺賷乇 丕賱囟賵囟丕亍';
+      case 'components.stats.connection':
+        return '丕賱丕鬲氐丕賱';
+      case 'components.stats.traffic':
+        return '丕賱亘賷丕賳丕鬲';
+      case 'components.stats.trafficLive':
+        return '丕賱亘賷丕賳丕鬲 丕賱丨丕賱賷丞';
+      case 'components.stats.trafficTotal':
+        return '廿噩賲丕賱賷 丕賱亘賷丕賳丕鬲';
+      case 'components.stats.uplink':
+        return '丕賱廿乇爻丕賱';
+      case 'components.stats.downlink':
+        return '丕賱丕爻鬲賯亘丕賱';
+      case 'components.stats.speed':
+        return '丕賱爻乇毓丞';
+      case 'components.stats.totalTransferred':
+        return '廿噩賲丕賱賷 丕賱賳賯賱';
+      case 'components.subscriptionInfo.upload':
+        return '丕賱乇賮毓';
+      case 'components.subscriptionInfo.download':
+        return '丕賱鬲賳夭賷賱';
+      case 'components.subscriptionInfo.total':
+        return '廿噩賲丕賱賷 丕賱亘賷丕賳丕鬲';
+      case 'components.subscriptionInfo.expireDate':
+        return '鬲丕乇賷禺 丕賱丕賳鬲賴丕亍';
+      case 'components.subscriptionInfo.expired':
+        return '賲賳鬲賴賷 丕賱氐賱丕丨賷丞';
+      case 'components.subscriptionInfo.noTraffic':
+        return '賳賮丿鬲 丕賱亘丕賯丞';
+      case 'components.subscriptionInfo.remainingTime':
+        return '丕賱賵賯鬲 丕賱賲鬲亘賯賷';
+      case 'components.subscriptionInfo.remainingDuration':
+        return ({required Object duration}) => '賲鬲亘賯賺 ${duration} 賷賵賲';
+      case 'components.subscriptionInfo.remainingDurationNew':
+        return ({required Object duration}) => '${duration} 賷賵賲';
+      case 'components.subscriptionInfo.remainingTrafficSemanticLabel':
+        return ({required Object consumed, required Object total}) => '鬲賲 丕爻鬲賴賱丕賰 ${consumed} 賲賳 ${total}';
+      case 'components.subscriptionInfo.remainingTraffic':
+        return '丕賱亘賷丕賳丕鬲 丕賱賲鬲亘賯賷丞';
+      case 'components.subscriptionInfo.remainingUsage':
+        return '丕賱賲鬲亘賯賷';
+      case 'components.subscriptionInfo.profileSite':
+        return '丕賱賲夭賵賾丿';
+      case 'components.subscriptionInfo.profileSupport':
+        return '丕賱丿毓賲';
+      case 'dialogs.sortProfiles.title':
+        return '賮乇夭 丨爻亘';
+      case 'dialogs.sortProfiles.sort.name':
+        return '兀亘噩丿賷賸丕';
+      case 'dialogs.sortProfiles.sort.lastUpdate':
+        return '丌禺乇 鬲丨丿賷孬';
+      case 'dialogs.warpLicense.title':
+        return '賲賵丕賮賯丞 Cloudflare WARP';
+      case 'dialogs.warpLicense.description':
+        return ({required InlineSpanBuilder tos, required InlineSpanBuilder privacy}) => TextSpan(
+          children: [
+            const TextSpan(text: 'Cloudflare WARP 賴賵 賲夭賵丿 VPN 賲噩丕賳賷 賱賭 WireGuard. 亘鬲賮毓賷賱 賴匕丕 丕賱禺賷丕乇貙 賮廿賳賰 鬲賵丕賮賯 毓賱賶 '),
+            tos('卮乇賵胤 丕賱禺丿賲丞'),
+            const TextSpan(text: ' 賵 '),
+            privacy('爻賷丕爻丞 丕賱禺氐賵氐賷丞'),
+            const TextSpan(text: ' 丕賱禺丕氐丞 亘賭 Cloudflare WARP.'),
+          ],
+        );
+      case 'dialogs.newVersion.title':
+        return '鬲丨丿賷孬 賲鬲丕丨';
+      case 'dialogs.newVersion.msg':
+        return '廿氐丿丕乇 噩丿賷丿 賲賳 ${_root.common.appTitle} 賲鬲丕丨. 賴賱 鬲乇睾亘 賮賷 丕賱鬲丨丿賷孬 丕賱丌賳責';
+      case 'dialogs.newVersion.currentVersion':
+        return '丕賱廿氐丿丕乇 丕賱丨丕賱賷: ';
+      case 'dialogs.newVersion.newVersion':
+        return '丕賱廿氐丿丕乇 丕賱噩丿賷丿: ';
+      case 'dialogs.newVersion.updateNow':
+        return '丕賱鬲丨丿賷孬 丕賱丌賳';
+      case 'dialogs.confirmation.settings.import.msg':
+        return '爻賷丐丿賷 賴匕丕 廿賱賶 丕爻鬲亘丿丕賱 噩賲賷毓 廿毓丿丕丿丕鬲賰 丕賱丨丕賱賷丞. 賴賱 兀賳鬲 賲鬲兀賰丿責';
+      case 'dialogs.confirmation.profile.delete.title':
+        return '丨匕賮 丕賱賲賱賮 丕賱卮禺氐賷';
+      case 'dialogs.confirmation.profile.delete.msg':
+        return '賴賱 兀賳鬲 賲鬲兀賰丿 賲賳 乇睾亘鬲賰 賮賷 丨匕賮 賴匕丕 丕賱賲賱賮 丕賱卮禺氐賷 賳賴丕卅賷賸丕責';
+      case 'dialogs.confirmation.perAppProxy.shareOnGithub.title':
+        return '鬲丨爻賷賳 丕賱丕禺鬲賷丕乇 丕賱鬲賱賯丕卅賷';
+      case 'dialogs.confirmation.perAppProxy.shareOnGithub.msg':
+        return '亘賲卮丕乇賰丞 丕賱鬲胤亘賷賯丕鬲 丕賱鬲賷 丕禺鬲乇鬲賴丕貙 賮廿賳賰 鬲爻丕毓丿 賮賷 廿賰賲丕賱 賯丕卅賲丞 "丕賱丕禺鬲賷丕乇 丕賱鬲賱賯丕卅賷"';
+      case 'dialogs.confirmation.perAppProxy.import.msg':
+        return '爻賷丐丿賷 賴匕丕 廿賱賶 丕爻鬲亘丿丕賱 噩賲賷毓 鬲丨丿賷丿丕鬲賰 丕賱丨丕賱賷丞 賱亘乇賵賰爻賷 丕賱鬲胤亘賷賯丕鬲. 賴賱 兀賳鬲 賲鬲兀賰丿 賲賳 乇睾亘鬲賰 賮賷 丕賱賲鬲丕亘毓丞責';
+      case 'dialogs.confirmation.routeRule.delete.title':
+        return '丨匕賮 丕賱賯丕毓丿丞';
+      case 'dialogs.confirmation.routeRule.delete.msg':
+        return ({required Object rulename}) => '賴賱 兀賳鬲 賲鬲兀賰丿 賲賳 乇睾亘鬲賰 賮賷 丨匕賮 賯丕毓丿丞 "${rulename}"責';
+      case 'dialogs.experimentalNotice.title':
+        return '賲賷夭丕鬲 鬲噩乇賷亘賷丞 賯賷丿 丕賱丕爻鬲禺丿丕賲';
+      case 'dialogs.experimentalNotice.msg':
+        return '賱賯丿 賮毓賾賱鬲 賲賷夭丕鬲 鬲噩乇賷亘賷丞 賯丿 鬲丐孬乇 毓賱賶 噩賵丿丞 丕賱丕鬲氐丕賱 賵鬲爻亘亘 兀禺胤丕亍 睾賷乇 賲鬲賵賯毓丞. 賷賲賰賳賰 丿丕卅賲賸丕 鬲睾賷賷乇 賴匕賴 丕賱禺賷丕乇丕鬲 兀賵 廿毓丕丿丞 鬲毓賷賷賳賴丕 賲賳 氐賮丨丞 丕賱廿毓丿丕丿丕鬲.';
+      case 'dialogs.experimentalNotice.disable':
+        return '賱丕 鬲毓乇囟 賲乇丞 兀禺乇賶';
+      case 'dialogs.noActiveProfile.title':
+        return '选择一个配置文件';
+      case 'dialogs.noActiveProfile.msg':
+        return '让我们从添加一个包含您 VPN 连接详细信息的配置文件开始。\n\n还没有 VPN 服务器？别担心，按照下面的教程，您可以快速免费地设置一个。';
+      case 'dialogs.noActiveProfile.helpBtn.label':
+        return '告诉我如何操作';
+      case 'dialogs.noActiveProfile.helpBtn.url':
+        return 'https://hiddify.com/manager/';
+      case 'dialogs.unknownDomainsWarning.title':
+        return '鬲丨匕賷乇 賲賳 乇丕亘胤 禺丕乇噩賷';
+      case 'dialogs.unknownDomainsWarning.youAreAboutToVisit':
+        return '兀賳鬲 毓賱賶 賵卮賰 夭賷丕乇丞:';
+      case 'dialogs.unknownDomainsWarning.thisWebsiteIsNotInOurTrustedList':
+        return '賴匕丕 丕賱賲賵賯毓 賱賷爻 囟賲賳 賯丕卅賲丞 丕賱賲賵丕賯毓 丕賱賲賵孬賵賯丞 賱丿賷賳丕. 賷乇噩賶 丕賱賲鬲丕亘毓丞 亘丨匕乇.';
+      case 'dialogs.proxyInfo.fullTag':
+        return '丕賱毓賱丕賲丞 丕賱賰丕賲賱丞:';
+      case 'dialogs.proxyInfo.type':
+        return '丕賱賳賵毓:';
+      case 'dialogs.proxyInfo.testTime':
+        return '賵賯鬲 丕賱丕禺鬲亘丕乇:';
+      case 'dialogs.proxyInfo.testDelay':
+        return '鬲兀禺賷乇 丕賱丕禺鬲亘丕乇:';
+      case 'dialogs.proxyInfo.isSelected':
+        return '賲丨丿丿:';
+      case 'dialogs.proxyInfo.isGroup':
+        return '賲噩賲賵毓丞';
+      case 'dialogs.proxyInfo.isSecure':
+        return '丌賲賳:';
+      case 'dialogs.proxyInfo.port':
+        return '丕賱賲賳賮匕:';
+      case 'dialogs.proxyInfo.host':
+        return '丕賱賲囟賷賮:';
+      case 'dialogs.proxyInfo.ip':
+        return 'IP:';
+      case 'dialogs.proxyInfo.countryCode':
+        return '乇賲夭 丕賱丿賵賱丞:';
+      case 'dialogs.proxyInfo.region':
+        return '丕賱賲賳胤賯丞:';
+      case 'dialogs.proxyInfo.city':
+        return '丕賱賲丿賷賳丞:';
+      case 'dialogs.proxyInfo.asn':
+        return 'ASN:';
+      case 'dialogs.proxyInfo.organization':
+        return '丕賱賲購賳馗賲丞:';
+      case 'dialogs.proxyInfo.location':
+        return '丕賱賲賵賯毓:';
+      case 'dialogs.proxyInfo.postalCode':
+        return '丕賱乇賲夭 丕賱亘乇賷丿賷:';
+      case 'dialogs.windowClosing.askEachTime':
+        return '丕賱爻丐丕賱 賰賱 賲乇丞';
+      case 'dialogs.windowClosing.alertMessage':
+        return '賴賱 鬲乇賷丿 廿禺賮丕亍 丕賱鬲胤亘賷賯 兀賲 丕賱禺乇賵噩 賲賳賴責';
+      case 'dialogs.windowClosing.remember':
+        return '鬲匕賰乇 禺賷丕乇賷';
+      case 'connection.tapToConnect':
+        return '丕賳賯乇 賱賱丕鬲氐丕賱';
+      case 'connection.connect':
+        return '丕鬲氐丕賱';
+      case 'connection.connecting':
+        return '噩丕乇 丕賱丕鬲氐丕賱...';
+      case 'connection.connected':
+        return '賲鬲氐賱';
+      case 'connection.disconnect':
+        return '賯胤毓 丕賱丕鬲氐丕賱';
+      case 'connection.disconnecting':
+        return '噩丕乇賷 賯胤毓 丕賱丕鬲氐丕賱...';
+      case 'connection.reconnect':
+        return '廿毓丕丿丞 丕賱丕鬲氐丕賱';
+      case 'connection.reconnectMsg':
+        return '噩丕乇賷 廿毓丕丿丞 丕賱丕鬲氐丕賱 賱鬲胤亘賷賯 丕賱鬲睾賷賷乇丕鬲...';
+      case 'connection.secure':
+        return '賲購丐賲賾賻賳 亘賵丕爻胤丞 WARP';
+      case 'errors.unexpected':
+        return '禺胤兀 睾賷乇 賲鬲賵賯毓';
+      case 'errors.connection.unexpected':
+        return '禺胤兀 丕鬲氐丕賱 睾賷乇 賲鬲賵賯毓';
+      case 'errors.connection.timeout':
+        return '丕賳鬲賴賶 賵賯鬲 丕賱丕鬲氐丕賱';
+      case 'errors.connection.badResponse':
+        return '丕爻鬲噩丕亘丞 睾賷乇 氐丕賱丨丞';
+      case 'errors.connection.connectionError':
+        return '禺胤兀 賮賷 丕賱丕鬲氐丕賱';
+      case 'errors.connection.badCertificate':
+        return '卮賴丕丿丞 睾賷乇 氐丕賱丨丞';
+      case 'errors.profiles.unexpected':
+        return '禺胤兀 睾賷乇 賲鬲賵賯毓';
+      case 'errors.profiles.notFound':
+        return '賱賲 賷鬲賲 丕賱毓孬賵乇 毓賱賶 丕賱賲賱賮 丕賱卮禺氐賷';
+      case 'errors.profiles.invalidConfig':
+        return '鬲賰賵賷賳丕鬲 睾賷乇 氐丕賱丨丞';
+      case 'errors.profiles.invalidUrl':
+        return '乇丕亘胤 睾賷乇 氐丕賱丨';
+      case 'errors.profiles.canceledByUser':
+        return '鬲賲 丕賱廿賱睾丕亍 賲賳 賯亘賱 丕賱賲爻鬲禺丿賲';
+      case 'errors.connectivity.unexpected':
+        return '賮卮賱 睾賷乇 賲鬲賵賯毓';
+      case 'errors.connectivity.missingVpnPermission':
+        return '廿匕賳 丕賱賭 VPN 賲賮賯賵丿';
+      case 'errors.connectivity.missingNotificationPermission':
+        return '廿匕賳 丕賱廿卮毓丕乇丕鬲 賲賮賯賵丿';
+      case 'errors.connectivity.core':
+        return '禺胤兀 賮賷 丕賱賳賵丕丞';
+      case 'errors.singbox.serviceNotRunning':
+        return '丕賱禺丿賲丞 賱丕 鬲毓賲賱';
+      case 'errors.singbox.missingPrivilege':
+        return '氐賱丕丨賷丕鬲 賲胤賱賵亘丞';
+      case 'errors.singbox.missingPrivilegeMsg':
+        return '賵囟毓 丕賱賭 VPN 賷鬲胤賱亘 氐賱丕丨賷丕鬲 丕賱賲爻丐賵賱. 賷乇噩賶 廿毓丕丿丞 鬲卮睾賷賱 丕賱鬲胤亘賷賯 賰賲爻丐賵賱 兀賵 鬲睾賷賷乇 賵囟毓 丕賱禺丿賲丞.';
+      case 'errors.singbox.invalidConfigOptions':
+        return '禺賷丕乇丕鬲 鬲賰賵賷賳 睾賷乇 氐丕賱丨丞';
+      case 'errors.singbox.invalidConfig':
+        return '鬲賰賵賷賳 睾賷乇 氐丕賱丨';
+      case 'errors.warp.missingLicense':
+        return '乇禺氐丞 WARP 賲賮賯賵丿丞';
+      case 'errors.warp.missingLicenseMsg':
+        return '丕賱賲賱賮 丕賱卮禺氐賷 丕賱賲丨丿丿 賷爻鬲禺丿賲 賲賷夭丞 WARP. 賱丕爻鬲禺丿丕賲 賴匕賴 丕賱賲賷夭丞貙 賷噩亘 丕賱賲賵丕賮賯丞 毓賱賶 卮乇賵胤 乇禺氐丞 WARP.';
+      default:
+        return null;
+    }
+  }
+}

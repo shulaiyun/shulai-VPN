@@ -1,0 +1,647 @@
+{
+  "common": {
+    "appTitle": "树懒VPN",
+    "start": "袧邪褔邪褌褜",
+    "version": "袙械褉褋懈褟",
+    "ok": "OK",
+    "cancel": "袨褌屑械薪邪",
+    "kContinue": "袩褉芯写芯谢卸懈褌褜",
+    "showMore": "袩芯泻邪蟹邪褌褜 斜芯谢褜褕械",
+    "showLess": "袩芯泻邪蟹邪褌褜 屑械薪褜褕械",
+    "filter": "肖懈谢褜褌褉",
+    "all": "袙褋械",
+    "pause": "袩邪褍蟹邪",
+    "resume": "袙芯蟹芯斜薪芯胁懈褌褜",
+    "clear": "袨褔懈褋褌懈褌褜",
+    "close": "袟邪泻褉褘褌褜",
+    "auto": "袗胁褌芯",
+    "manually": "袙褉褍褔薪褍褞",
+    "name": "袠屑褟",
+    "url": "URL",
+    "add": "袛芯斜邪胁懈褌褜",
+    "clipboard": "袘褍褎械褉 芯斜屑械薪邪",
+    "addToClipboard": "袛芯斜邪胁懈褌褜 胁 斜褍褎械褉 芯斜屑械薪邪",
+    "scanQr": "小泻邪薪懈褉芯胁邪褌褜 QR",
+    "free": "袘械褋锌谢邪褌薪芯",
+    "warp": "WARP",
+    "fragment": "肖褉邪谐屑械薪褌",
+    "help": "小锌褉邪胁泻邪",
+    "save": "小芯褏褉邪薪懈褌褜",
+    "update": "袨斜薪芯胁懈褌褜",
+    "share": "袩芯写械谢懈褌褜褋褟",
+    "edit": "袠蟹屑械薪懈褌褜",
+    "delete": "校写邪谢懈褌褜",
+    "discard": "袨褌屑械薪懈褌褜",
+    "import": "袠屑锌芯褉褌",
+    "export": "协泻褋锌芯褉褌",
+    "later": "袩芯蟹卸械",
+    "ignore": "袠谐薪芯褉懈褉芯胁邪褌褜",
+    "quit": "袙褘褏芯写",
+    "notSet": "袧械 蟹邪写邪薪芯",
+    "hide": "小泻褉褘褌褜",
+    "exit": "袙褘泄褌懈",
+    "reset": "小斜褉芯褋",
+    "done": "袚芯褌芯胁芯",
+    "search": "袩芯懈褋泻",
+    "decline": "袨褌泻谢芯薪懈褌褜",
+    "agree": "小芯谐谢邪褋械薪",
+    "empty": "袩褍褋褌芯",
+    "unknown": "袧械懈蟹胁械褋褌薪芯",
+    "hidden": "小泻褉褘褌褘泄",
+    "timeout": "孝邪泄屑-邪褍褌",
+    "sort": "小芯褉褌懈褉芯胁邪褌褜",
+    "dashboard": "袩邪薪械谢褜 褍锌褉邪胁谢械薪懈褟",
+    "interval": {
+      "day": {
+        "zero": "",
+        "one": "$n 写械薪褜",
+        "few": "$n 写薪褟",
+        "many": "$n 写薪械泄",
+        "other": "$n 写薪褟"
+      },
+      "hour": {
+        "zero": "",
+        "one": "$n 褔邪褋",
+        "few": "$n 褔邪褋邪",
+        "many": "$n 褔邪褋芯胁",
+        "other": "$n 褔邪褋邪"
+      }
+    },
+    "msg": {
+      "permission": {
+        "denied": "袛芯褋褌褍锌 蟹邪锌褉械褖械薪"
+      },
+      "export": {
+        "clipboard": {
+          "success": "校褋锌械褕薪芯 写芯斜邪胁谢械薪芯 胁 斜褍褎械褉 芯斜屑械薪邪",
+          "failure": "袧械 褍写邪谢芯褋褜 褋泻芯锌懈褉芯胁邪褌褜 胁 斜褍褎械褉 芯斜屑械薪邪",
+          "contentTooLarge": "小谢懈褕泻芯屑 斜芯谢褜褕芯泄 泻芯薪褌械薪褌. 袠褋锌芯谢褜蟹褍泄褌械 褝泻褋锌芯褉褌 胁 褎邪泄谢"
+        },
+        "file": {
+          "success": "肖邪泄谢 JSON 褍褋锌械褕薪芯 褋芯蟹写邪薪",
+          "failure": "袧械 褍写邪谢芯褋褜 褋芯蟹写邪褌褜 褎邪泄谢"
+        }
+      },
+      "import": {
+        "confirm": "袩芯写褌胁械褉写懈褌褜 懈屑锌芯褉褌",
+        "success": "校褋锌械褕薪芯 懈屑锌芯褉褌懈褉芯胁邪薪芯",
+        "failure": "袧械 褍写邪谢芯褋褜 懈屑锌芯褉褌懈褉芯胁邪褌褜"
+      }
+    }
+  },
+  "intro": {
+    "banner": "袙褋械, 褔褌芯 胁邪屑 薪褍卸薪芯 写谢褟 懈薪褌械褉薪械褌邪 斜械蟹 芯谐褉邪薪懈褔械薪懈泄",
+    "termsAndPolicyCaution(rich)": "袩褉芯写芯谢卸邪褟, 胁褘 褋芯谐谢邪褕邪械褌械褋褜 褋 ${tap(@:pages.about.termsAndConditions)}",
+    "info(rich)": "小写械谢邪薪芯 褋 鉂わ笍 Hiddify - ${tap_source(袨褌泻褉褘褌褘泄 懈褋褏芯写薪褘泄 泻芯写)} (${tap_license(袥懈褑械薪蟹懈褟)})"
+  },
+  "pages": {
+    "home": {
+      "title": "袚谢邪胁薪邪褟",
+      "quickSettings": "袘褘褋褌褉褘械 薪邪褋褌褉芯泄泻懈"
+    },
+    "proxies": {
+      "title": "袩褉芯泻褋懈",
+      "sort": "小芯褉褌懈褉芯胁邪褌褜 锌褉芯泻褋懈",
+      "testDelay": "袩褉芯胁械褉懈褌褜 蟹邪写械褉卸泻褍",
+      "empty": "袧械褌 写芯褋褌褍锌薪褘褏 锌褉芯泻褋懈",
+      "activeProxy": "袗泻褌懈胁薪褘泄 锌褉芯泻褋懈",
+      "unknownIp": "袧械懈蟹胁械褋褌薪褘泄 IP",
+      "sortOptions": {
+        "unsorted": "袩芯 褍屑芯谢褔邪薪懈褞",
+        "name": "袩芯 邪谢褎邪胁懈褌褍",
+        "delay": "袩芯 蟹邪写械褉卸泻械"
+      },
+      "ipInfo": {
+        "address": "IP-邪写褉械褋",
+        "country": "小褌褉邪薪邪",
+        "organization": "袨褉谐邪薪懈蟹邪褑懈褟"
+      },
+      "delay": {
+        "result": "袟邪写械褉卸泻邪: ${delay} 屑褋",
+        "timeout": "孝邪泄屑-邪褍褌 褌械褋褌邪 蟹邪写械褉卸泻懈",
+        "testing": "袟邪写械褉卸泻邪: 褌械褋褌懈褉芯胁邪薪懈械..."
+      }
+    },
+    "profiles": {
+      "title": "袩褉芯褎懈谢懈",
+      "add": "袛芯斜邪胁懈褌褜 锌褉芯褎懈谢褜",
+      "update": "袨斜薪芯胁懈褌褜 锌褉芯褎懈谢褜",
+      "viewAllProfiles": "袩芯褋屑芯褌褉械褌褜 胁褋械 锌褉芯褎懈谢懈",
+      "activeProfileName": "袠屑褟 邪泻褌懈胁薪芯谐芯 锌褉芯褎懈谢褟: \"${name}\".",
+      "nonActiveProfileName": "袙褘斜褉邪褌褜 \"${name}\" 泻邪泻 邪泻褌懈胁薪褘泄 锌褉芯褎懈谢褜",
+      "freeSubNotFound": "袘械褋锌谢邪褌薪邪褟 锌芯写锌懈褋泻邪 薪械 薪邪泄写械薪邪",
+      "freeSubNotFoundForRegion": "袘械褋锌谢邪褌薪邪褟 锌芯写锌懈褋泻邪 写谢褟 褉械谐懈芯薪邪 \"${region}\" 薪械 薪邪泄写械薪邪",
+      "failedToLoad": "袧械 褍写邪谢芯褋褜 蟹邪谐褉褍蟹懈褌褜",
+      "updateSubscriptions": "袨斜薪芯胁懈褌褜 锌芯写锌懈褋泻懈",
+      "share": {
+        "urlToClipboard": "URL 胁 斜褍褎械褉 芯斜屑械薪邪",
+        "showUrlQr": "袩芯泻邪蟹邪褌褜 QR-泻芯写 URL",
+        "jsonToClipboard": "JSON 胁 斜褍褎械褉 芯斜屑械薪邪"
+      },
+      "msg": {
+        "save": {
+          "success": "袩褉芯褎懈谢褜 褍褋锌械褕薪芯 褋芯褏褉邪薪械薪"
+        },
+        "invalidUrl": "袧械胁械褉薪褘泄 URL",
+        "add": {
+          "failure": "袧械 褍写邪谢芯褋褜 写芯斜邪胁懈褌褜 锌褉芯褎懈谢褜"
+        },
+        "update": {
+          "success": "袩褉芯褎懈谢褜 褍褋锌械褕薪芯 芯斜薪芯胁谢械薪",
+          "successNamed": "\"${name}\" 褍褋锌械褕薪芯 芯斜薪芯胁谢械薪",
+          "failure": "袧械 褍写邪谢芯褋褜 芯斜薪芯胁懈褌褜 锌褉芯褎懈谢褜",
+          "failureNamed": "袧械 褍写邪谢芯褋褜 芯斜薪芯胁懈褌褜 \"${name}\""
+        },
+        "delete": {
+          "success": "袩褉芯褎懈谢褜 褍褋锌械褕薪芯 褍写邪谢械薪"
+        }
+      }
+    },
+    "profileDetails": {
+      "title": "袩褉芯褎懈谢褜",
+      "lastUpdate": "袩芯褋谢械写薪械械 芯斜薪芯胁谢械薪懈械",
+      "form": {
+        "nameHint": "袠屑褟 锌褉芯褎懈谢褟",
+        "emptyName": "袠屑褟 芯斜褟蟹邪褌械谢褜薪芯 写谢褟 蟹邪锌芯谢薪械薪懈褟",
+        "invalidUrl": "袧械胁械褉薪褘泄 URL",
+        "urlHint": "袩芯谢薪褘泄 URL 泻芯薪褎懈谐褍褉邪褑懈懈",
+        "disableAutoUpdate": "袨褌泻谢褞褔懈褌褜 邪胁褌芯芯斜薪芯胁谢械薪懈械",
+        "autoUpdateInterval": "袠薪褌械褉胁邪谢 邪胁褌芯芯斜薪芯胁谢械薪懈褟",
+        "loading": "袛芯斜邪胁谢械薪懈械 锌褉芯褎懈谢褟..."
+      }
+    },
+    "logs": {
+      "title": "袥芯谐懈",
+      "shareCoreLogs": "袩芯写械谢懈褌褜褋褟 谢芯谐邪屑懈 褟写褉邪",
+      "shareAppLogs": "袩芯写械谢懈褌褜褋褟 谢芯谐邪屑懈 锌褉懈谢芯卸械薪懈褟"
+    },
+    "about": {
+      "title": "袨 锌褉芯谐褉邪屑屑械",
+      "notAvailableMsg": "袙褘 褍卸械 懈褋锌芯谢褜蟹褍械褌械 锌芯褋谢械写薪褞褞 胁械褉褋懈褞",
+      "checkForUpdate": "袩褉芯胁械褉懈褌褜 芯斜薪芯胁谢械薪懈褟",
+      "openWorkingDir": "袨褌泻褉褘褌褜 褉邪斜芯褔褍褞 锌邪锌泻褍",
+      "sourceCode": "袠褋褏芯写薪褘泄 泻芯写",
+      "telegramChannel": "袣邪薪邪谢 胁 Telegram",
+      "termsAndConditions": "校褋谢芯胁懈褟 懈褋锌芯谢褜蟹芯胁邪薪懈褟",
+      "privacyPolicy": "袩芯谢懈褌懈泻邪 泻芯薪褎懈写械薪褑懈邪谢褜薪芯褋褌懈"
+    },
+    "settings": {
+      "title": "袧邪褋褌褉芯泄泻懈",
+      "resetTunnel": "小斜褉芯褋懈褌褜 锌褉芯褎懈谢褜 VPN",
+      "options": {
+        "import": {
+          "clipboard": "袠屑锌芯褉褌懈褉芯胁邪褌褜 薪邪褋褌褉芯泄泻懈 懈蟹 斜褍褎械褉邪 芯斜屑械薪邪",
+          "file": "袠屑锌芯褉褌懈褉芯胁邪褌褜 薪邪褋褌褉芯泄泻懈 懈蟹 褎邪泄谢邪"
+        },
+        "export": {
+          "anonymousToClipboard": "袣芯锌懈褉芯胁邪褌褜 邪薪芯薪懈屑薪褘械 薪邪褋褌褉芯泄泻懈 胁 斜褍褎械褉 芯斜屑械薪邪",
+          "anonymousToFile": "协泻褋锌芯褉褌懈褉芯胁邪褌褜 邪薪芯薪懈屑薪褘械 薪邪褋褌褉芯泄泻懈 胁 褎邪泄谢",
+          "allToClipboard": "袣芯锌懈褉芯胁邪褌褜 胁褋械 薪邪褋褌褉芯泄泻懈 胁 斜褍褎械褉 芯斜屑械薪邪",
+          "allToFile": "协泻褋锌芯褉褌懈褉芯胁邪褌褜 胁褋械 薪邪褋褌褉芯泄泻懈 胁 褎邪泄谢"
+        },
+        "reset": "小斜褉芯褋懈褌褜 薪邪褋褌褉芯泄泻懈"
+      },
+      "general": {
+        "title": "袨斜褖懈械",
+        "locale": "携蟹褘泻",
+        "themeMode": "孝械屑邪 芯褎芯褉屑谢械薪懈褟",
+        "themeModes": {
+          "system": "小懈褋褌械屑薪邪褟",
+          "dark": "孝械屑薪邪褟",
+          "light": "小胁械褌谢邪褟",
+          "black": "效械褉薪邪褟"
+        },
+        "enableAnalytics": "袙泻谢褞褔懈褌褜 邪薪邪谢懈褌懈泻褍",
+        "enableAnalyticsMsg": "袪邪蟹褉械褕懈褌褜 褋斜芯褉 邪薪邪谢懈褌懈泻懈 懈 芯褌锌褉邪胁泻褍 芯褌褔械褌芯胁 芯 褋斜芯褟褏 写谢褟 褍谢褍褔褕械薪懈褟 锌褉懈谢芯卸械薪懈褟",
+        "autoIpCheck": "袗胁褌芯屑邪褌懈褔械褋泻懈 锌褉芯胁械褉褟褌褜 IP-邪写褉械褋",
+        "dynamicNotification": "袨褌芯斜褉邪卸邪褌褜 褋泻芯褉芯褋褌褜 胁 褍胁械写芯屑谢械薪懈懈",
+        "hapticFeedback": "孝邪泻褌懈谢褜薪褘泄 芯褌泻谢懈泻",
+        "actionAtClosing": "袛械泄褋褌胁懈械 锌褉懈 蟹邪泻褉褘褌懈懈",
+        "autoStart": "袟邪锌褍褋泻邪褌褜 锌褉懈 胁褏芯写械 胁 褋懈褋褌械屑褍",
+        "silentStart": "袟邪锌褍褋泻邪褌褜 褋胁械褉薪褍褌褘屑",
+        "ignoreBatteryOptimizations": "袨褌泻谢褞褔懈褌褜 芯锌褌懈屑懈蟹邪褑懈褞 斜邪褌邪褉械懈",
+        "ignoreBatteryOptimizationsMsg": "小薪褟褌褜 芯谐褉邪薪懈褔械薪懈褟 写谢褟 芯锌褌懈屑邪谢褜薪芯泄 褉邪斜芯褌褘 VPN",
+        "memoryLimit": "袨谐褉邪薪懈褔械薪懈械 锌邪屑褟褌懈",
+        "memoryLimitMsg": "袙泻谢褞褔懈褌械, 械褋谢懈 胁褘 褋褌邪谢泻懈胁邪械褌械褋褜 褋 芯褕懈斜泻邪屑懈 薪械褏胁邪褌泻懈 锌邪屑褟褌懈 懈谢懈 褔邪褋褌褘屑懈 褋斜芯褟屑懈 锌褉懈谢芯卸械薪懈褟",
+        "debugMode": "袪械卸懈屑 芯褌谢邪写泻懈",
+        "debugModeMsg": "袩械褉械蟹邪锌褍褋褌懈褌械 锌褉懈谢芯卸械薪懈械, 褔褌芯斜褘 锌褉懈屑械薪懈褌褜 褝褌芯 懈蟹屑械薪械薪懈械",
+        "logLevel": "校褉芯胁械薪褜 谢芯谐懈褉芯胁邪薪懈褟",
+        "connectionTestUrl": "URL 写谢褟 褌械褋褌邪 褋芯械写懈薪械薪懈褟",
+        "urlTestInterval": "袠薪褌械褉胁邪谢 褌械褋褌邪 URL",
+        "clashApiPort": "袩芯褉褌 Clash API",
+        "useXrayCoreWhenPossible": "袠褋锌芯谢褜蟹芯胁邪褌褜 xray-core, 械褋谢懈 胁芯蟹屑芯卸薪芯",
+        "useXrayCoreWhenPossibleMsg": "袠褋锌芯谢褜蟹芯胁邪褌褜 xray-core 锌褉懈 芯斜褉邪斜芯褌泻械 褋褋褘谢芯泻 薪邪 锌芯写锌懈褋泻褍. 袧械芯斜褏芯写懈屑芯 锌芯胁褌芯褉薪芯 懈屑锌芯褉褌懈褉芯胁邪褌褜 褋褋褘谢泻褍, 褔褌芯斜褘 胁泻谢褞褔懈褌褜 褝褌褍 芯锌褑懈褞."
+      },
+      "routing": {
+        "title": "袦邪褉褕褉褍褌懈蟹邪褑懈褟",
+        "perAppProxy": {
+          "title": "袩褉芯泻褋懈 写谢褟 锌褉懈谢芯卸械薪懈泄",
+          "hideSysApps": "小泻褉褘褌褜 褋懈褋褌械屑薪褘械 锌褉懈谢芯卸械薪懈褟",
+          "options": {
+            "import": {
+              "clipboard": "袠屑锌芯褉褌懈褉芯胁邪褌褜 胁褘斜芯褉 懈蟹 斜褍褎械褉邪 芯斜屑械薪邪",
+              "file": "袠屑锌芯褉褌懈褉芯胁邪褌褜 胁褘斜芯褉 懈蟹 褎邪泄谢邪",
+              "msg": "袠屑锌芯褉褌 蟹邪屑械薪懈褌 胁邪褕 褌械泻褍褖懈泄 胁褘斜芯褉. 袙褘 褍胁械褉械薪褘, 褔褌芯 褏芯褌懈褌械 锌褉芯写芯谢卸懈褌褜?"
+            },
+            "export": {
+              "clipboard": "袣芯锌懈褉芯胁邪褌褜 胁褘斜芯褉 胁 斜褍褎械褉 芯斜屑械薪邪",
+              "file": "协泻褋锌芯褉褌懈褉芯胁邪褌褜 胁褘斜芯褉 胁 褎邪泄谢"
+            },
+            "shareToAll": "袩芯写械谢懈褌褜褋褟 褋芯 胁褋械屑懈",
+            "clearAllSelections": "袨褔懈褋褌懈褌褜 胁械褋褜 胁褘斜芯褉"
+          },
+          "modes": {
+            "all": "袙褋械",
+            "proxy": "袩褉芯泻褋懈",
+            "bypass": "袙 芯斜褏芯写",
+            "allMsg": "袩褉芯泻褋懈褉芯胁邪褌褜 胁褋械 锌褉懈谢芯卸械薪懈褟",
+            "proxyMsg": "袩褉芯泻褋懈褉芯胁邪褌褜 褌芯谢褜泻芯 胁褘斜褉邪薪薪褘械 锌褉懈谢芯卸械薪懈褟",
+            "bypassMsg": "袧械 锌褉芯泻褋懈褉芯胁邪褌褜 胁褘斜褉邪薪薪褘械 锌褉懈谢芯卸械薪懈褟"
+          },
+          "autoSelection": {
+            "title": "袗胁褌芯胁褘斜芯褉",
+            "performNow": "袙褘锌芯谢薪懈褌褜 褋械泄褔邪褋",
+            "resetToDefault": "小斜褉芯褋懈褌褜 锌芯 褍屑芯谢褔邪薪懈褞",
+            "autoUpdateInterval": "袠薪褌械褉胁邪谢 邪胁褌芯芯斜薪芯胁谢械薪懈褟",
+            "toast": {
+              "success": "袗胁褌芯胁褘斜芯褉 锌褉懈谢芯卸械薪懈泄 褍褋锌械褕薪芯 蟹邪胁械褉褕械薪",
+              "failure": "袨褕懈斜泻邪 邪胁褌芯胁褘斜芯褉邪",
+              "regionNotFound": "袗胁褌芯胁褘斜芯褉 写谢褟 褉械谐懈芯薪邪 \"${region}\" 薪械 薪邪泄写械薪",
+              "alreadyInAuto": "袙邪褕 胁褘斜芯褉 褍卸械 薪邪褏芯写懈褌褋褟 胁 褋锌懈褋泻械 邪胁褌芯胁褘斜芯褉邪"
+            },
+            "dialog": {
+              "title": "袗胁褌芯胁褘斜芯褉 锌褉懈谢芯卸械薪懈泄",
+              "msg": "肖褍薪泻褑懈褟 邪胁褌芯胁褘斜芯褉邪 写谢褟 锌褉芯泻褋懈 锌褉懈谢芯卸械薪懈泄 斜褘谢邪 芯褌泻谢褞褔械薪邪 懈蟹-蟹邪 褋屑械薪褘 褉械谐懈芯薪邪 薪邪 \"${region}\""
+            }
+          }
+        },
+        "region": "袪械谐懈芯薪",
+        "regions": {
+          "ir": "袠褉邪薪 (ir)",
+          "cn": "袣懈褌邪泄 (cn)",
+          "ru": "袪芯褋褋懈褟 (ru)",
+          "af": "袗褎谐邪薪懈褋褌邪薪 (af)",
+          "id": "袠薪写芯薪械蟹懈褟 (id)",
+          "tr": "孝褍褉褑懈褟 (tr)",
+          "br": "袘褉邪蟹懈谢懈褟 (br)",
+          "other": "袛褉褍谐芯泄"
+        },
+        "balancerStrategy": {
+          "title": "小褌褉邪褌械谐懈褟 Balancer",
+          "roundRobin": "Round robin",
+          "consistentHash": "Consistent hash",
+          "stickySession": "Sticky session"
+        },
+        "blockAds": "袘谢芯泻懈褉芯胁邪褌褜 褉械泻谢邪屑褍",
+        "bypassLan": "袨斜褏芯写 LAN",
+        "resolveDestination": "袨锌褉械写械谢褟褌褜 邪写褉械褋 薪邪蟹薪邪褔械薪懈褟",
+        "ipv6Route": "袦邪褉褕褉褍褌 IPv6",
+        "ipv6Modes": {
+          "disable": "袨褌泻谢褞褔懈褌褜",
+          "enable": "袙泻谢褞褔懈褌褜",
+          "prefer": "袩褉械写锌芯褔褌懈褌械谢褜薪芯",
+          "only": "孝芯谢褜泻芯"
+        },
+        "routeRule": {
+          "title": "袩褉邪胁懈谢邪 屑邪褉褕褉褍褌懈蟹邪褑懈懈",
+          "options": {
+            "import": {
+              "clipboard": "袠屑锌芯褉褌懈褉芯胁邪褌褜 锌褉邪胁懈谢邪 懈蟹 斜褍褎械褉邪 芯斜屑械薪邪",
+              "file": "袠屑锌芯褉褌懈褉芯胁邪褌褜 锌褉邪胁懈谢邪 懈蟹 褎邪泄谢邪"
+            },
+            "export": {
+              "clipboard": "袣芯锌懈褉芯胁邪褌褜 锌褉邪胁懈谢邪 胁 斜褍褎械褉 芯斜屑械薪邪",
+              "file": "小芯褏褉邪薪懈褌褜 锌褉邪胁懈谢邪 胁 褎邪泄谢"
+            },
+            "reset": "小斜褉芯褋懈褌褜 锌褉邪胁懈谢邪"
+          },
+          "deleteRule": "校写邪谢懈褌褜 锌褉邪胁懈谢芯",
+          "createRule": "小芯蟹写邪褌褜 薪芯胁芯械 锌褉邪胁懈谢芯",
+          "rule": {
+            "title": "袩褉邪胁懈谢芯",
+            "ruleChanged": "袩褉邪胁懈谢芯 懈蟹屑械薪械薪芯",
+            "ruleChangedMsg": "袙褘 褏芯褌懈褌械 褋芯褏褉邪薪懈褌褜 懈蟹屑械薪械薪懈褟?",
+            "onlyTunMode": "袛芯褋褌褍锌薪芯 褌芯谢褜泻芯 胁 褉械卸懈屑械 TUN",
+            "notAvailabeInThisPlatform": "袧械写芯褋褌褍锌薪芯 薪邪 褝褌芯泄 锌谢邪褌褎芯褉屑械",
+            "canNotBeEmpty": "袧械 屑芯卸械褌 斜褘褌褜 锌褍褋褌褘屑",
+            "validUrlEx": "https://example.com",
+            "validUrl": "袙邪谢懈写薪褘泄 \"URL\", 薪邪锌褉懈屑械褉\n@:pages.settings.routing.routeRule.rule.validUrlEx",
+            "validProcessNameEx": "Chrome.exe 懈谢懈 google chrome 懈谢懈 chrome",
+            "validProcessName": "袙邪谢懈写薪芯械 \"袠屑褟 锌褉芯褑械褋褋邪\", 薪邪锌褉懈屑械褉\n@:pages.settings.routing.routeRule.rule.validProcessNameEx",
+            "validProcessPathEx": "C:\\Pro...\\chrome.exe\n/App.../Google Chrome\n/usr/lib.../chrome",
+            "validProcessPath": "袙邪谢懈写薪褘泄 \"袩褍褌褜 泻 锌褉芯褑械褋褋褍\", 薪邪锌褉懈屑械褉\n@:pages.settings.routing.routeRule.rule.validProcessPathEx",
+            "validPortRangeEx": "80 懈谢懈 1-65000",
+            "validPortRange": "袙邪谢懈写薪褘泄 \"袩芯褉褌\" 懈谢懈 \"袛懈邪锌邪蟹芯薪 锌芯褉褌芯胁\", 薪邪锌褉懈屑械褉\n@:pages.settings.routing.routeRule.rule.validPortRangeEx",
+            "validIpCidrEx": "8.8.8.8 懈谢懈 10.0.0.0/24",
+            "validIpCidr": "袙邪谢懈写薪褘泄 IP CIDR, 薪邪锌褉懈屑械褉\n@:pages.settings.routing.routeRule.rule.validIpCidrEx",
+            "validDomainEx": "Google.com 懈谢懈 dl.google.com",
+            "validDomain": "袙邪谢懈写薪褘泄 \"袛芯屑械薪\", 薪邪锌褉懈屑械褉\n@:pages.settings.routing.routeRule.rule.validDomainEx",
+            "validDomainSuffixEx": ".com 懈谢懈 .ru",
+            "validDomainSuffix": "袙邪谢懈写薪褘泄 \"小褍褎褎懈泻褋 写芯屑械薪邪\", 薪邪锌褉懈屑械褉\n@:pages.settings.routing.routeRule.rule.validDomainSuffixEx",
+            "tileTitle(map)": {
+              "name": "袠屑褟",
+              "outbound": "袠褋褏芯写褟褖懈泄 锌褉懈 褋芯胁锌邪写械薪懈懈",
+              "rule_set": "URL 薪邪斜芯褉邪 锌褉邪胁懈谢",
+              "package_name": "袠屑械薪邪 锌邪泻械褌芯胁",
+              "process_name": "袠屑械薪邪 锌褉芯褑械褋褋芯胁",
+              "process_path": "袩褍褌懈 泻 锌褉芯褑械褋褋邪屑",
+              "network": "小械褌懈",
+              "port_range": "袩芯褉褌褘 薪邪蟹薪邪褔械薪懈褟",
+              "source_port_range": "袠褋褏芯写薪褘械 锌芯褉褌褘",
+              "protocol": "袩褉芯褌芯泻芯谢",
+              "ip_cidr": "IP CIDR 薪邪蟹薪邪褔械薪懈褟",
+              "source_ip_cidr": "袠褋褏芯写薪褘泄 IP CIDR",
+              "domain": "袛芯屑械薪",
+              "domain_suffixe": "小褍褎褎懈泻褋 写芯屑械薪邪",
+              "domain_keyword": "袣谢褞褔械胁芯械 褋谢芯胁芯 写芯屑械薪邪",
+              "domain_regex": "袪械谐褍谢褟褉薪芯械 胁褘褉邪卸械薪懈械 写芯屑械薪邪"
+            },
+            "outbound(map)": {
+              "proxy": "袩褉芯泻褋懈",
+              "direct": "袧邪锌褉褟屑褍褞",
+              "direct_with_fragment": "袧邪锌褉褟屑褍褞 褋 褎褉邪谐屑械薪褌芯屑",
+              "block": "袘谢芯泻懈褉芯胁邪褌褜"
+            },
+            "network(map)": {
+              "all": "袙褋械",
+              "tcp": "TCP",
+              "udp": "UDP"
+            },
+            "protocol(map)": {
+              "": "袙褋械",
+              "tls": "TLS",
+              "http": "HTTP",
+              "quic": "QUIC",
+              "stun": "STUN",
+              "dns": "DNS",
+              "bittorrent": "BitTorrent"
+            }
+          },
+          "genericList": {
+            "addNew": "袛芯斜邪胁懈褌褜 薪芯胁芯械 蟹薪邪褔械薪懈械",
+            "update": "袨斜薪芯胁懈褌褜 蟹薪邪褔械薪懈械",
+            "clearList": "袨褔懈褋褌懈褌褜 褋锌懈褋芯泻",
+            "clearListMsg": "袙褋械 褝谢械屑械薪褌褘 褍写邪谢械薪褘"
+          },
+          "androidApps": {
+            "pageTitle": "袩褉懈谢芯卸械薪懈褟 Android",
+            "showSystemApps": "袩芯泻邪蟹邪褌褜 褋懈褋褌械屑薪褘械 锌褉懈谢芯卸械薪懈褟",
+            "hideSystemApps": "小泻褉褘褌褜 褋懈褋褌械屑薪褘械 锌褉懈谢芯卸械薪懈褟",
+            "clearSelection": "袨褔懈褋褌懈褌褜 胁褘斜芯褉",
+            "uninstalled": "校写邪谢械薪芯"
+          }
+        }
+      },
+      "dns": {
+        "title": "DNS",
+        "remoteDns": "校写邪谢械薪薪褘泄 DNS",
+        "remoteDnsDomainStrategy": "小褌褉邪褌械谐懈褟 写芯屑械薪邪 褍写邪谢械薪薪芯谐芯 DNS",
+        "directDns": "袪邪褋锌芯蟹薪邪胁邪褌械谢褜 懈褋褏芯写褟褖械谐芯 褋械褉胁械褉邪 (薪邪锌褉褟屑褍褞)",
+        "directDnsDomainStrategy": "小褌褉邪褌械谐懈褟 懈褋褏芯写褟褖械谐芯 写芯屑械薪邪",
+        "enableDnsRouting": "袙泻谢褞褔懈褌褜 屑邪褉褕褉褍褌懈蟹邪褑懈褞 DNS",
+        "enableFakeDns": "袙泻谢褞褔懈褌褜 锌芯写写械谢褜薪褘泄 DNS",
+        "domainStrategy": {
+          "auto": "袗胁褌芯",
+          "preferIpv6": "袩褉械写锌芯褔懈褌邪褌褜 IPv6",
+          "preferIpv4": "袩褉械写锌芯褔懈褌邪褌褜 IPv4",
+          "ipv4Only": "孝芯谢褜泻芯 IPv4",
+          "ipv6Only": "孝芯谢褜泻芯 IPv6"
+        }
+      },
+      "inbound": {
+        "title": "袙褏芯写褟褖懈械",
+        "serviceMode": "袪械卸懈屑 褋谢褍卸斜褘",
+        "serviceModes": {
+          "proxy": "孝芯谢褜泻芯 锌褉芯泻褋懈-褋谢褍卸斜邪",
+          "systemProxy": "校褋褌邪薪芯胁懈褌褜 褋懈褋褌械屑薪褘泄 锌褉芯泻褋懈",
+          "tun": "VPN",
+          "tunService": "小谢褍卸斜邪 VPN"
+        },
+        "shortServiceModes": {
+          "proxy": "袩褉芯泻褋懈",
+          "systemProxy": "小懈褋褌械屑薪褘泄 锌褉芯泻褋懈",
+          "tun": "VPN",
+          "tunService": "小谢褍卸斜邪 VPN"
+        },
+        "strictRoute": "小褌褉芯谐邪褟 屑邪褉褕褉褍褌懈蟹邪褑懈褟",
+        "tunImplementation": "袪械邪谢懈蟹邪褑懈褟 TUN",
+        "tunImplementations": {
+          "mixed": "小屑械褕邪薪薪邪褟",
+          "system": "小懈褋褌械屑薪邪褟",
+          "gvisor": "gVisor"
+        },
+        "mixedPort": "小屑械褕邪薪薪褘泄 锌芯褉褌",
+        "tproxyPort": "袩芯褉褌 锌褉芯蟹褉邪褔薪芯谐芯 锌褉芯泻褋懈",
+        "directPort": "袥芯泻邪谢褜薪褘泄 锌芯褉褌 direct",
+        "redirectPort": "袩芯褉褌 锌械褉械薪邪锌褉邪胁谢械薪懈褟",
+        "allowConnectionFromLan": "袩芯写械谢懈褌褜褋褟 VPN 胁 谢芯泻邪谢褜薪芯泄 褋械褌懈"
+      },
+      "tlsTricks": {
+        "title": "孝褉褞泻懈 TLS",
+        "enable": "袙泻谢褞褔懈褌褜 褎褉邪谐屑械薪褌邪褑懈褞",
+        "packets": "袩邪泻械褌褘 褎褉邪谐屑械薪褌邪褑懈懈",
+        "packetsTlsHello": "TLS Hello",
+        "packets1_1": "1-1",
+        "packets1_2": "1-2",
+        "packets1_3": "1-3",
+        "packets1_4": "1-4",
+        "packets1_5": "1-5",
+        "size": "袪邪蟹屑械褉 褎褉邪谐屑械薪褌邪",
+        "sleep": "袟邪写械褉卸泻邪 褎褉邪谐屑械薪褌邪",
+        "mixedSniCase": {
+          "enable": "袙泻谢褞褔懈褌褜 褋屑械褕邪薪薪褘泄 褉械谐懈褋褌褉 SNI"
+        },
+        "padding": {
+          "enable": "袙泻谢褞褔懈褌褜 写芯锌芯谢薪械薪懈械",
+          "size": "袪邪蟹屑械褉 写芯锌芯谢薪械薪懈褟"
+        }
+      },
+      "warp": {
+        "title": "WARP",
+        "enable": "袙泻谢褞褔懈褌褜 WARP",
+        "generateConfig": "小谐械薪械褉懈褉芯胁邪褌褜 泻芯薪褎懈谐褍褉邪褑懈褞 WARP",
+        "configGenerated": "袣芯薪褎懈谐褍褉邪褑懈褟 Warp 褋谐械薪械褉懈褉芯胁邪薪邪",
+        "missingConfig": "袨褌褋褍褌褋褌胁褍械褌 泻芯薪褎懈谐褍褉邪褑懈褟 WARP",
+        "detourMode": "袪械卸懈屑 屑邪褉褕褉褍褌懈蟹邪褑懈懈 WARP",
+        "detourModes": {
+          "proxyOverWarp": "袧邪锌褉邪胁谢褟褌褜 锌褉芯泻褋懈 褔械褉械蟹 WARP",
+          "warpOverProxy": "袧邪锌褉邪胁谢褟褌褜 WARP 褔械褉械蟹 锌褉芯泻褋懈",
+          "proxyOverWarpExplain": "袪邪蟹斜谢芯泻懈褉芯胁邪褌褜 锌褉芯泻褋懈 褋 锌芯屑芯褖褜褞 WARP",
+          "warpOverProxyExplain": "袛芯锌芯谢薪懈褌械谢褜薪邪褟 斜械蟹芯锌邪褋薪芯褋褌褜 褋 WARP"
+        },
+        "licenseKey": "袥懈褑械薪蟹懈芯薪薪褘泄 泻谢褞褔",
+        "cleanIp": "效懈褋褌褘泄 IP",
+        "port": "袩芯褉褌",
+        "noise": {
+          "count": "袣芯谢懈褔械褋褌胁芯 褕褍屑邪",
+          "mode": "袪械卸懈屑 褕褍屑邪",
+          "size": "袪邪蟹屑械褉 褕褍屑邪",
+          "delay": "袟邪写械褉卸泻邪 褕褍屑邪"
+        }
+      }
+    }
+  },
+  "components": {
+    "stats": {
+      "connection": "小芯械写懈薪械薪懈械",
+      "traffic": "孝褉邪褎懈泻",
+      "trafficLive": "孝械泻褍褖懈泄 褌褉邪褎懈泻",
+      "trafficTotal": "袨斜褖懈泄 褌褉邪褎懈泻",
+      "uplink": "袨褌锌褉邪胁泻邪",
+      "downlink": "袩褉懈械屑",
+      "speed": "小泻芯褉芯褋褌褜",
+      "totalTransferred": "袙褋械谐芯 锌械褉械写邪薪芯"
+    },
+    "subscriptionInfo": {
+      "upload": "袨褌锌褉邪胁谢械薪芯",
+      "download": "袩芯谢褍褔械薪芯",
+      "total": "袙褋械谐芯 褌褉邪褎懈泻邪",
+      "expireDate": "袛邪褌邪 芯泻芯薪褔邪薪懈褟",
+      "expired": "袠褋褌械泻",
+      "noTraffic": "袣胁芯褌邪 懈褋褔械褉锌邪薪邪",
+      "remainingTime": "袨褋褌邪胁褕械械褋褟 胁褉械屑褟",
+      "remainingDuration": "芯褋褌邪谢芯褋褜 ${duration} 写薪械泄",
+      "remainingDurationNew": "${duration} 写薪械泄",
+      "remainingTrafficSemanticLabel": "懈蟹褉邪褋褏芯写芯胁邪薪芯 ${consumed} 懈蟹 ${total} 褌褉邪褎懈泻邪",
+      "remainingTraffic": "袨褋褌邪胁褕懈泄褋褟 褌褉邪褎懈泻",
+      "remainingUsage": "袨褋褌邪谢芯褋褜",
+      "profileSite": "袩褉芯胁邪泄写械褉",
+      "profileSupport": "袩芯写写械褉卸泻邪"
+    }
+  },
+  "dialogs": {
+    "sortProfiles": {
+      "title": "小芯褉褌懈褉芯胁邪褌褜 锌芯",
+      "sort": {
+        "name": "袩芯 邪谢褎邪胁懈褌褍",
+        "lastUpdate": "袩芯褋谢械写薪械屑褍 芯斜薪芯胁谢械薪懈褞"
+      }
+    },
+    "warpLicense": {
+      "title": "小芯谐谢邪褕械薪懈械 芯 WARP 芯褌 Cloudflare",
+      "description(rich)": "Cloudflare WARP - 褝褌芯 斜械褋锌谢邪褌薪褘泄 锌褉芯胁邪泄写械褉 WireGuard VPN. 袙泻谢褞褔邪褟 褝褌褍 芯锌褑懈褞, 胁褘 褋芯谐谢邪褕邪械褌械褋褜 褋 ${tos(校褋谢芯胁懈褟屑懈 芯斜褋谢褍卸懈胁邪薪懈褟)} 懈 ${privacy(袩芯谢懈褌懈泻芯泄 泻芯薪褎懈写械薪褑懈邪谢褜薪芯褋褌懈)} Cloudflare WARP."
+    },
+    "newVersion": {
+      "title": "袛芯褋褌褍锌薪芯 芯斜薪芯胁谢械薪懈械",
+      "msg": "袛芯褋褌褍锌薪邪 薪芯胁邪褟 胁械褉褋懈褟 @:common.appTitle. 啸芯褌懈褌械 芯斜薪芯胁懈褌褜 褋械泄褔邪褋?",
+      "currentVersion": "孝械泻褍褖邪褟 胁械褉褋懈褟: ",
+      "newVersion": "袧芯胁邪褟 胁械褉褋懈褟: ",
+      "updateNow": "袨斜薪芯胁懈褌褜 褋械泄褔邪褋"
+    },
+    "confirmation": {
+      "settings": {
+        "import": {
+          "msg": "协褌芯 锌械褉械蟹邪锌懈褕械褌 胁褋械 锌邪褉邪屑械褌褉褘 泻芯薪褎懈谐褍褉邪褑懈懈 锌褉械写芯褋褌邪胁谢械薪薪褘屑懈 蟹薪邪褔械薪懈褟屑懈. 袙褘 褍胁械褉械薪褘?"
+        }
+      },
+      "profile": {
+        "delete": {
+          "title": "校写邪谢懈褌褜 锌褉芯褎懈谢褜",
+          "msg": "袙褘 褍胁械褉械薪褘, 褔褌芯 褏芯褌懈褌械 薪邪胁褋械谐写邪 褍写邪谢懈褌褜 褝褌芯褌 锌褉芯褎懈谢褜?"
+        }
+      },
+      "perAppProxy": {
+        "shareOnGithub": {
+          "title": "校谢褍褔褕械薪懈械 邪胁褌芯胁褘斜芯褉邪",
+          "msg": "袛械谢褟褋褜 胁褘斜褉邪薪薪褘屑懈 锌褉懈谢芯卸械薪懈褟屑懈, 胁褘 锌芯屑芯谐邪械褌械 锌芯锌芯谢薪懈褌褜 褋锌懈褋芯泻 \"邪胁褌芯胁褘斜芯褉邪\""
+        },
+        "import": {
+          "msg": "协褌芯 蟹邪屑械薪懈褌 胁褋械 胁邪褕懈 褌械泻褍褖懈械 薪邪褋褌褉芯泄泻懈 锌褉芯泻褋懈 写谢褟 锌褉懈谢芯卸械薪懈泄. 袙褘 褍胁械褉械薪褘, 褔褌芯 褏芯褌懈褌械 锌褉芯写芯谢卸懈褌褜?"
+        }
+      },
+      "routeRule": {
+        "delete": {
+          "title": "校写邪谢懈褌褜 锌褉邪胁懈谢芯",
+          "msg": "袙褘 褍胁械褉械薪褘, 褔褌芯 褏芯褌懈褌械 褍写邪谢懈褌褜 锌褉邪胁懈谢芯 \"$rulename\"?"
+        }
+      }
+    },
+    "experimentalNotice": {
+      "title": "袠褋锌芯谢褜蟹褍褞褌褋褟 褝泻褋锌械褉懈屑械薪褌邪谢褜薪褘械 褎褍薪泻褑懈懈",
+      "msg": "袙褘 胁泻谢褞褔懈谢懈 薪械泻芯褌芯褉褘械 褝泻褋锌械褉懈屑械薪褌邪谢褜薪褘械 褎褍薪泻褑懈懈, 泻芯褌芯褉褘械 屑芯谐褍褌 锌芯胁谢懈褟褌褜 薪邪 泻邪褔械褋褌胁芯 褋芯械写懈薪械薪懈褟 懈 胁褘蟹胁邪褌褜 薪械锌褉械写胁懈写械薪薪褘械 芯褕懈斜泻懈. 袙褘 胁褋械谐写邪 屑芯卸械褌械 懈蟹屑械薪懈褌褜 懈谢懈 褋斜褉芯褋懈褌褜 褝褌懈 锌邪褉邪屑械褌褉褘 薪邪 褋褌褉邪薪懈褑械 薪邪褋褌褉芯械泻.",
+      "disable": "袘芯谢褜褕械 薪械 锌芯泻邪蟹褘胁邪褌褜"
+    },
+    "noActiveProfile": {
+      "title": "袙褘斜械褉懈褌械 锌褉芯褎懈谢褜",
+      "msg": "袛邪胁邪泄褌械 薪邪褔薪械屑 褋 写芯斜邪胁谢械薪懈褟 锌褉芯褎懈谢褟 锌芯写泻谢褞褔械薪懈褟, 泻芯褌芯褉褘泄 褋芯写械褉卸懈褌 写邪薪薪褘械 胁邪褕械谐芯 VPN-褋芯械写懈薪械薪懈褟.\n\n袝褖械 薪械褌 VPN-褋械褉胁械褉邪? 袧械 斜械褋锌芯泻芯泄褌械褋褜 鈥?锌褉芯褋褌芯 褋谢械写褍泄褌械 褉褍泻芯胁芯写褋褌胁褍 薪懈卸械, 褔褌芯斜褘 斜褘褋褌褉芯 懈 斜械褋锌谢邪褌薪芯 薪邪褋褌褉芯懈褌褜 械谐芯.",
+      "helpBtn": {
+        "label": "袩芯泻邪卸懈褌械, 泻邪泻",
+        "url": "https://github.com/shulaiyun/shulai-VPN.git"
+      }
+    },
+    "unknownDomainsWarning": {
+      "title": "袩褉械写褍锌褉械卸写械薪懈械 芯 胁薪械褕薪械泄 褋褋褘谢泻械",
+      "youAreAboutToVisit": "袙褘 褋芯斜懈褉邪械褌械褋褜 锌械褉械泄褌懈 薪邪 褋邪泄褌:",
+      "thisWebsiteIsNotInOurTrustedList": "协褌芯褌 褋邪泄褌 薪械 胁褏芯写懈褌 胁 薪邪褕 褋锌懈褋芯泻 写芯胁械褉械薪薪褘褏. 袩芯卸邪谢褍泄褋褌邪, 写械泄褋褌胁褍泄褌械 褋 芯褋褌芯褉芯卸薪芯褋褌褜褞."
+    },
+    "proxyInfo": {
+      "fullTag": "袩芯谢薪褘泄 褌械谐:",
+      "type": "孝懈锌:",
+      "testTime": "袙褉械屑褟 褌械褋褌邪:",
+      "testDelay": "袟邪写械褉卸泻邪 褌械褋褌邪:",
+      "isSelected": "袙褘斜褉邪薪:",
+      "isGroup": "协褌芯 谐褉褍锌锌邪",
+      "isSecure": "袟邪褖懈褖械薪芯:",
+      "port": "袩芯褉褌:",
+      "host": "啸芯褋褌:",
+      "ip": "IP:",
+      "countryCode": "袣芯写 褋褌褉邪薪褘:",
+      "region": "袪械谐懈芯薪:",
+      "city": "袚芯褉芯写:",
+      "asn": "ASN:",
+      "organization": "袨褉谐邪薪懈蟹邪褑懈褟:",
+      "location": "袦械褋褌芯锌芯谢芯卸械薪懈械:",
+      "postalCode": "袩芯褔褌芯胁褘泄 懈薪写械泻褋:"
+    },
+    "windowClosing": {
+      "askEachTime": "小锌褉邪褕懈胁邪褌褜 泻邪卸写褘泄 褉邪蟹",
+      "alertMessage": "小泻褉褘褌褜 懈谢懈 胁褘泄褌懈 懈蟹 锌褉懈谢芯卸械薪懈褟?",
+      "remember": "袟邪锌芯屑薪懈褌褜 屑芯泄 胁褘斜芯褉"
+    }
+  },
+  "connection": {
+    "tapToConnect": "袧邪卸屑懈褌械 写谢褟 锌芯写泻谢褞褔械薪懈褟",
+    "connect": "袩芯写泻谢褞褔懈褌褜",
+    "connecting": "袩芯写泻谢褞褔械薪懈械...",
+    "connected": "袩芯写泻谢褞褔械薪芯",
+    "disconnect": "袨褌泻谢褞褔懈褌褜",
+    "disconnecting": "袨褌泻谢褞褔械薪懈械...",
+    "reconnect": "袩械褉械锌芯写泻谢褞褔懈褌褜",
+    "reconnectMsg": "袩械褉械锌芯写泻谢褞褔械薪懈械 写谢褟 褍褔械褌邪 懈蟹屑械薪械薪懈泄...",
+    "secure": "袟邪褖懈褖械薪芯 褋 锌芯屑芯褖褜褞 WARP"
+  },
+  "errors": {
+    "unexpected": "袧械锌褉械写胁懈写械薪薪邪褟 芯褕懈斜泻邪",
+    "connection": {
+      "unexpected": "袧械锌褉械写胁懈写械薪薪邪褟 芯褕懈斜泻邪 锌芯写泻谢褞褔械薪懈褟",
+      "timeout": "孝邪泄屑-邪褍褌 锌芯写泻谢褞褔械薪懈褟",
+      "badResponse": "袧械胁械褉薪褘泄 芯褌胁械褌",
+      "connectionError": "袨褕懈斜泻邪 锌芯写泻谢褞褔械薪懈褟",
+      "badCertificate": "袧械写械泄褋褌胁懈褌械谢褜薪褘泄 褋械褉褌懈褎懈泻邪褌"
+    },
+    "profiles": {
+      "unexpected": "袧械锌褉械写胁懈写械薪薪邪褟 芯褕懈斜泻邪",
+      "notFound": "袩褉芯褎懈谢褜 薪械 薪邪泄写械薪",
+      "invalidConfig": "袧械胁械褉薪邪褟 泻芯薪褎懈谐褍褉邪褑懈褟",
+      "invalidUrl": "袧械胁械褉薪褘泄 URL",
+      "canceledByUser": "袨褌屑械薪械薪芯 锌芯谢褜蟹芯胁邪褌械谢械屑"
+    },
+    "connectivity": {
+      "unexpected": "袧械锌褉械写胁懈写械薪薪褘泄 褋斜芯泄",
+      "missingVpnPermission": "袨褌褋褍褌褋褌胁褍械褌 褉邪蟹褉械褕械薪懈械 薪邪 VPN",
+      "missingNotificationPermission": "袨褌褋褍褌褋褌胁褍械褌 褉邪蟹褉械褕械薪懈械 薪邪 褍胁械写芯屑谢械薪懈褟",
+      "core": "袨褕懈斜泻邪 褟写褉邪"
+    },
+    "singbox": {
+      "serviceNotRunning": "小谢褍卸斜邪 薪械 蟹邪锌褍褖械薪邪",
+      "missingPrivilege": "袨褌褋褍褌褋褌胁褍褞褌 锌褉邪胁邪",
+      "missingPrivilegeMsg": "袪械卸懈屑 VPN 褌褉械斜褍械褌 锌褉邪胁 邪写屑懈薪懈褋褌褉邪褌芯褉邪. 袥懈斜芯 锌械褉械蟹邪锌褍褋褌懈褌械 锌褉懈谢芯卸械薪懈械 芯褌 懈屑械薪懈 邪写屑懈薪懈褋褌褉邪褌芯褉邪, 谢懈斜芯 懈蟹屑械薪懈褌械 褉械卸懈屑 褋谢褍卸斜褘.",
+      "invalidConfigOptions": "袧械胁械褉薪褘械 锌邪褉邪屑械褌褉褘 泻芯薪褎懈谐褍褉邪褑懈懈",
+      "invalidConfig": "袧械胁械褉薪邪褟 泻芯薪褎懈谐褍褉邪褑懈褟"
+    },
+    "warp": {
+      "missingLicense": "袨褌褋褍褌褋褌胁褍械褌 谢懈褑械薪蟹懈褟 Warp",
+      "missingLicenseMsg": "袙褘斜褉邪薪薪褘泄 锌褉芯褎懈谢褜 懈褋锌芯谢褜蟹褍械褌 褎褍薪泻褑懈褞 WARP; 写谢褟 懈褋锌芯谢褜蟹芯胁邪薪懈褟 褝褌芯泄 褎褍薪泻褑懈懈 薪械芯斜褏芯写懈屑芯 锌褉懈薪褟褌褜 谢懈褑械薪蟹懈褞 WARP."
+    }
+  }
+}
