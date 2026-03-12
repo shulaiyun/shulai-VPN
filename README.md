@@ -54,9 +54,11 @@
 - <img width="856" height="629" alt="image" src="https://github.com/user-attachments/assets/408f70e6-4d57-49f3-8d12-7b34581d8397" /><img width="852" height="854" alt="image" src="https://github.com/user-attachments/assets/8bf7b0de-33e5-4496-955d-d505da07e01e" />
 
 `：首页
-- `<img width="838" height="861" alt="image" src="https://github.com/user-attachments/assets/31ca7b54-fbbb-413d-92fe-e5f164ea39db" />
+- `<img width="842" height="855" alt="image" src="https://github.com/user-attachments/assets/074a7298-4359-4872-a946-54d0aa64b85c" />
+
 `：节点页
-- `<img width="858" height="859" alt="image" src="https://github.com/user-attachments/assets/9b54d954-f219-46dc-ae7b-e6d0d9ba7be7" />
+- `<img width="847" height="857" alt="image" src="https://github.com/user-attachments/assets/bac4183e-b1ef-4640-b681-1c161e911a55" />
+
 `：设置页
 - `docs/screenshots/windows-client.png`：Windows 客户端
 
