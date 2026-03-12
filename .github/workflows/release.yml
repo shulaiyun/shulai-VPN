@@ -33,7 +33,7 @@ on:
       package_windows_setup:
         description: "Include Windows setup package"
         required: false
-        default: false
+        default: true
         type: boolean
 
 permissions:
@@ -53,7 +53,7 @@ jobs:
       build-windows: true
       build-linux: true
       build-macos: true
-      package-windows-setup: false
+      package-windows-setup: true
 
   build_manual:
     if: ${{ github.event_name == 'workflow_dispatch' }}
