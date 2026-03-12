@@ -303,6 +303,15 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Refresh macOS CocoaPods lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd macos
+          rm -f Podfile.lock
+          rm -rf Pods
+          pod install --repo-update
+
       - name: Build macOS app
         id: build_macos
         continue-on-error: true
