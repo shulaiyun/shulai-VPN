@@ -51,10 +51,13 @@
 
 建议后续将截图放在以下目录：
 
-- <img width="856" height="629" alt="image" src="https://github.com/user-attachments/assets/408f70e6-4d57-49f3-8d12-7b34581d8397" />
+- <img width="856" height="629" alt="image" src="https://github.com/user-attachments/assets/408f70e6-4d57-49f3-8d12-7b34581d8397" /><img width="852" height="854" alt="image" src="https://github.com/user-attachments/assets/8bf7b0de-33e5-4496-955d-d505da07e01e" />
+
 `：首页
-- `docs/screenshots/nodes.png`：节点页
-- `docs/screenshots/settings.png`：设置页
+- `<img width="838" height="861" alt="image" src="https://github.com/user-attachments/assets/31ca7b54-fbbb-413d-92fe-e5f164ea39db" />
+`：节点页
+- `<img width="858" height="859" alt="image" src="https://github.com/user-attachments/assets/9b54d954-f219-46dc-ae7b-e6d0d9ba7be7" />
+`：设置页
 - `docs/screenshots/windows-client.png`：Windows 客户端
 
 如需继续扩展，也可以在 `docs/screenshots/` 下按平台新增更多文件。
