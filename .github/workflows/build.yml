@@ -80,6 +80,7 @@ jobs:
           exit ${PIPESTATUS[0]}
 
       - name: Collect Android artifacts
+        id: collect_android
         if: always()
         shell: bash
         run: |
@@ -89,6 +90,11 @@ jobs:
           cp build/app/outputs/flutter-apk/*.apk out/ 2>/dev/null || true
           cp build_out/app/outputs/flutter-apk/*.apk out/ 2>/dev/null || true
           cp build-logs/*.log out/ 2>/dev/null || true
+          if compgen -G "out/*.apk" > /dev/null; then
+            echo "has_apk=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_apk=false" >> "$GITHUB_OUTPUT"
+          fi
           ls -la out
 
       - name: Upload Android artifacts
@@ -101,7 +107,7 @@ jobs:
           if-no-files-found: error
 
       - name: Mark Android build failure
-        if: ${{ steps.build_apk.outcome != 'success' }}
+        if: ${{ steps.collect_android.outputs.has_apk != 'true' }}
         shell: bash
         run: exit 1
 
