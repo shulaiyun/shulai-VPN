@@ -22,9 +22,38 @@ const mapOrderStatus = (code: number): { status: string; isFinal: boolean } => {
       return { status: "completed", isFinal: true };
     case 4:
       return { status: "discounted", isFinal: true };
+    case 5:
+      return { status: "expired", isFinal: true };
     default:
       return { status: "unknown", isFinal: false };
   }
+};
+
+const parseNumber = (value: unknown): number => {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+};
+
+const toIsoTime = (value: unknown): string | null => {
+  if (value == null) return null;
+  if (typeof value === "number") {
+    const ts = value > 9_999_999_999 ? value : value * 1000;
+    return new Date(ts).toISOString();
+  }
+  const text = String(value).trim();
+  if (!text) return null;
+  const numeric = Number(text);
+  if (Number.isFinite(numeric)) {
+    const ts = numeric > 9_999_999_999 ? numeric : numeric * 1000;
+    return new Date(ts).toISOString();
+  }
+  const parsed = new Date(text);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed.toISOString();
 };
 
 export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void => {
@@ -40,6 +69,47 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
       handling_fee_percent: Number(item.handling_fee_percent ?? 0),
     }));
     return ok(reply, { methods: normalized });
+  });
+
+  app.get("/api/app/v1/orders", async (request, reply) => {
+    const session = requireSession(request, deps.sessions);
+    const query = request.query as Record<string, unknown>;
+    const statusFilter = typeof query.status === "string" ? query.status.trim().toLowerCase() : "all";
+    const orderNoFilter = typeof query.order_no === "string" ? query.order_no.trim() : "";
+    const rawOrders = await deps.xboard.getOrders(session.xboardAuthData);
+    const normalized = rawOrders
+      .map((raw) => {
+        const orderNo = String(raw.trade_no ?? raw.order_no ?? raw.orderNo ?? "").trim();
+        const statusCode = parseNumber(raw.status);
+        const mapped = mapOrderStatus(statusCode);
+        const period = String(raw.period ?? raw.billing_cycle ?? "").trim();
+        const rawPlan = typeof raw.plan === "object" && raw.plan !== null ? (raw.plan as Record<string, unknown>) : null;
+        return {
+          order_no: orderNo,
+          status_code: statusCode,
+          status: mapped.status,
+          is_final: mapped.isFinal,
+          total_amount: parseNumber(raw.total_amount ?? raw.total_amount_cny ?? raw.total),
+          plan_id: parseNumber(raw.plan_id),
+          plan_name: String(raw.plan_name ?? rawPlan?.name ?? "").trim(),
+          period,
+          created_at: toIsoTime(raw.created_at),
+          updated_at: toIsoTime(raw.updated_at),
+        };
+      })
+      .filter((item) => item.order_no.length > 0)
+      .filter((item) => {
+        if (orderNoFilter && !item.order_no.includes(orderNoFilter)) return false;
+        if (!statusFilter || statusFilter === "all") return true;
+        if (statusFilter === "paid") return item.status === "completed" || item.status === "discounted";
+        return item.status === statusFilter;
+      });
+
+    return ok(reply, {
+      orders: normalized,
+      total: normalized.length,
+      fetched_at: new Date().toISOString(),
+    });
   });
 
   app.post("/api/app/v1/orders", async (request, reply) => {

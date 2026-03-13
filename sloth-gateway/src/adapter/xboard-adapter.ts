@@ -49,6 +49,14 @@ type XboardRegisterOptions = {
   hcaptchaData?: string;
 };
 
+type XboardGuestConfig = {
+  is_email_verify?: unknown;
+  is_invite_force?: unknown;
+  is_register?: unknown;
+  email_whitelist_suffix?: unknown;
+  email_suffix?: unknown;
+};
+
 export class XboardAdapter {
   constructor(private readonly baseUrl: string, private readonly timeoutMs: number) {}
 
@@ -140,6 +148,23 @@ export class XboardAdapter {
     return true;
   }
 
+  async getAuthPolicy(): Promise<{
+    isEmailVerifyEnabled: boolean;
+    isInviteForce: boolean;
+    isRegisterEnabled: boolean;
+    allowedEmailSuffixes: string[];
+  }> {
+    const config = await this.request<XboardGuestConfig>("GET", "/api/v1/guest/comm/config");
+    const suffixRaw = this.pick(config, ["email_whitelist_suffix", "email_suffix"]);
+    const suffixes = this.normalizeEmailSuffixes(suffixRaw);
+    return {
+      isEmailVerifyEnabled: this.toBool(config.is_email_verify),
+      isInviteForce: this.toBool(config.is_invite_force),
+      isRegisterEnabled: config.is_register == null ? true : this.toBool(config.is_register),
+      allowedEmailSuffixes: suffixes,
+    };
+  }
+
   async getUserInfo(authData: string): Promise<XboardUserInfo> {
     return this.request<XboardUserInfo>("GET", "/api/v1/user/info", undefined, authData);
   }
@@ -158,6 +183,52 @@ export class XboardAdapter {
 
   async getPaymentMethods(authData: string): Promise<Array<Record<string, unknown>>> {
     return this.request<Array<Record<string, unknown>>>("GET", "/api/v1/user/order/getPaymentMethod", undefined, authData);
+  }
+
+  async getOrders(authData: string): Promise<Array<Record<string, unknown>>> {
+    const result = await this.request<unknown>("GET", "/api/v1/user/order/fetch", undefined, authData);
+    if (Array.isArray(result)) {
+      return result.filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null);
+    }
+    return [];
+  }
+
+  async getInviteSummary(authData: string): Promise<{
+    inviteCode: string | null;
+    inviteUrl: string | null;
+    rebateTotal: number;
+    rebatePending: number;
+    invitedCount: number;
+  }> {
+    const raw = await this.request<Record<string, unknown>>("GET", "/api/v1/user/invite/fetch", undefined, authData);
+    const inviteCode = this.toStringOrNull(
+      this.pick(raw, [
+        "invite_code",
+        "code",
+        "inviteCode",
+      ]),
+    );
+    const inviteUrl = this.toStringOrNull(
+      this.pick(raw, [
+        "invite_url",
+        "invite_link",
+        "inviteLink",
+        "url",
+        "link",
+      ]),
+    );
+
+    return {
+      inviteCode,
+      inviteUrl,
+      rebateTotal: this.toNumber(
+        this.pick(raw, ["rebate_total", "commission_total", "total_rebate", "total_amount"]),
+      ),
+      rebatePending: this.toNumber(
+        this.pick(raw, ["rebate_pending", "commission_pending", "pending_amount"]),
+      ),
+      invitedCount: this.toNumber(this.pick(raw, ["invited_count", "invite_count", "user_count"])),
+    };
   }
 
   async createOrder(input: {
@@ -213,6 +284,46 @@ export class XboardAdapter {
       version,
       nodeCount: this.estimateNodeCount(normalized),
     };
+  }
+
+  private pick(source: Record<string, unknown>, keys: string[]): unknown {
+    for (const key of keys) {
+      if (key in source) return source[key];
+    }
+    return undefined;
+  }
+
+  private toBool(value: unknown): boolean {
+    if (typeof value === "boolean") return value;
+    if (typeof value === "number") return value > 0;
+    if (typeof value === "string") {
+      const normalized = value.trim().toLowerCase();
+      return ["1", "true", "yes", "on"].includes(normalized);
+    }
+    return false;
+  }
+
+  private toNumber(value: unknown): number {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string") {
+      const parsed = Number(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+
+  private toStringOrNull(value: unknown): string | null {
+    if (value == null) return null;
+    const text = String(value).trim();
+    return text.length > 0 ? text : null;
+  }
+
+  private normalizeEmailSuffixes(value: unknown): string[] {
+    const raw = Array.isArray(value) ? value.map((item) => String(item)) : String(value ?? "").split(/[,\s]+/g);
+    return raw
+      .map((item) => item.trim().toLowerCase())
+      .filter((item) => item.length > 0)
+      .map((item) => (item.startsWith("@") ? item : `@${item}`));
   }
 
   private async request<T>(method: "GET" | "POST", path: string, body?: unknown, authData?: string): Promise<T> {

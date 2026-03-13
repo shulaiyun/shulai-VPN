@@ -7,6 +7,10 @@ import 'package:hiddify/core/router/go_router/helper/active_breakpoint_notifier.
 import 'package:hiddify/core/router/go_router/helper/custom_transition.dart';
 import 'package:hiddify/core/router/go_router/refresh_listenable.dart';
 import 'package:hiddify/features/about/widget/about_page.dart';
+import 'package:hiddify/features/app_gateway/widget/gateway_account_page.dart';
+import 'package:hiddify/features/app_gateway/widget/gateway_login_page.dart';
+import 'package:hiddify/features/app_gateway/widget/gateway_plans_page.dart';
+import 'package:hiddify/features/app_gateway/widget/gateway_register_page.dart';
 import 'package:hiddify/features/home/widget/home_page.dart';
 import 'package:hiddify/features/intro/widget/intro_page.dart';
 import 'package:hiddify/features/log/overview/logs_page.dart';
@@ -30,6 +34,8 @@ part 'routing_config_notifier.g.dart';
 // each branch in go router has its own focus scope
 final branchesScope = <String, FocusScopeNode>{
   'home': FocusScopeNode(),
+  'gatewayPlans': FocusScopeNode(),
+  'gatewayAccount': FocusScopeNode(),
   'profiles': FocusScopeNode(),
   'settings': FocusScopeNode(),
   'logs': FocusScopeNode(),
@@ -42,12 +48,28 @@ final loadingConfig = RoutingConfig(
 );
 
 String getNameOfBranch(bool isMobileBreakpoint, bool showProfilesAction, int index) => isMobileBreakpoint
-    ? ['home', 'settings'][index]
-    : ['home', if (showProfilesAction) 'profiles', 'settings', 'logs', 'about'][index];
+    ? ['home', 'gatewayPlans', 'gatewayAccount', 'settings'][index]
+    : [
+        'home',
+        'gatewayPlans',
+        'gatewayAccount',
+        if (showProfilesAction) 'profiles',
+        'settings',
+        'logs',
+        'about',
+      ][index];
 
 int getIndexOfBranch(bool isMobileBreakpoint, bool showProfilesAction, String name) => isMobileBreakpoint
-    ? ['home', 'settings'].indexOf(name)
-    : ['home', if (showProfilesAction) 'profiles', 'settings', 'logs', 'about'].indexOf(name);
+    ? ['home', 'gatewayPlans', 'gatewayAccount', 'settings'].indexOf(name)
+    : [
+        'home',
+        'gatewayPlans',
+        'gatewayAccount',
+        if (showProfilesAction) 'profiles',
+        'settings',
+        'logs',
+        'about',
+      ].indexOf(name);
 
 @Riverpod(keepAlive: true)
 class RoutingConfigNotifier extends _$RoutingConfigNotifier {
@@ -79,10 +101,11 @@ class RoutingConfigNotifier extends _$RoutingConfigNotifier {
         if (!introCompleted) {
           return url != null ? '/intro?url=$url' : '/intro';
         } else if (isIntro) {
-          if (url != null)
+          if (url != null) {
             WidgetsBinding.instance.addPostFrameCallback(
               (_) => ref.read(bottomSheetsNotifierProvider.notifier).showAddProfile(url: url),
             );
+          }
           return '/home';
         } else if (url != null) {
           WidgetsBinding.instance.addPostFrameCallback(
@@ -113,6 +136,18 @@ class RoutingConfigNotifier extends _$RoutingConfigNotifier {
                       pageBuilder: (_, state) =>
                           customTransition(TransitionType.fade, state.pageKey, const ProxiesOverviewPage()),
                     ),
+                    GoRoute(
+                      name: 'gatewayLogin',
+                      path: '/gateway-login',
+                      pageBuilder: (_, state) =>
+                          customTransition(TransitionType.slide, state.pageKey, const GatewayLoginPage()),
+                    ),
+                    GoRoute(
+                      name: 'gatewayRegister',
+                      path: '/gateway-register',
+                      pageBuilder: (_, state) =>
+                          customTransition(TransitionType.slide, state.pageKey, const GatewayRegisterPage()),
+                    ),
                     if (isMobileBreakpoint)
                       GoRoute(
                         name: 'profileDetails',
@@ -123,6 +158,33 @@ class RoutingConfigNotifier extends _$RoutingConfigNotifier {
                           ProfileDetailsPage(id: state.pathParameters['id']!),
                         ),
                       ),
+                  ],
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: <GoRoute>[
+                GoRoute(
+                  name: 'gatewayPlans',
+                  path: '/gateway-plans',
+                  builder: (_, _) => FocusScope(node: branchesScope['gatewayPlans'], child: const GatewayPlansPage()),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: <GoRoute>[
+                GoRoute(
+                  name: 'gatewayAccount',
+                  path: '/gateway-account',
+                  builder: (_, _) =>
+                      FocusScope(node: branchesScope['gatewayAccount'], child: const GatewayAccountPage()),
+                  routes: <GoRoute>[
+                    GoRoute(
+                      name: 'gatewayInvite',
+                      path: 'invite',
+                      pageBuilder: (_, state) =>
+                          customTransition(TransitionType.slide, state.pageKey, const GatewayInvitePage()),
+                    ),
                   ],
                 ),
               ],

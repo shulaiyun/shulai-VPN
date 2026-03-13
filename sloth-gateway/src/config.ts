@@ -7,6 +7,14 @@ const num = (v: string | undefined, d: number): number => {
   return Number.isFinite(parsed) ? parsed : d;
 };
 
+const csv = (v: string | undefined): string[] => {
+  if (!v) return [];
+  return v
+    .split(",")
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => item.length > 0);
+};
+
 const normalizeBaseUrl = (value: string | undefined, fallback: string): string => {
   const raw = (value ?? fallback).trim().replace(/\/$/, "");
   // Accept both host root and accidentally provided /api/v1,/api/v2 suffixes.
@@ -30,5 +38,6 @@ export const config = {
   defaultGithubUrl: process.env.DEFAULT_GITHUB_URL ?? "https://github.com/shulaiyun/shulai-VPN",
   defaultTicketUrl: process.env.DEFAULT_TICKET_URL ?? "",
   defaultNoticeUrl: process.env.DEFAULT_NOTICE_URL ?? "",
+  allowedEmailSuffixes: csv(process.env.AUTH_ALLOWED_EMAIL_SUFFIXES),
   debugBindCode: (process.env.DEBUG_BIND_CODE ?? "false").toLowerCase() === "true",
 };

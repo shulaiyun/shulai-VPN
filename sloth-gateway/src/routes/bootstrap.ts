@@ -53,6 +53,29 @@ const buildAccountSummary = async (
   };
 };
 
+const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string, subscribeUrl: string) => {
+  try {
+    const summary = await deps.xboard.getInviteSummary(authData);
+    return {
+      invite_code: summary.inviteCode,
+      invite_url: summary.inviteUrl ?? (summary.inviteCode ? `${subscribeUrl}&code=${encodeURIComponent(summary.inviteCode)}` : null),
+      rebate_total: summary.rebateTotal,
+      rebate_pending: summary.rebatePending,
+      invited_count: summary.invitedCount,
+      supported: true,
+    };
+  } catch {
+    return {
+      invite_code: null,
+      invite_url: null,
+      rebate_total: 0,
+      rebate_pending: 0,
+      invited_count: 0,
+      supported: false,
+    };
+  }
+};
+
 export const registerBootstrapRoutes = (app: FastifyInstance, deps: BootstrapDeps): void => {
   const handleSummary = async (request: FastifyRequest, reply: FastifyReply) => {
     const session = requireSession(request, deps.sessions);
@@ -66,5 +89,12 @@ export const registerBootstrapRoutes = (app: FastifyInstance, deps: BootstrapDep
 
   app.get("/api/app/v1/account/summary", async (request, reply) => {
     return handleSummary(request, reply);
+  });
+
+  app.get("/api/app/v1/invite/summary", async (request, reply) => {
+    const session = requireSession(request, deps.sessions);
+    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData);
+    const data = await readInviteSummarySafe(deps, session.xboardAuthData, subscribe.subscribe_url);
+    return ok(reply, data);
   });
 };

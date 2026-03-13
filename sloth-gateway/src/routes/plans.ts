@@ -10,14 +10,14 @@ type PlanDeps = {
 };
 
 const periodLabels: Record<string, string> = {
-  month_price: "Monthly",
-  quarter_price: "Quarterly",
-  half_year_price: "Semiannual",
-  year_price: "Yearly",
-  two_year_price: "2 Years",
-  three_year_price: "3 Years",
-  onetime_price: "One-time",
-  reset_price: "Data Reset",
+  month_price: "月付",
+  quarter_price: "季付",
+  half_year_price: "半年",
+  year_price: "年付",
+  two_year_price: "两年",
+  three_year_price: "三年",
+  onetime_price: "一次性",
+  reset_price: "重置流量",
 };
 
 const periodSortOrder = [

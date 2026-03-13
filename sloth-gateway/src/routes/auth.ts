@@ -14,6 +14,91 @@ type AuthRouteDeps = {
   xboard: XboardAdapter;
 };
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const extractErrorText = (error: AppError): string => {
+  const detailsText = (() => {
+    try {
+      return JSON.stringify(error.details ?? {});
+    } catch {
+      return "";
+    }
+  })();
+  return `${error.message} ${detailsText}`.toLowerCase();
+};
+
+const mapUpstreamAuthError = (error: unknown): never => {
+  if (!(error instanceof AppError)) {
+    throw error;
+  }
+  if (error.code !== ErrorCodes.UPSTREAM_ERROR) {
+    throw error;
+  }
+
+  const text = extractErrorText(error);
+  if (text.includes("register") && (text.includes("closed") || text.includes("disable"))) {
+    throw new AppError(403, ErrorCodes.REGISTER_CLOSED, "当前站点已关闭注册");
+  }
+  if (text.includes("invite") && (text.includes("required") || text.includes("empty") || text.includes("must"))) {
+    throw new AppError(400, ErrorCodes.INVITE_CODE_REQUIRED, "当前站点要求填写邀请码");
+  }
+  if (
+    (text.includes("email") && text.includes("verify") && text.includes("required")) ||
+    text.includes("email code required")
+  ) {
+    throw new AppError(400, ErrorCodes.EMAIL_VERIFY_REQUIRED, "当前站点要求邮箱验证码");
+  }
+  if (
+    text.includes("email code") &&
+    (text.includes("error") || text.includes("invalid") || text.includes("incorrect") || text.includes("expired"))
+  ) {
+    throw new AppError(400, ErrorCodes.EMAIL_CODE_INVALID, "邮箱验证码错误或已过期");
+  }
+  if (
+    text.includes("suffix") &&
+    (text.includes("allow") || text.includes("invalid") || text.includes("limit") || text.includes("not"))
+  ) {
+    throw new AppError(400, ErrorCodes.EMAIL_SUFFIX_NOT_ALLOWED, "仅支持指定邮箱后缀注册");
+  }
+  if (
+    text.includes("invalid email") ||
+    text.includes("email format") ||
+    text.includes("邮箱格式") ||
+    text.includes("email is invalid")
+  ) {
+    throw new AppError(400, ErrorCodes.BAD_EMAIL_FORMAT, "邮箱格式不正确，请检查邮箱是否正确");
+  }
+  if (
+    text.includes("password") &&
+    (text.includes("error") || text.includes("invalid") || text.includes("wrong") || text.includes("incorrect"))
+  ) {
+    throw new AppError(401, ErrorCodes.AUTH_INVALID_CREDENTIALS, "邮箱或密码错误");
+  }
+  if (text.includes("credential") || text.includes("unauthorized") || text.includes("login failed")) {
+    throw new AppError(401, ErrorCodes.AUTH_INVALID_CREDENTIALS, "邮箱或密码错误");
+  }
+
+  throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "上游认证服务异常，请稍后重试");
+};
+
+const normalizeEmailSuffixes = (suffixes: string[]): string[] =>
+  suffixes
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => item.length > 0)
+    .map((item) => (item.startsWith("@") ? item : `@${item}`));
+
+const ensureEmailValidAndAllowed = (email: string, allowedSuffixes: string[]) => {
+  if (!EMAIL_REGEX.test(email)) {
+    throw new AppError(400, ErrorCodes.BAD_EMAIL_FORMAT, "邮箱格式不正确，请检查邮箱是否正确");
+  }
+  if (allowedSuffixes.length <= 0) return;
+  const normalized = email.toLowerCase();
+  const matched = allowedSuffixes.some((suffix) => normalized.endsWith(suffix));
+  if (!matched) {
+    throw new AppError(400, ErrorCodes.EMAIL_SUFFIX_NOT_ALLOWED, "仅支持指定邮箱后缀注册");
+  }
+};
+
 const htmlEscape = (value: string): string =>
   value
     .replaceAll("&", "&amp;")
@@ -211,25 +296,60 @@ const tokenResponse = (issued: ReturnType<typeof issueSessionTokenSet>) => ({
 });
 
 export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): void => {
+  const configuredAllowedSuffixes = normalizeEmailSuffixes(config.allowedEmailSuffixes);
+
+  const readAuthPolicy = async () => {
+    let upstreamPolicy: Awaited<ReturnType<XboardAdapter["getAuthPolicy"]>> | null = null;
+    try {
+      upstreamPolicy = await deps.xboard.getAuthPolicy();
+    } catch {
+      upstreamPolicy = null;
+    }
+    const upstreamSuffixes = upstreamPolicy ? normalizeEmailSuffixes(upstreamPolicy.allowedEmailSuffixes) : [];
+    const allowedEmailSuffixes = configuredAllowedSuffixes.length > 0 ? configuredAllowedSuffixes : upstreamSuffixes;
+    return {
+      allowedEmailSuffixes,
+      registerEnabled: upstreamPolicy?.isRegisterEnabled ?? true,
+      emailVerifyRequired: upstreamPolicy?.isEmailVerifyEnabled ?? false,
+      inviteCodeRequired: upstreamPolicy?.isInviteForce ?? false,
+    };
+  };
+
+  app.get("/api/app/v1/auth/policy", async (_, reply) => {
+    const policy = await readAuthPolicy();
+    return ok(reply, {
+      allowed_email_suffixes: policy.allowedEmailSuffixes,
+      register_enabled: policy.registerEnabled,
+      email_verify_required: policy.emailVerifyRequired,
+      invite_code_required: policy.inviteCodeRequired,
+    });
+  });
+
   app.post("/api/app/v1/auth/send-email-verify", async (request, reply) => {
     const body = (request.body ?? {}) as Record<string, unknown>;
     const email = String(body.email ?? "").trim();
     if (!email) {
       throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "email is required");
     }
+    const policy = await readAuthPolicy();
+    ensureEmailValidAndAllowed(email, policy.allowedEmailSuffixes);
 
-    await deps.xboard.sendEmailVerify({
-      email,
-      captchaData: typeof body.captcha_data === "string" ? body.captcha_data : undefined,
-      recaptchaData: typeof body.recaptcha_data === "string" ? body.recaptcha_data : undefined,
-      turnstileData: typeof body.turnstile_data === "string" ? body.turnstile_data : undefined,
-      hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
-    });
+    try {
+      await deps.xboard.sendEmailVerify({
+        email,
+        captchaData: typeof body.captcha_data === "string" ? body.captcha_data : undefined,
+        recaptchaData: typeof body.recaptcha_data === "string" ? body.recaptcha_data : undefined,
+        turnstileData: typeof body.turnstile_data === "string" ? body.turnstile_data : undefined,
+        hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
+      });
+    } catch (error) {
+      mapUpstreamAuthError(error);
+    }
 
     return ok(reply, {
       sent: true,
       email,
-      message: "Email verification sent",
+      message: "验证码已发送",
     });
   });
 
@@ -240,8 +360,11 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
     if (!email || !password) {
       throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "email and password are required");
     }
+    ensureEmailValidAndAllowed(email, []);
 
-    const login = await deps.xboard.login(email, password);
+    const login = await deps.xboard
+      .login(email, password)
+      .catch((error): never => mapUpstreamAuthError(error));
     const [user, subscribe] = await Promise.all([
       deps.xboard.getUserInfo(login.authData),
       deps.xboard.getSubscribe(login.authData),
@@ -270,15 +393,22 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
     if (!email || !password) {
       throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "email and password are required");
     }
+    const policy = await readAuthPolicy();
+    ensureEmailValidAndAllowed(email, policy.allowedEmailSuffixes);
+    if (!policy.registerEnabled) {
+      throw new AppError(403, ErrorCodes.REGISTER_CLOSED, "当前站点已关闭注册");
+    }
 
-    const registered = await deps.xboard.register(email, password, {
-      emailCode: typeof body.email_code === "string" ? body.email_code : undefined,
-      inviteCode: typeof body.invite_code === "string" ? body.invite_code : undefined,
-      captchaData: typeof body.captcha_data === "string" ? body.captcha_data : undefined,
-      recaptchaData: typeof body.recaptcha_data === "string" ? body.recaptcha_data : undefined,
-      turnstileData: typeof body.turnstile_data === "string" ? body.turnstile_data : undefined,
-      hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
-    });
+    const registered = await deps.xboard
+      .register(email, password, {
+        emailCode: typeof body.email_code === "string" ? body.email_code : undefined,
+        inviteCode: typeof body.invite_code === "string" ? body.invite_code : undefined,
+        captchaData: typeof body.captcha_data === "string" ? body.captcha_data : undefined,
+        recaptchaData: typeof body.recaptcha_data === "string" ? body.recaptcha_data : undefined,
+        turnstileData: typeof body.turnstile_data === "string" ? body.turnstile_data : undefined,
+        hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
+      })
+      .catch((error): never => mapUpstreamAuthError(error));
 
     const [user, subscribe] = await Promise.all([
       deps.xboard.getUserInfo(registered.authData),
