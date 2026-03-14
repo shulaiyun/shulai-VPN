@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+﻿import type { FastifyInstance } from "fastify";
 import type { XboardAdapter } from "../adapter/xboard-adapter";
 import { requireSession } from "../plugins/auth";
 import type { SessionStore } from "../store/session-store";
@@ -17,7 +17,7 @@ type KnowledgeItem = {
   updated_at: string | null;
 };
 
-const toIsoTime = (value: unknown): string | null => {
+const parseIsoTime = (value: unknown): string | null => {
   if (value == null) return null;
   if (typeof value === "number") {
     const ts = value > 9_999_999_999 ? value : value * 1000;
@@ -31,8 +31,7 @@ const toIsoTime = (value: unknown): string | null => {
     return new Date(ts).toISOString();
   }
   const parsed = new Date(text);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return parsed.toISOString();
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 };
 
 const pickText = (source: Record<string, unknown>, keys: string[]): string => {
@@ -112,10 +111,25 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
       id: Number(item.id ?? 0),
       title: pickText(item, ["title", "subject", "name"]),
       content: pickText(item, ["content", "body", "message"]),
-      created_at: toIsoTime(item.created_at),
-      updated_at: toIsoTime(item.updated_at),
+      created_at: parseIsoTime(item.created_at),
+      updated_at: parseIsoTime(item.updated_at),
     }));
 
+    return ok(reply, {
+      items,
+      total: notices.total,
+      fetched_at: new Date().toISOString(),
+    });
+  });
+
+  app.get("/api/app/v1/content/notices/summary", async (request, reply) => {
+    const session = requireSession(request, deps.sessions);
+    const notices = await deps.xboard.getNotices(session.xboardAuthData, 1, 3);
+    const items = notices.items.map((item) => ({
+      id: Number(item.id ?? 0),
+      title: pickText(item, ["title", "subject", "name"]),
+      updated_at: parseIsoTime(item.updated_at ?? item.created_at),
+    }));
     return ok(reply, {
       items,
       total: notices.total,
@@ -142,7 +156,7 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
           category,
           title: pickText(item, ["title", "name"]),
           body: pickText(item, ["body", "content"]),
-          updated_at: toIsoTime(item.updated_at),
+          updated_at: parseIsoTime(item.updated_at),
         });
       }
     }
@@ -160,9 +174,7 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
     const params = request.params as { id: string };
     const id = Number(params.id);
     if (!Number.isFinite(id) || id <= 0) {
-      return ok(reply, {
-        item: null,
-      });
+      return ok(reply, { item: null });
     }
 
     if (id >= 900001 && id <= 900005) {
@@ -177,9 +189,8 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
       category,
       title: pickText(raw, ["title", "name"]),
       body: pickText(raw, ["body", "content"]),
-      updated_at: toIsoTime(raw.updated_at),
+      updated_at: parseIsoTime(raw.updated_at),
     };
     return ok(reply, { item });
   });
 };
-

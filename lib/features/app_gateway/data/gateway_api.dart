@@ -4,16 +4,37 @@ import 'package:hiddify/features/app_gateway/model/gateway_models.dart';
 import 'package:hiddify/utils/custom_loggers.dart';
 
 class GatewayApiException implements Exception {
-  GatewayApiException({required this.message, this.code, this.statusCode, this.path, this.method});
+  GatewayApiException({
+    required this.message,
+    this.code,
+    this.statusCode,
+    this.path,
+    this.method,
+    this.details,
+  });
 
   final String message;
   final String? code;
   final int? statusCode;
   final String? path;
   final String? method;
+  final Map<String, dynamic>? details;
 
   bool get isDeviceIdMismatch =>
       (code == "FORBIDDEN" || statusCode == 403) && message.toLowerCase().contains("device_id does not match bind");
+
+  bool get requiresCaptcha => code == "CAPTCHA_REQUIRED";
+
+  String? _detailString(String key) {
+    final raw = details?[key];
+    if (raw == null) return null;
+    final text = raw.toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
+  String? get captchaActionUrl => _detailString("action_url");
+  String? get captchaRegisterUrl => _detailString("xboard_register_url");
+  String? get captchaReturnUrl => _detailString("app_return_url");
 
   @override
   String toString() => "GatewayApiException(code: $code, status: $statusCode, message: $message)";
@@ -58,6 +79,17 @@ class SlothGatewayApi with InfraLogger {
   String _friendlyMessage({required String raw, String? code, int? statusCode}) {
     final message = raw.trim();
     final lowerRaw = message.toLowerCase();
+    if (lowerRaw.contains("response has a status code of")) {
+      final inferred = RegExp(r"status code of (\d{3})").firstMatch(lowerRaw);
+      final parsed = inferred == null ? null : int.tryParse(inferred.group(1)!);
+      final finalStatus = statusCode ?? parsed;
+      if (finalStatus == 401) return "登录状态已失效，请重新登录";
+      if (finalStatus == 403) return "当前请求被拒绝，请检查账号权限";
+      if (finalStatus == 404) return "请求接口不存在，请更新网关服务";
+      if (finalStatus == 422) return "请求参数不正确，请检查输入信息";
+      if (finalStatus != null && finalStatus >= 500) return "网关服务暂时不可用，请稍后重试";
+      return "请求失败，请稍后重试";
+    }
     final looksHtml = lowerRaw.contains("<html") || lowerRaw.contains("<!doctype") || lowerRaw.contains("<body");
     final statusMatch = RegExp(r"status code of (\d{3})").firstMatch(lowerRaw);
     final inferredStatus = statusMatch == null ? null : int.tryParse(statusMatch.group(1)!);
@@ -86,6 +118,14 @@ class SlothGatewayApi with InfraLogger {
         return "当前站点开启人机验证，请先在网页端完成验证";
       case "INVITE_CODE_REQUIRED":
         return "当前站点要求填写邀请码";
+      case "ORDER_PENDING_EXISTS":
+        return "您有未付款订单，请先支付或取消当前订单";
+      case "ORDER_WAITING_EFFECTIVE":
+        return "您有待生效订单，请稍后再试";
+      case "ORDER_ALREADY_PAID":
+        return "该订单已支付，无需重复支付";
+      case "TICKET_UNAVAILABLE":
+        return "工单入口暂时不可用，请稍后重试";
       case "UNAUTHORIZED":
         return "登录状态已失效，请重新登录";
       case "ORDER_NOT_CANCELLABLE":
@@ -205,6 +245,16 @@ class SlothGatewayApi with InfraLogger {
   Future<GatewayInviteSummary> inviteSummary(String accessToken) async {
     final data = await _request(method: "GET", path: "/api/app/v1/invite/summary", accessToken: accessToken);
     return GatewayInviteSummary.fromMap(data);
+  }
+
+  Future<bool> inviteWithdraw({required String accessToken, required double amount}) async {
+    final data = await _request(
+      method: "POST",
+      path: "/api/app/v1/invite/withdraw",
+      accessToken: accessToken,
+      body: {"amount": amount},
+    );
+    return data["requested"] == true;
   }
 
   Future<GatewaySubscriptionResult> subscription(String accessToken) async {
@@ -358,6 +408,15 @@ class SlothGatewayApi with InfraLogger {
     return GatewayTicketEntry.fromMap(data);
   }
 
+  Future<GatewayTelegramBindingStatus> telegramBinding(String accessToken) async {
+    final data = await _request(
+      method: "GET",
+      path: "/api/app/v1/account/telegram-binding",
+      accessToken: accessToken,
+    );
+    return GatewayTelegramBindingStatus.fromMap(data);
+  }
+
   Future<Map<String, dynamic>> _request({
     required String method,
     required String path,
@@ -383,6 +442,7 @@ class SlothGatewayApi with InfraLogger {
           message: _friendlyMessage(raw: rawMessage, code: code, statusCode: response.statusCode),
           path: path,
           method: method,
+          details: _asStringKeyedMap(err["details"]),
         );
       }
 
@@ -404,6 +464,7 @@ class SlothGatewayApi with InfraLogger {
           message: _friendlyMessage(raw: rawMessage, code: code, statusCode: error.response?.statusCode),
           path: path,
           method: method,
+          details: _asStringKeyedMap(err["details"]),
         );
       }
       throw GatewayApiException(

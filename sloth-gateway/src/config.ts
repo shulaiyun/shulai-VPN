@@ -35,6 +35,8 @@ export const config = {
   xboardWebBaseUrl: normalizeBaseUrl(process.env.XBOARD_WEB_BASE_URL ?? process.env.XBOARD_BASE_URL, "http://127.0.0.1"),
   xboardTimeoutMs: num(process.env.XBOARD_TIMEOUT_MS, 15000),
   defaultTelegramUrl: process.env.DEFAULT_TELEGRAM_URL ?? "https://t.me/shulai2026",
+  telegramBotUsername: process.env.TELEGRAM_BOT_USERNAME ?? "shulaiyun_bot",
+  telegramBotUrl: process.env.TELEGRAM_BOT_URL ?? "https://t.me/shulaiyun_bot",
   defaultGithubUrl: process.env.DEFAULT_GITHUB_URL ?? "https://github.com/shulaiyun/shulai-VPN",
   defaultTicketUrl: process.env.DEFAULT_TICKET_URL ?? "",
   defaultNoticeUrl: process.env.DEFAULT_NOTICE_URL ?? "",

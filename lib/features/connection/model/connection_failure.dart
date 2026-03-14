@@ -1,9 +1,48 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+﻿import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hiddify/core/localization/translations.dart';
 import 'package:hiddify/core/model/failures.dart';
 import 'package:hiddify/features/settings/model/config_option_failure.dart';
 
 part 'connection_failure.freezed.dart';
+
+String? _normalizeUnexpectedConnectivityMessage(Object? error) {
+  if (error == null) return null;
+  final raw = error.toString();
+  final text = raw.toLowerCase();
+
+  if (
+      text.contains("tun permission denied") ||
+      text.contains("vpn permission denied") ||
+      (text.contains("permission denied") && text.contains("tun"))) {
+    return "请先在系统中授予 VPN/TUN 权限后再连接";
+  }
+
+  if (
+      text.contains("failed to start background core") ||
+      text.contains("background core is not started yet") ||
+      text.contains("createservice - null") ||
+      text.contains("createservice")) {
+    return "后台服务启动失败，请重试；如仍失败请重启应用";
+  }
+
+  if (
+      text.contains("profile not found") ||
+      text.contains("empty outbound") ||
+      text.contains("no profile") ||
+      text.contains("subscription content is empty")) {
+    return "当前节点为空，请先同步订阅或购买套餐";
+  }
+
+  if (text.contains("failed to connect")) {
+    return "连接节点失败，请切换节点后重试";
+  }
+
+  if (text.contains("unexpected failure") || text.contains("unexpected")) {
+    return "连接失败，请稍后重试";
+  }
+
+  return "连接失败，请检查网络与节点状态后重试";
+}
 
 @freezed
 sealed class ConnectionFailure with _$ConnectionFailure, Failure {
@@ -39,7 +78,7 @@ sealed class ConnectionFailure with _$ConnectionFailure, Failure {
     return switch (this) {
       UnexpectedConnectionFailure(:final error) when error != null => (
         type: t.errors.connectivity.unexpected,
-        message: "$error",
+        message: _normalizeUnexpectedConnectivityMessage(error),
       ),
       UnexpectedConnectionFailure() => (type: t.errors.connectivity.unexpected, message: null),
       MissingVpnPermission(:final message) => (type: t.errors.connectivity.missingVpnPermission, message: message),

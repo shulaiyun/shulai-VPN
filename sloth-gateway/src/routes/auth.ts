@@ -43,7 +43,51 @@ const readUpstreamStatus = (error: AppError): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const mapUpstreamAuthError = (error: unknown): never => {
+const readUpstreamMessage = (error: AppError): string => {
+  const details = error.details as Record<string, unknown> | undefined;
+  const upstreamError = details?.upstream_error;
+  if (upstreamError && typeof upstreamError === "object") {
+    const mapped = upstreamError as Record<string, unknown>;
+    const msg = mapped.message;
+    if (typeof msg === "string" && msg.trim().length > 0) return msg.trim();
+    const errors = mapped.errors;
+    if (errors && typeof errors === "object") {
+      const allValues = Object.values(errors as Record<string, unknown>);
+      const first = allValues.length > 0 ? allValues[0] : undefined;
+      if (Array.isArray(first) && first.length > 0) {
+        const firstError = String(first[0] ?? "").trim();
+        if (firstError.length > 0) return firstError;
+      }
+      if (typeof first === "string" && first.trim().length > 0) {
+        return first.trim();
+      }
+    }
+  }
+  return "";
+};
+
+const isGenericUpstreamMessage = (value: string): boolean => {
+  const text = value.trim().toLowerCase();
+  if (!text) return true;
+  return (
+    text === "xboard request failed" ||
+    text === "gateway request failed" ||
+    text === "upstream request failed" ||
+    text === "internal server error"
+  );
+};
+
+const buildCaptchaAction = (email?: string) => {
+  const normalizedEmail = (email ?? "").trim().toLowerCase();
+  const query = normalizedEmail.length <= 0 ? "" : `?email=${encodeURIComponent(normalizedEmail)}`;
+  return {
+    action_url: `${config.publicBaseUrl}/api/app/v1/auth/captcha/guide${query}`,
+    xboard_register_url: `${config.xboardWebBaseUrl}/#/register`,
+    app_return_url: `slothvpn://auth/captcha-complete${normalizedEmail.length <= 0 ? "" : `?email=${encodeURIComponent(normalizedEmail)}`}`,
+  };
+};
+
+const mapUpstreamAuthError = (error: unknown, context?: { email?: string }): never => {
   if (!(error instanceof AppError)) {
     throw error;
   }
@@ -53,6 +97,63 @@ const mapUpstreamAuthError = (error: unknown): never => {
 
   const text = extractErrorText(error);
   const upstreamStatus = readUpstreamStatus(error);
+  const upstreamMessage = readUpstreamMessage(error);
+
+  if (upstreamStatus === 429 || text.includes("too many request")) {
+    throw new AppError(429, ErrorCodes.UPSTREAM_ERROR, "请求过于频繁，请稍后重试");
+  }
+
+  const loweredUpstream = upstreamMessage.toLowerCase();
+  if (
+    loweredUpstream.includes("captcha") ||
+    loweredUpstream.includes("turnstile") ||
+    loweredUpstream.includes("hcaptcha") ||
+    loweredUpstream.includes("recaptcha") ||
+    loweredUpstream.includes("人机验证")
+  ) {
+    throw new AppError(
+      400,
+      ErrorCodes.CAPTCHA_REQUIRED,
+      "当前站点开启人机验证，请先前往网页完成验证",
+      buildCaptchaAction(context?.email),
+    );
+  }
+
+  if (upstreamStatus >= 400 && upstreamStatus < 500 && upstreamMessage.length > 0) {
+    const lowered = upstreamMessage.toLowerCase();
+    if (
+      lowered.includes("captcha") ||
+      lowered.includes("turnstile") ||
+      lowered.includes("hcaptcha") ||
+      lowered.includes("recaptcha") ||
+      lowered.includes("人机验证")
+    ) {
+      throw new AppError(
+        400,
+        ErrorCodes.CAPTCHA_REQUIRED,
+        "当前站点开启人机验证，请先前往网页完成验证",
+        buildCaptchaAction(context?.email),
+      );
+    }
+    if (
+      lowered.includes("email format") ||
+      lowered.includes("invalid email") ||
+      lowered.includes("邮箱格式")
+    ) {
+      throw new AppError(400, ErrorCodes.BAD_EMAIL_FORMAT, "邮箱格式不正确，请检查邮箱是否正确");
+    }
+    if (
+      lowered.includes("email code") ||
+      lowered.includes("验证码")
+    ) {
+      throw new AppError(400, ErrorCodes.EMAIL_CODE_INVALID, "邮箱验证码错误或已过期");
+    }
+    if (lowered.includes("invite")) {
+      throw new AppError(400, ErrorCodes.INVITE_CODE_REQUIRED, "当前站点要求填写邀请码");
+    }
+    throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, upstreamMessage);
+  }
+
   if (upstreamStatus === 422) {
     if (text.includes("邮箱格式") || text.includes("email format") || text.includes("invalid email")) {
       throw new AppError(400, ErrorCodes.BAD_EMAIL_FORMAT, "邮箱格式不正确，请检查邮箱是否正确");
@@ -63,6 +164,13 @@ const mapUpstreamAuthError = (error: unknown): never => {
     if (text.includes("verify") || text.includes("验证码")) {
       throw new AppError(400, ErrorCodes.EMAIL_CODE_INVALID, "邮箱验证码错误或已过期");
     }
+    if (upstreamMessage.length > 0) {
+      throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, upstreamMessage);
+    }
+  }
+
+  if (upstreamStatus > 0 && upstreamStatus < 500 && upstreamMessage.length > 0 && !isGenericUpstreamMessage(upstreamMessage)) {
+    throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, upstreamMessage);
   }
   if (text.includes("register") && (text.includes("closed") || text.includes("disable"))) {
     throw new AppError(403, ErrorCodes.REGISTER_CLOSED, "当前站点已关闭注册");
@@ -95,7 +203,12 @@ const mapUpstreamAuthError = (error: unknown): never => {
     text.includes("hcaptcha") ||
     text.includes("人机验证")
   ) {
-    throw new AppError(400, ErrorCodes.CAPTCHA_REQUIRED, "当前站点开启人机验证，请在网页端完成验证码后再注册");
+    throw new AppError(
+      400,
+      ErrorCodes.CAPTCHA_REQUIRED,
+      "当前站点开启人机验证，请先前往网页完成验证",
+      buildCaptchaAction(context?.email),
+    );
   }
   if (
     text.includes("invalid email") ||
@@ -113,6 +226,10 @@ const mapUpstreamAuthError = (error: unknown): never => {
   }
   if (text.includes("credential") || text.includes("unauthorized") || text.includes("login failed")) {
     throw new AppError(401, ErrorCodes.AUTH_INVALID_CREDENTIALS, "邮箱或密码错误");
+  }
+
+  if (upstreamMessage.length > 0 && !isGenericUpstreamMessage(upstreamMessage) && upstreamMessage.length < 160) {
+    throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, upstreamMessage);
   }
 
   throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "上游认证服务异常，请稍后重试");
@@ -301,6 +418,48 @@ const authCallbackPage = (deepLink: string, bindId: string): string => `<!doctyp
     </script>
   </body>
 </html>`;
+
+const captchaGuidePage = (input: { email?: string; registerUrl: string; returnDeepLink: string }): string => {
+  const safeEmail = htmlEscape((input.email ?? "").trim());
+  const safeRegisterUrl = htmlEscape(input.registerUrl);
+  const safeReturn = htmlEscape(input.returnDeepLink);
+  return `<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>树懒VPN 人机验证引导</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif; margin: 0; background: #f5f8ff; color: #0f172a; }
+      .wrap { max-width: 720px; margin: 24px auto; padding: 0 16px; }
+      .card { background: #fff; border: 1px solid #dbe4ff; border-radius: 14px; padding: 18px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06); }
+      h1 { margin: 0 0 10px; font-size: 22px; }
+      p { margin: 0 0 10px; color: #334155; line-height: 1.55; }
+      .tips { margin: 12px 0; padding: 12px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; }
+      .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+      a.btn { border-radius: 10px; text-decoration: none; padding: 10px 14px; font-weight: 600; }
+      a.primary { background: #2563eb; color: #fff; }
+      a.secondary { background: #e2e8f0; color: #0f172a; }
+      code { background: #f1f5f9; border-radius: 6px; padding: 2px 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h1>请先完成网页人机验证</h1>
+        <p>当前站点开启了验证码或人机验证，App 内无法直接完成。请先打开网页完成验证，再返回 App 继续注册或发送邮箱验证码。</p>
+        ${safeEmail.length > 0 ? `<p>当前邮箱：<code>${safeEmail}</code></p>` : ""}
+        <div class="tips">完成验证后，回到 App 重新点击“发送邮箱验证码”或“注册并登录”即可继续。</div>
+        <div class="btns">
+          <a class="btn primary" href="${safeRegisterUrl}" target="_blank" rel="noopener">打开网页完成验证</a>
+          <a class="btn secondary" href="${safeReturn}">我已完成验证，返回 App</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>`;
+};
+
 const issueSessionTokenSet = (deps: AuthRouteDeps, input: {
   xboardAuthData: string;
   xboardToken?: string;
@@ -369,6 +528,15 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
     });
   });
 
+  app.get("/api/app/v1/auth/captcha/guide", async (request, reply) => {
+    const query = request.query as Record<string, unknown>;
+    const email = normalizeEmail(String(query.email ?? ""));
+    const registerUrl = `${config.xboardWebBaseUrl}/#/register`;
+    const returnDeepLink = `slothvpn://auth/captcha-complete${email.length > 0 ? `?email=${encodeURIComponent(email)}` : ""}`;
+    reply.header("content-type", "text/html; charset=utf-8");
+    return reply.send(captchaGuidePage({ email, registerUrl, returnDeepLink }));
+  });
+
   app.post("/api/app/v1/auth/send-email-verify", async (request, reply) => {
     const body = (request.body ?? {}) as Record<string, unknown>;
     const email = normalizeEmail(String(body.email ?? ""));
@@ -387,7 +555,14 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
         hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
       });
     } catch (error) {
-      mapUpstreamAuthError(error);
+      try {
+        mapUpstreamAuthError(error, { email });
+      } catch (mapped) {
+        if (mapped instanceof AppError) {
+          throw mapped;
+        }
+        throw mapped;
+      }
     }
 
     return ok(reply, {
@@ -452,7 +627,7 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
         turnstileData: typeof body.turnstile_data === "string" ? body.turnstile_data : undefined,
         hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
       })
-      .catch((error): never => mapUpstreamAuthError(error));
+      .catch((error): never => mapUpstreamAuthError(error, { email }));
 
     const [user, subscribe] = await Promise.all([
       deps.xboard.getUserInfo(registered.authData),

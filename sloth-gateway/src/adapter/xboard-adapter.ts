@@ -15,6 +15,8 @@ type XboardUserInfo = {
   balance?: number;
   uuid?: string;
   plan_id?: number;
+  telegram_id?: string | number;
+  telegram_username?: string;
 };
 
 type XboardPlan = {
@@ -221,6 +223,11 @@ export class XboardAdapter {
     inviteUrl: string | null;
     rebateTotal: number;
     rebatePending: number;
+    rebateAvailable: number;
+    rebateWithdrawn: number;
+    rebateRate: number;
+    rebateRuleText: string | null;
+    canWithdraw: boolean;
     invitedCount: number;
   }> {
     const raw = await this.request<Record<string, unknown>>("GET", "/api/v1/user/invite/fetch", undefined, authData);
@@ -250,8 +257,38 @@ export class XboardAdapter {
       rebatePending: this.toNumber(
         this.pick(raw, ["rebate_pending", "commission_pending", "pending_amount"]),
       ),
+      rebateAvailable: this.toNumber(
+        this.pick(raw, ["rebate_available", "commission_available", "can_withdraw_amount", "available_amount"]),
+      ),
+      rebateWithdrawn: this.toNumber(
+        this.pick(raw, ["rebate_withdrawn", "commission_withdrawn", "withdrawn_amount", "withdraw_amount"]),
+      ),
+      rebateRate: this.toNumber(
+        this.pick(raw, ["rebate_rate", "commission_rate", "invite_rate"]),
+      ),
+      rebateRuleText: this.toStringOrNull(
+        this.pick(raw, ["rebate_rule", "commission_rule", "rule", "description"]),
+      ),
+      canWithdraw: this.toBool(
+        this.pick(raw, ["can_withdraw", "withdraw_enable", "is_withdraw_enable", "enable_withdraw"]),
+      ),
       invitedCount: this.toNumber(this.pick(raw, ["invited_count", "invite_count", "user_count"])),
     };
+  }
+
+  async submitInviteWithdraw(authData: string, amount: number): Promise<boolean> {
+    const payload = { amount };
+    try {
+      await this.request<boolean>("POST", "/api/v1/user/invite/withdraw", payload, authData);
+      return true;
+    } catch (error) {
+      if (error instanceof AppError && error.code === ErrorCodes.UPSTREAM_ERROR) {
+        // Compatibility fallback for panel variants.
+        await this.request<boolean>("POST", "/api/v1/user/invite/save", payload, authData);
+        return true;
+      }
+      throw error;
+    }
   }
 
   async getNotices(authData: string, current = 1, pageSize = 10): Promise<{

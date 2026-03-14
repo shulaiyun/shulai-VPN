@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hiddify/features/app_gateway/data/gateway_api.dart';
@@ -27,6 +27,36 @@ class GatewayRegisterPage extends HookConsumerWidget {
     final isSendingCode = useState(false);
     final policy = useState<GatewayAuthPolicy?>(null);
     final policyLoading = useState(true);
+
+    Future<void> openCaptchaGuide(GatewayApiException error) async {
+      final target = error.captchaActionUrl ?? error.captchaRegisterUrl;
+      if (target == null || target.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+        return;
+      }
+
+      final openLabel = Localizations.localeOf(context).languageCode.toLowerCase().startsWith('zh')
+          ? "去网页完成验证"
+          : "Open Web Verification";
+
+      final action = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(g.registerTitle),
+          content: Text(error.message),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(g.back)),
+            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(openLabel)),
+          ],
+        ),
+      );
+      if (action != true || !context.mounted) return;
+
+      await context.push(
+        "/gateway-account/webview",
+        extra: <String, String>{"url": target, "title": openLabel},
+      );
+    }
 
     Future<void> loadPolicy() async {
       policyLoading.value = true;
@@ -59,6 +89,7 @@ class GatewayRegisterPage extends HookConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.emailSuffixRestricted)));
         return;
       }
+
       isSendingCode.value = true;
       try {
         await ref.read(slothGatewayPortalControllerProvider).sendEmailVerify(email);
@@ -66,7 +97,11 @@ class GatewayRegisterPage extends HookConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.verifyCodeSent)));
       } on GatewayApiException catch (error) {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.sendFailed(error.message))));
+        if (error.requiresCaptcha) {
+          await openCaptchaGuide(error);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.sendFailed(error.message))));
+        }
       } catch (_) {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.sendFailed(g.unknownError))));
@@ -79,6 +114,7 @@ class GatewayRegisterPage extends HookConsumerWidget {
       final email = emailController.text.trim();
       final password = passwordController.text.trim();
       final authPolicy = policy.value;
+
       if (email.isEmpty || password.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.enterEmailPassword)));
         return;
@@ -99,22 +135,25 @@ class GatewayRegisterPage extends HookConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.inviteCodeLabel)));
         return;
       }
+
       isLoading.value = true;
       try {
-        await ref
-            .read(slothGatewayPortalControllerProvider)
-            .register(
-              email: email,
-              password: password,
-              emailCode: emailCodeController.text.trim(),
-              inviteCode: inviteCodeController.text.trim(),
-            );
+        await ref.read(slothGatewayPortalControllerProvider).register(
+          email: email,
+          password: password,
+          emailCode: emailCodeController.text.trim(),
+          inviteCode: inviteCodeController.text.trim(),
+        );
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.registerSucceeded)));
         context.go("/gateway-account");
       } on GatewayApiException catch (error) {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.registerFailed(error.message))));
+        if (error.requiresCaptcha) {
+          await openCaptchaGuide(error);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.registerFailed(error.message))));
+        }
       } catch (_) {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.registerFailed(g.unknownError))));
@@ -139,7 +178,10 @@ class GatewayRegisterPage extends HookConsumerWidget {
           if (policy.value != null && !policy.value!.registerEnabled)
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(g.registerClosedHint, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child: Text(
+                g.registerClosedHint,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             ),
           const SizedBox(height: 16),
           TextField(

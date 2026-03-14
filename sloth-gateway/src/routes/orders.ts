@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+﻿import type { FastifyInstance } from "fastify";
 import type { XboardAdapter } from "../adapter/xboard-adapter";
 import { AppError, ErrorCodes } from "../errors";
 import { requireSession } from "../plugins/auth";
@@ -8,6 +8,32 @@ import { ok } from "../utils/response";
 type OrderDeps = {
   sessions: SessionStore;
   xboard: XboardAdapter;
+};
+
+const parseNumber = (value: unknown): number => {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+};
+
+const parseIsoTime = (value: unknown): string | null => {
+  if (value == null) return null;
+  if (typeof value === "number") {
+    const ts = value > 9_999_999_999 ? value : value * 1000;
+    return new Date(ts).toISOString();
+  }
+  const text = String(value).trim();
+  if (!text) return null;
+  const numeric = Number(text);
+  if (Number.isFinite(numeric)) {
+    const ts = numeric > 9_999_999_999 ? numeric : numeric * 1000;
+    return new Date(ts).toISOString();
+  }
+  const parsed = new Date(text);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 };
 
 const mapOrderStatus = (code: number): { status: string; isFinal: boolean } => {
@@ -44,45 +70,19 @@ const mapOrderType = (type: number): { key: string; label: string } => {
   }
 };
 
-const parseNumber = (value: unknown): number => {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    if (Number.isFinite(parsed)) return parsed;
-  }
-  return 0;
-};
-
-const toIsoTime = (value: unknown): string | null => {
-  if (value == null) return null;
-  if (typeof value === "number") {
-    const ts = value > 9_999_999_999 ? value : value * 1000;
-    return new Date(ts).toISOString();
-  }
-  const text = String(value).trim();
-  if (!text) return null;
-  const numeric = Number(text);
-  if (Number.isFinite(numeric)) {
-    const ts = numeric > 9_999_999_999 ? numeric : numeric * 1000;
-    return new Date(ts).toISOString();
-  }
-  const parsed = new Date(text);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return parsed.toISOString();
-};
-
 const normalizeOrder = (raw: Record<string, unknown>) => {
   const orderNo = String(raw.trade_no ?? raw.order_no ?? raw.orderNo ?? "").trim();
   const statusCode = parseNumber(raw.status);
-  const statusMapped = mapOrderStatus(statusCode);
-  const orderTypeCode = parseNumber(raw.type);
-  const orderType = mapOrderType(orderTypeCode);
+  const mappedStatus = mapOrderStatus(statusCode);
+  const typeCode = parseNumber(raw.type);
+  const mappedType = mapOrderType(typeCode);
   const rawPlan = typeof raw.plan === "object" && raw.plan !== null ? (raw.plan as Record<string, unknown>) : null;
+
   return {
     order_no: orderNo,
     status_code: statusCode,
-    status: statusMapped.status,
-    is_final: statusMapped.isFinal,
+    status: mappedStatus.status,
+    is_final: mappedStatus.isFinal,
     can_cancel: statusCode === 0,
     total_amount: parseNumber(raw.total_amount ?? raw.total_amount_cny ?? raw.total),
     handling_amount: parseNumber(raw.handling_amount),
@@ -93,14 +93,109 @@ const normalizeOrder = (raw: Record<string, unknown>) => {
     plan_id: parseNumber(raw.plan_id),
     plan_name: String(raw.plan_name ?? rawPlan?.name ?? "").trim(),
     period: String(raw.period ?? raw.billing_cycle ?? "").trim(),
-    type_code: orderTypeCode,
-    type: orderType.key,
-    type_label: orderType.label,
-    created_at: toIsoTime(raw.created_at),
-    updated_at: toIsoTime(raw.updated_at),
-    paid_at: toIsoTime(raw.paid_at),
+    type_code: typeCode,
+    type: mappedType.key,
+    type_label: mappedType.label,
+    created_at: parseIsoTime(raw.created_at),
+    updated_at: parseIsoTime(raw.updated_at),
+    paid_at: parseIsoTime(raw.paid_at),
     surplus_order_ids: Array.isArray(raw.surplus_order_ids) ? raw.surplus_order_ids : [],
   };
+};
+
+const extractOrderError = (error: AppError): {
+  status: number;
+  path: string;
+  text: string;
+  upstreamMessage: string;
+} => {
+  const details = (error.details ?? {}) as Record<string, unknown>;
+  const upstreamStatusRaw = details.upstream_status;
+  const upstreamPath = String(details.upstream_path ?? "").trim();
+  const upstreamError = details.upstream_error;
+
+  let upstreamMessage = "";
+  if (upstreamError && typeof upstreamError === "object") {
+    const mapped = upstreamError as Record<string, unknown>;
+    upstreamMessage = String(mapped.message ?? "").trim();
+  } else if (typeof upstreamError === "string") {
+    upstreamMessage = upstreamError.trim();
+  }
+
+  const status =
+    typeof upstreamStatusRaw === "number"
+      ? upstreamStatusRaw
+      : Number.isFinite(Number(upstreamStatusRaw))
+      ? Number(upstreamStatusRaw)
+      : 0;
+
+  const mergedText = `${error.message} ${upstreamMessage} ${JSON.stringify(details)}`.toLowerCase();
+
+  return { status, path: upstreamPath, text: mergedText, upstreamMessage };
+};
+
+const containsAny = (text: string, patterns: string[]): boolean => patterns.some((item) => text.includes(item));
+
+const mapUpstreamOrderError = (error: unknown): never => {
+  if (!(error instanceof AppError)) {
+    throw error;
+  }
+  if (error.code !== ErrorCodes.UPSTREAM_ERROR) {
+    throw error;
+  }
+
+  const extracted = extractOrderError(error);
+  const { status, path, text, upstreamMessage } = extracted;
+
+  const isCreate = path.endsWith("/api/v1/user/order/save") || path.endsWith("/api/v2/user/order/save");
+  const isCheckout = path.endsWith("/api/v1/user/order/checkout") || path.endsWith("/api/v2/user/order/checkout");
+  const isCancel = path.endsWith("/api/v1/user/order/cancel") || path.endsWith("/api/v2/user/order/cancel");
+
+  if (
+    (isCreate && status === 400) ||
+    containsAny(text, [
+      "未付款或开通中的订单",
+      "未付款订单",
+      "未支付订单",
+      "pending order",
+      "unpaid order",
+      "pending payment",
+    ])
+  ) {
+    throw new AppError(409, ErrorCodes.ORDER_PENDING_EXISTS, "您有未付款订单，请先支付或取消当前订单");
+  }
+
+  if (
+    containsAny(text, [
+      "待生效",
+      "开通中的订单",
+      "waiting effective",
+      "wait effective",
+      "activating",
+    ])
+  ) {
+    throw new AppError(409, ErrorCodes.ORDER_WAITING_EFFECTIVE, "您有待生效订单，请稍后再试");
+  }
+
+  if (
+    (isCheckout && status === 400 && containsAny(text, ["paid", "已支付", "已经支付"])) ||
+    containsAny(text, ["already paid", "已支付", "已经支付"])
+  ) {
+    throw new AppError(409, ErrorCodes.ORDER_ALREADY_PAID, "该订单已支付，无需重复支付");
+  }
+
+  if (
+    (isCancel && status === 400) ||
+    containsAny(text, ["cannot cancel", "不可取消", "不能取消", "已取消", "already cancelled", "already canceled"])
+  ) {
+    throw new AppError(400, ErrorCodes.ORDER_NOT_CANCELLABLE, "当前订单状态不可取消");
+  }
+
+  if (status >= 400 && status < 500 && upstreamMessage.trim().length > 0) {
+    throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, upstreamMessage.trim());
+  }
+
+  throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "订单服务暂时不可用，请稍后重试");
 };
 
 export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void => {
@@ -124,6 +219,7 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
     const statusFilter = typeof query.status === "string" ? query.status.trim().toLowerCase() : "all";
     const orderNoFilter = typeof query.order_no === "string" ? query.order_no.trim() : "";
     const rawOrders = await deps.xboard.getOrders(session.xboardAuthData);
+
     const normalized = rawOrders
       .map(normalizeOrder)
       .filter((item) => item.order_no.length > 0)
@@ -151,12 +247,14 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
       throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "plan_id and period are required");
     }
 
-    const orderNo = await deps.xboard.createOrder({
-      authData: session.xboardAuthData,
-      planId,
-      period,
-      couponCode: typeof body.coupon_code === "string" ? body.coupon_code : undefined,
-    });
+    const orderNo = await deps.xboard
+      .createOrder({
+        authData: session.xboardAuthData,
+        planId,
+        period,
+        couponCode: typeof body.coupon_code === "string" ? body.coupon_code : undefined,
+      })
+      .catch((err): never => mapUpstreamOrderError(err));
 
     return ok(reply, {
       order_no: orderNo,
@@ -173,12 +271,15 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
       throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "payment_method_id is required");
     }
 
-    const checkout = await deps.xboard.checkoutOrder({
-      authData: session.xboardAuthData,
-      orderNo: params.orderNo,
-      paymentMethodId,
-      token: typeof body.token === "string" ? body.token : undefined,
-    });
+    const checkout = await deps.xboard
+      .checkoutOrder({
+        authData: session.xboardAuthData,
+        orderNo: params.orderNo,
+        paymentMethodId,
+        token: typeof body.token === "string" ? body.token : undefined,
+      })
+      .catch((err): never => mapUpstreamOrderError(err));
+
     const paymentData = checkout.data == null ? "" : String(checkout.data);
     const paymentUrl = /^https?:\/\//i.test(paymentData) ? paymentData : null;
     const completed = checkout.type === -1;
@@ -198,7 +299,6 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
     const params = request.params as { orderNo: string };
     const statusCode = await deps.xboard.getOrderStatus(session.xboardAuthData, params.orderNo);
     const mapped = mapOrderStatus(statusCode);
-
     return ok(reply, {
       order_no: params.orderNo,
       status_code: statusCode,
@@ -216,7 +316,6 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
     if (!normalized.order_no) {
       throw new AppError(404, ErrorCodes.NOT_FOUND, "Order does not exist");
     }
-
     return ok(reply, {
       order: normalized,
       fetched_at: new Date().toISOString(),
@@ -226,12 +325,10 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
   app.post("/api/app/v1/orders/:orderNo/cancel", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
     const params = request.params as { orderNo: string };
-    const cancelled = await deps.xboard.cancelOrder(session.xboardAuthData, params.orderNo).catch((error): never => {
-      if (error instanceof AppError && error.code === ErrorCodes.UPSTREAM_ERROR) {
-        throw new AppError(400, ErrorCodes.ORDER_NOT_CANCELLABLE, "当前订单状态不可取消");
-      }
-      throw error;
-    });
+    const cancelled = await deps.xboard
+      .cancelOrder(session.xboardAuthData, params.orderNo)
+      .catch((err): never => mapUpstreamOrderError(err));
+
     return ok(reply, {
       order_no: params.orderNo,
       cancelled: cancelled === true,
@@ -239,4 +336,3 @@ export const registerOrderRoutes = (app: FastifyInstance, deps: OrderDeps): void
     });
   });
 };
-

@@ -108,7 +108,7 @@ class HomePage extends HookConsumerWidget {
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
                       child: _ConnectionHeaderCard(
                         title: statusText,
                         connected: connectionStatus.valueOrNull == const Connected(),
@@ -119,7 +119,7 @@ class HomePage extends HookConsumerWidget {
                   ),
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
                       child: _GatewayEntryCard(refreshSignal: gatewayRefreshTick),
                     ),
                   ),
@@ -128,34 +128,28 @@ class HomePage extends HookConsumerWidget {
                       child: ProfileTile(
                         profile: profile,
                         isMain: true,
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                         color: theme.colorScheme.surfaceContainer,
                       ),
                     ),
                     _ => const SliverToBoxAdapter(),
                   },
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      child: _GatewaySubscriptionHint(refreshSignal: gatewayRefreshTick),
-                    ),
-                  ),
                   const SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(16, 6, 16, 0),
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ConnectionButton(),
-                          SizedBox(height: 6),
+                          SizedBox(height: 2),
                           ActiveProxyDelayIndicator(),
-                          SizedBox(height: 6),
+                          SizedBox(height: 2),
                           ActiveProxyFooter(),
                         ],
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 18)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 4)),
                 ],
               ),
             ),
@@ -225,7 +219,7 @@ class _ConnectionHeaderCard extends StatelessWidget {
         gradient: SlothGradients.heroBackground,
         boxShadow: SlothShadows.card,
       ),
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -241,7 +235,7 @@ class _ConnectionHeaderCard extends StatelessWidget {
                 ),
                 child: const SlothIcon(SlothIconType.sloth, color: Colors.white),
               ),
-              const Gap(8),
+              const Gap(6),
               Expanded(
                 child: Text(
                   title,
@@ -251,7 +245,7 @@ class _ConnectionHeaderCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(999),
                   color: statusColor.withValues(alpha: 0.2),
@@ -263,7 +257,7 @@ class _ConnectionHeaderCard extends StatelessWidget {
               ),
             ],
           ),
-          const Gap(10),
+          const Gap(8),
           Row(
             children: [
               Expanded(
@@ -292,12 +286,12 @@ class _StatMini extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white.withValues(alpha: 0.13)),
       child: Row(
         children: [
           SlothIcon(icon, size: 16, color: Colors.white),
-          const Gap(6),
+          const Gap(4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,6 +326,13 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
   bool _syncing = false;
   bool _loggedIn = false;
   GatewayAccountSummary? _summary;
+
+  String _formatTraffic(int bytes) {
+    const gb = 1024 * 1024 * 1024;
+    const mb = 1024 * 1024;
+    if (bytes >= gb) return "${(bytes / gb).toStringAsFixed(2)} GB";
+    return "${(bytes / mb).toStringAsFixed(2)} MB";
+  }
 
   @override
   void initState() {
@@ -413,7 +414,7 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -421,26 +422,41 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
               g.accountAndPlanSectionTitle,
               style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 2),
             if (_loggedIn) ...[
               Text(g.statusLoggedIn(_summary?.email ?? "--")),
-              const SizedBox(height: 6),
+              const SizedBox(height: 3),
               Wrap(
                 spacing: 8,
-                runSpacing: 8,
+                runSpacing: 6,
                 children: [
                   _MiniStatusTile(label: g.homeCurrentPlan, value: _summary?.planName ?? "--"),
+                  _MiniStatusTile(label: g.homeExpireAt, value: _summary?.expiredAt ?? "--"),
+                  _MiniStatusTile(
+                    label: g.homeRemainingTraffic,
+                    value: _formatTraffic(_summary?.trafficRemaining ?? 0),
+                  ),
                 ],
               ),
+              if ((_summary?.trafficTotal ?? 0) > 0) ...[
+                const SizedBox(height: 6),
+                LinearProgressIndicator(
+                  value: ((_summary!.trafficRemaining) / (_summary!.trafficTotal)).clamp(0.0, 1.0),
+                  minHeight: 8,
+                  borderRadius: BorderRadius.circular(999),
+                  color: Colors.green.shade500,
+                  backgroundColor: Colors.green.shade100.withValues(alpha: 0.5),
+                ),
+              ],
             ] else ...[
               Text(g.statusNotLoggedIn),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(g.homeGuide),
             ],
-            const SizedBox(height: 10),
+            const SizedBox(height: 6),
             Wrap(
               spacing: 8,
-              runSpacing: 8,
+              runSpacing: 6,
               children: [
                 if (_loggedIn)
                   FilledButton(onPressed: () => context.go("/gateway-account"), child: Text(g.myAccount))
@@ -462,105 +478,6 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
   }
 }
 
-class _GatewaySubscriptionHint extends ConsumerStatefulWidget {
-  const _GatewaySubscriptionHint({required this.refreshSignal});
-
-  final int refreshSignal;
-
-  @override
-  ConsumerState<_GatewaySubscriptionHint> createState() => _GatewaySubscriptionHintState();
-}
-
-class _GatewaySubscriptionHintState extends ConsumerState<_GatewaySubscriptionHint> {
-  GatewayAccountSummary? _summary;
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _refresh();
-  }
-
-  @override
-  void didUpdateWidget(covariant _GatewaySubscriptionHint oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.refreshSignal != widget.refreshSignal) {
-      _refresh();
-    }
-  }
-
-  String _formatTraffic(int bytes) {
-    const gb = 1024 * 1024 * 1024;
-    const mb = 1024 * 1024;
-    if (bytes >= gb) return "${(bytes / gb).toStringAsFixed(2)} GB";
-    return "${(bytes / mb).toStringAsFixed(2)} MB";
-  }
-
-  Future<void> _refresh() async {
-    setState(() => _loading = true);
-    try {
-      final portal = ref.read(slothGatewayPortalControllerProvider);
-      final loggedIn = await portal.isLoggedIn();
-      if (!loggedIn) {
-        if (!mounted) return;
-        setState(() {
-          _summary = null;
-          _loading = false;
-        });
-        return;
-      }
-      final summary = await portal.fetchAccountSummary();
-      if (!mounted) return;
-      setState(() {
-        _summary = summary;
-        _loading = false;
-      });
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _summary = null;
-        _loading = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final g = GatewayL10n.of(context);
-    final theme = Theme.of(context);
-    if (_loading || _summary == null) return const SizedBox.shrink();
-    return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: theme.colorScheme.surfaceContainerLow,
-        border: Border.all(color: theme.colorScheme.outlineVariant),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              "${g.homeExpireAt}: ${_summary?.expiredAt ?? '--'}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          const Gap(10),
-          Expanded(
-            child: Text(
-              "${g.homeRemainingTraffic}: ${_formatTraffic(_summary?.trafficRemaining ?? 0)}",
-              textAlign: TextAlign.right,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _MiniStatusTile extends StatelessWidget {
   const _MiniStatusTile({required this.label, required this.value});
 
@@ -571,13 +488,18 @@ class _MiniStatusTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: theme.colorScheme.surfaceContainerHigh),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label, style: theme.textTheme.labelSmall),
-          Text(value, style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700)),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     );

@@ -216,14 +216,65 @@ class GatewayPlansPage extends HookConsumerWidget {
         final portal = ref.read(slothGatewayPortalControllerProvider);
         final ok = await portal.cancelOrder(order.orderNo);
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? g.orderCancelled : g.cancelOrderFailed(g.unknownError))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(ok ? g.orderCancelled : g.cancelOrderFailed(g.unknownError))),
+        );
         await load();
       } on GatewayApiException catch (error) {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.cancelOrderFailed(error.message))));
+        final code = error.code ?? "";
+        if (code == "ORDER_NOT_CANCELLABLE" || code == "ORDER_ALREADY_PAID") {
+          await load();
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error.message)),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(g.cancelOrderFailed(error.message))),
+          );
+        }
       } finally {
         runningOrderNo.value = null;
       }
+    }
+
+    Future<bool> confirmBeforeBuy(GatewayPlan plan, String period) async {
+      final currentPlan = summary.value?.planName?.trim();
+      final isRenew = currentPlan != null && currentPlan.isNotEmpty && currentPlan == plan.name.trim();
+      final title = isRenew ? "续费确认" : "切换套餐确认";
+      final lines = <String>[
+        "1. ${g.renewRulesSamePlan}",
+        "2. ${g.renewRulesUpgrade}",
+        "3. ${g.renewRulesRefund}",
+      ];
+      final selectedPeriod = plan.periods
+          .firstWhere(
+            (item) => item.code == period,
+            orElse: () => GatewayPlanPeriod(code: period, label: period, price: 0),
+          );
+      final periodLabel = g.periodLabel(selectedPeriod.code, selectedPeriod.label);
+      final amountText = _presentPrice(selectedPeriod.price);
+      final content = StringBuffer()
+        ..writeln("当前套餐：${currentPlan == null || currentPlan.isEmpty ? '--' : currentPlan}")
+        ..writeln("目标套餐：${plan.name}")
+        ..writeln("购买周期：$periodLabel")
+        ..writeln("订单金额：$amountText")
+        ..writeln()
+        ..writeln(lines.join("\n"));
+
+      final result = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(title),
+          content: Text(content.toString()),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("取消")),
+            FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text("确认下单")),
+          ],
+        ),
+      );
+      return result == true;
     }
 
     Future<void> buy(GatewayPlan plan) async {
@@ -233,6 +284,8 @@ class GatewayPlansPage extends HookConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.selectPeriodAndPayment)));
         return;
       }
+      final confirmed = await confirmBeforeBuy(plan, period);
+      if (!confirmed) return;
 
       runningPlanId.value = plan.id;
       try {
