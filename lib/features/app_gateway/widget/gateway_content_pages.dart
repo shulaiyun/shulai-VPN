@@ -256,24 +256,24 @@ class GatewayKnowledgeDetailPage extends HookConsumerWidget {
       body: loading.value
           ? const Center(child: CircularProgressIndicator())
           : error.value != null
-          ? ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                Text(error.value!),
-                const SizedBox(height: 12),
-                FilledButton(onPressed: load, child: Text(g.retry)),
-              ],
-            )
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                Text(detail.value?.title ?? "-", style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 8),
-                if (detail.value?.updatedAt != null) Text(detail.value!.updatedAt!),
-                const SizedBox(height: 12),
-                MarkdownBody(data: detail.value?.body ?? ""),
-              ],
-            ),
+              ? ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    Text(error.value!),
+                    const SizedBox(height: 12),
+                    FilledButton(onPressed: load, child: Text(g.retry)),
+                  ],
+                )
+              : ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    Text(detail.value?.title ?? "-", style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 8),
+                    if (detail.value?.updatedAt != null) Text(detail.value!.updatedAt!),
+                    const SizedBox(height: 12),
+                    MarkdownBody(data: detail.value?.body ?? ""),
+                  ],
+                ),
     );
   }
 }

@@ -98,6 +98,12 @@ class SlothGatewaySyncController with AppLogger {
       await _handlePaymentCallback(uri);
       return;
     }
+
+    if (uri.host == 'auth' && uri.path == '/captcha-complete') {
+      final email = uri.queryParameters['email']?.trim();
+      _showSuccess(email == null || email.isEmpty ? "人机验证已完成，请返回注册页继续操作" : "邮箱 $email 已完成人机验证，请继续发送验证码或注册");
+      return;
+    }
   }
 
   Future<void> _handleAuthCallback(Uri uri) async {
@@ -105,7 +111,7 @@ class SlothGatewaySyncController with AppLogger {
     final exchangeToken = uri.queryParameters['exchange_token']?.trim();
     final callbackDeviceId = uri.queryParameters['device_id']?.trim();
     if (_isBlank(bindId) || _isBlank(exchangeToken)) {
-      _showError('登录回调参数不完整，请重新绑定账号');
+      _showError("登录回调参数不完整，请重新绑定账号");
       return;
     }
 
@@ -134,24 +140,24 @@ class SlothGatewaySyncController with AppLogger {
       await _refreshAndSync(reason: 'auth_callback');
       loggy.info("gateway bind/exchange success, bind_id=[$bindId], device_id=[$deviceId]");
       _notifyUiRefresh();
-      _showSuccess('账号绑定成功，订阅已自动同步');
+      _showSuccess("账号绑定成功，订阅已自动同步");
     } on GatewayApiException catch (error, stackTrace) {
       loggy.warning('gateway bind/exchange api failure', error, stackTrace);
       if (error.isDeviceIdMismatch) {
-        _showError('绑定失败：设备ID不一致，请在 App 内重新发起绑定');
+        _showError("绑定失败：设备ID不一致，请在 App 内重新发起绑定");
       } else {
-        _showError('账号绑定失败：${error.message}');
+        _showError("账号绑定失败：${error.message}");
       }
     } catch (error, stackTrace) {
       loggy.warning('failed to handle auth callback', error, stackTrace);
-      _showError('账号绑定失败，订阅未同步');
+      _showError("账号绑定失败，订阅未同步");
     }
   }
 
   Future<void> _handlePaymentCallback(Uri uri) async {
     final orderNo = uri.queryParameters['order_no'] ?? uri.queryParameters['trade_no'];
     if (_isBlank(orderNo)) {
-      _showError('支付回调缺少订单号');
+      _showError("支付回调缺少订单号");
       return;
     }
 
@@ -159,7 +165,7 @@ class SlothGatewaySyncController with AppLogger {
       final store = await _sessionStore();
       final accessToken = store.readAccessToken();
       if (_isBlank(accessToken)) {
-        _showError('支付回调已收到，但未检测到登录状态');
+        _showError("支付回调已收到，但未检测到登录状态");
         return;
       }
 
@@ -167,13 +173,13 @@ class SlothGatewaySyncController with AppLogger {
       if (status.isCompleted || status.status == 'processing') {
         await _refreshAndSync(reason: 'payment_callback');
         _notifyUiRefresh();
-        _showSuccess('支付状态已更新，订阅已自动同步');
+        _showSuccess("支付状态已更新，订阅已自动同步");
       } else {
-        _showError('支付状态未完成，当前订单状态：${status.status}');
+        _showError("支付状态未完成，当前订单状态：${status.status}");
       }
     } catch (error, stackTrace) {
       loggy.warning('failed to handle payment callback', error, stackTrace);
-      _showError('处理支付回调失败，请手动刷新订单状态');
+      _showError("处理支付回调失败，请手动刷新订单状态");
     }
   }
 
@@ -198,15 +204,43 @@ class SlothGatewaySyncController with AppLogger {
       }
       loggy.info('gateway sync completed, reason=[$reason], pull_url=[${subscription.pullUrl}]');
       _notifyUiRefresh();
+    } on GatewayApiException catch (error, stackTrace) {
+      loggy.warning('gateway sync api failed, reason=[$reason]', error, stackTrace);
+      final lowered = error.message.toLowerCase();
+      final looksLikeNoSubscriptionYet =
+          error.code == "SUBSCRIPTION_NOT_AVAILABLE" ||
+          error.code == "FORBIDDEN" ||
+          error.statusCode == 401 ||
+          error.statusCode == 403 ||
+          lowered.contains("forbidden") ||
+          lowered.contains("denied") ||
+          lowered.contains("当前请求被拒绝") ||
+          lowered.contains("token is error") ||
+          lowered.contains("暂无可用订阅");
+      if (error.code == "SUBSCRIPTION_NOT_AVAILABLE") {
+        if (reason.startsWith('auth_')) {
+          _showSuccess("账号已登录，当前暂无可用订阅，请先购买套餐后再同步");
+        } else if (reason != 'startup') {
+          _showError("订阅同步失败：${error.message}");
+        }
+        return;
+      }
+      if (reason.startsWith('auth_') && looksLikeNoSubscriptionYet) {
+        _showSuccess("账号已登录，套餐开通后可一键同步订阅并连接");
+        return;
+      }
+      if (reason != 'startup') {
+        _showError("订阅同步失败：${error.message}");
+      }
     } on DioException catch (error, stackTrace) {
       loggy.warning('gateway sync request failed, reason=[$reason]', error, stackTrace);
       if (reason != 'startup') {
-        _showError('订阅同步失败，请稍后重试');
+        _showError("订阅同步失败，请稍后重试");
       }
     } catch (error, stackTrace) {
       loggy.warning('gateway sync failed, reason=[$reason]', error, stackTrace);
       if (reason != 'startup') {
-        _showError('订阅同步失败，请稍后重试');
+        _showError("订阅同步失败，请稍后重试");
       }
     } finally {
       _syncing?.complete();

@@ -53,6 +53,16 @@ type XboardRegisterOptions = {
   hcaptchaData?: string;
 };
 
+type XboardForgotPasswordOptions = {
+  emailCode?: string;
+  captchaData?: string;
+  recaptchaData?: string;
+  recaptchaV3Token?: string;
+  turnstileData?: string;
+  turnstileToken?: string;
+  hcaptchaData?: string;
+};
+
 type XboardGuestConfig = {
   is_email_verify?: unknown;
   is_invite_force?: unknown;
@@ -165,6 +175,52 @@ export class XboardAdapter {
     if (input.hcaptchaData) body.hcaptcha_data = input.hcaptchaData;
     await this.request<boolean>("POST", "/api/v1/passport/comm/sendEmailVerify", body);
     return true;
+  }
+
+  async forgotPassword(email: string, newPassword: string, options?: XboardForgotPasswordOptions): Promise<boolean> {
+    const body: Record<string, unknown> = {
+      email,
+      password: newPassword,
+    };
+    if (options?.emailCode) body.email_code = options.emailCode;
+    if (options?.captchaData) body.captcha_data = options.captchaData;
+    if (options?.recaptchaData) body.recaptcha_data = options.recaptchaData;
+    if (options?.recaptchaData) body.recaptcha_token = options.recaptchaData;
+    if (options?.recaptchaV3Token) body.recaptcha_v3_token = options.recaptchaV3Token;
+    if (options?.turnstileData) body.turnstile_data = options.turnstileData;
+    if (options?.turnstileData) body.turnstile_token = options.turnstileData;
+    if (options?.turnstileToken) body.turnstile_token = options.turnstileToken;
+    if (options?.hcaptchaData) body.hcaptcha_data = options.hcaptchaData;
+
+    const paths = [
+      "/api/v1/passport/auth/forget",
+      "/api/v1/passport/auth/forgot",
+      "/api/v1/passport/auth/reset",
+      "/api/v2/passport/auth/forget",
+      "/api/v2/passport/auth/forgot",
+      "/api/v2/passport/auth/reset",
+    ];
+
+    let lastError: unknown;
+    for (const path of paths) {
+      try {
+        await this.request<unknown>("POST", path, body);
+        return true;
+      } catch (error) {
+        lastError = error;
+        if (error instanceof AppError && error.code === ErrorCodes.UPSTREAM_ERROR) {
+          const details = this.toRecord(error.details);
+          const upstreamStatus = this.toNumber(details.upstream_status);
+          if (upstreamStatus === 404) {
+            continue;
+          }
+        }
+        throw error;
+      }
+    }
+
+    if (lastError) throw lastError;
+    return false;
   }
 
   async getAuthPolicy(): Promise<{
@@ -335,16 +391,7 @@ export class XboardAdapter {
 
   async getTickets(authData: string): Promise<Array<Record<string, unknown>>> {
     const raw = await this.request<unknown>("GET", "/api/v1/user/ticket/fetch", undefined, authData);
-    if (Array.isArray(raw)) {
-      return raw.filter((item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item));
-    }
-    const mapped = this.toRecord(raw);
-    if ("id" in mapped) return [mapped];
-    const list = mapped.data;
-    if (Array.isArray(list)) {
-      return list.filter((item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item));
-    }
-    return [];
+    return this.extractTickets(raw);
   }
 
   async getTicketDetail(authData: string, id: number): Promise<Record<string, unknown> | null> {
@@ -364,14 +411,36 @@ export class XboardAdapter {
     return null;
   }
 
-  async createTicket(input: { authData: string; subject: string; message: string; level?: number }): Promise<boolean> {
+  async createTicket(input: {
+    authData: string;
+    subject: string;
+    message: string;
+    level?: number;
+  }): Promise<{ created: boolean; ticketId: number | null; raw?: Record<string, unknown> }> {
     const level = Number.isFinite(input.level) ? Number(input.level) : 1;
-    return this.request<boolean>(
+    const result = await this.request<unknown>(
       "POST",
       "/api/v1/user/ticket/save",
       { subject: input.subject, message: input.message, level },
       input.authData,
     );
+    if (typeof result === "number" && Number.isFinite(result) && result > 0) {
+      return { created: true, ticketId: Math.floor(result) };
+    }
+    if (typeof result === "string") {
+      const parsed = Number(result);
+      if (Number.isFinite(parsed) && parsed > 0) {
+        return { created: true, ticketId: Math.floor(parsed) };
+      }
+      return { created: result.trim().length > 0, ticketId: null };
+    }
+    const mapped = this.toRecord(result);
+    const id = this.toNumber(this.pickFrom([mapped], ["id", "ticket_id", "ticketId"]));
+    return {
+      created: true,
+      ticketId: id > 0 ? id : null,
+      raw: Object.keys(mapped).length > 0 ? mapped : undefined,
+    };
   }
 
   async replyTicket(input: { authData: string; id: number; message: string }): Promise<boolean> {
@@ -571,6 +640,38 @@ export class XboardAdapter {
       return [];
     }
     return value.filter((item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item));
+  }
+
+  private extractTickets(value: unknown): Array<Record<string, unknown>> {
+    if (Array.isArray(value)) {
+      return value.filter(
+        (item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item),
+      );
+    }
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      return [];
+    }
+
+    const root = value as Record<string, unknown>;
+    if ("id" in root || "ticket_id" in root) {
+      return [root];
+    }
+
+    const keys = ["tickets", "list", "items", "records", "data", "result", "payload"];
+    for (const key of keys) {
+      const child = root[key];
+      if (!child) continue;
+      if (Array.isArray(child)) {
+        const list = child.filter(
+          (item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item),
+        );
+        if (list.length > 0) return list;
+      } else if (typeof child === "object") {
+        const nested = this.extractTickets(child);
+        if (nested.length > 0) return nested;
+      }
+    }
+    return [];
   }
 
   private toBool(value: unknown): boolean {

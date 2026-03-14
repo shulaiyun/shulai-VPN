@@ -346,7 +346,7 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
     }
     if (dt == null || dt.year <= 1970) return "--";
     final local = dt.toLocal();
-    final two = (int n) => n.toString().padLeft(2, '0');
+    String two(int n) => n.toString().padLeft(2, '0');
     return "${local.year}-${two(local.month)}-${two(local.day)} ${two(local.hour)}:${two(local.minute)}";
   }
 
@@ -416,6 +416,9 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
     final g = GatewayL10n.of(context);
     final isZh = Localizations.localeOf(context).languageCode.toLowerCase().startsWith('zh');
     final theme = Theme.of(context);
+    final trafficRemaining = _summary?.trafficRemaining ?? 0;
+    final trafficTotal = _summary?.trafficTotal ?? 0;
+    final trafficRemainingRate = trafficTotal <= 0 ? 0.0 : (trafficRemaining / trafficTotal).clamp(0.0, 1.0);
 
     if (_loading) {
       return Card(
@@ -459,22 +462,13 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
                 children: [
                   _MiniStatusTile(label: g.homeCurrentPlan, value: _summary?.planName ?? "--"),
                   _MiniStatusTile(label: g.homeExpireAt, value: _formatIsoTime(_summary?.expiredAt)),
-                  _MiniStatusTile(
+                  _TrafficMiniStatusTile(
                     label: g.homeRemainingTraffic,
-                    value: _formatTraffic(_summary?.trafficRemaining ?? 0),
+                    value: _formatTraffic(trafficRemaining),
+                    remainingRate: trafficRemainingRate,
                   ),
                 ],
               ),
-              if ((_summary?.trafficTotal ?? 0) > 0) ...[
-                const SizedBox(height: 4),
-                LinearProgressIndicator(
-                  value: ((_summary!.trafficRemaining) / (_summary!.trafficTotal)).clamp(0.0, 1.0),
-                  minHeight: 6,
-                  borderRadius: BorderRadius.circular(999),
-                  color: Colors.green.shade500,
-                  backgroundColor: Colors.green.shade100.withValues(alpha: 0.5),
-                ),
-              ],
             ] else ...[
               Text(g.homeGuide, style: theme.textTheme.bodySmall),
             ],
@@ -528,6 +522,73 @@ class _MiniStatusTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrafficMiniStatusTile extends StatelessWidget {
+  const _TrafficMiniStatusTile({required this.label, required this.value, required this.remainingRate});
+
+  final String label;
+  final String value;
+  final double remainingRate;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final safeRate = remainingRate.clamp(0.0, 1.0);
+    final fillColor = Color.lerp(
+      Colors.orange.shade500.withValues(alpha: 0.22),
+      Colors.green.shade500.withValues(alpha: 0.26),
+      safeRate,
+    )!;
+    final textColor = safeRate >= 0.78 ? Colors.white : theme.colorScheme.onSurface;
+    final labelColor = safeRate >= 0.78 ? Colors.white.withValues(alpha: 0.88) : theme.textTheme.labelSmall?.color;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHigh),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: theme.textTheme.labelSmall),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+          ),
+          Positioned.fill(
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: safeRate,
+              child: ColoredBox(color: fillColor),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: theme.textTheme.labelSmall?.copyWith(color: labelColor)),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700, color: textColor),
+                ),
+              ],
+            ),
           ),
         ],
       ),

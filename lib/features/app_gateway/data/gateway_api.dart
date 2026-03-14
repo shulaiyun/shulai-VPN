@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:hiddify/core/model/constants.dart';
 import 'package:hiddify/features/app_gateway/model/gateway_models.dart';
 import 'package:hiddify/utils/custom_loggers.dart';
@@ -89,9 +89,9 @@ class SlothGatewayApi with InfraLogger {
         case 401:
           return "登录状态已失效，请重新登录";
         case 403:
-          return "当前请求被拒绝，请检查账户权限";
+          return "当前请求被拒绝，请检查账号权限";
         case 404:
-          return "请求接口不存在，请更新网关服务";
+          return "请求接口不存在，请更新服务器版本";
         default:
           if (status != null && status >= 500) {
             return "网关服务暂时不可用，请稍后重试";
@@ -128,7 +128,7 @@ class SlothGatewayApi with InfraLogger {
       case "EMAIL_VERIFY_REQUIRED":
         return "当前站点要求邮箱验证码";
       case "EMAIL_CODE_INVALID":
-        return "验证码有误或已过期";
+        return "邮箱验证码错误或已过期";
       case "CAPTCHA_REQUIRED":
         return "当前站点要求人机验证，请先在网页完成验证后再继续";
       case "INVITE_CODE_REQUIRED":
@@ -142,7 +142,7 @@ class SlothGatewayApi with InfraLogger {
       case "ORDER_NOT_CANCELLABLE":
         return "当前订单状态不可取消";
       case "TICKET_UNAVAILABLE":
-        return "工单入口暂时不可用，请稍后重试";
+        return "工单服务暂时不可用，请稍后重试";
       case "UNAUTHORIZED":
         return "登录状态已失效，请重新登录";
       case "SUBSCRIPTION_NOT_AVAILABLE":
@@ -234,6 +234,23 @@ class SlothGatewayApi with InfraLogger {
   Future<bool> sendEmailVerify(String email) async {
     final data = await _request(method: "POST", path: "/api/app/v1/auth/send-email-verify", body: {"email": email});
     return data["sent"] == true;
+  }
+
+  Future<GatewayBindExchangeResult?> forgotPassword({
+    required String email,
+    required String newPassword,
+    required String emailCode,
+  }) async {
+    final data = await _request(
+      method: "POST",
+      path: "/api/app/v1/auth/forgot-password",
+      body: {"email": email, "new_password": newPassword, "email_code": emailCode},
+    );
+    final accessToken = data["access_token"]?.toString() ?? "";
+    if (accessToken.isNotEmpty) {
+      return GatewayBindExchangeResult.fromMap(data);
+    }
+    return null;
   }
 
   Future<Map<String, dynamic>> bindStart({required String deviceId, required String platform, String? appVersion}) {
@@ -448,7 +465,7 @@ class SlothGatewayApi with InfraLogger {
     return GatewayTicketItem.fromMap(raw.cast<String, dynamic>());
   }
 
-  Future<bool> createTicket({
+  Future<GatewayTicketItem?> createTicket({
     required String accessToken,
     required String subject,
     required String message,
@@ -460,7 +477,12 @@ class SlothGatewayApi with InfraLogger {
       accessToken: accessToken,
       body: {"subject": subject, "message": message, "level": level},
     );
-    return data["created"] == true;
+    if (data["created"] != true) return null;
+    final rawTicket = data["ticket"];
+    if (rawTicket is Map) {
+      return GatewayTicketItem.fromMap(rawTicket.cast<String, dynamic>());
+    }
+    return null;
   }
 
   Future<GatewayTicketItem?> replyTicket({

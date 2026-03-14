@@ -40,6 +40,10 @@ export const config = {
   defaultGithubUrl: process.env.DEFAULT_GITHUB_URL ?? "https://github.com/shulaiyun/shulai-VPN",
   defaultTicketUrl: process.env.DEFAULT_TICKET_URL ?? "",
   defaultNoticeUrl: process.env.DEFAULT_NOTICE_URL ?? "",
+  inviteCommissionRate: num(process.env.INVITE_COMMISSION_RATE, 20),
+  inviteLevel1Rate: num(process.env.INVITE_LEVEL1_RATE, 50),
+  inviteLevel2Rate: num(process.env.INVITE_LEVEL2_RATE, 50),
+  inviteLevel3Rate: num(process.env.INVITE_LEVEL3_RATE, 50),
   allowedEmailSuffixes: csv(process.env.AUTH_ALLOWED_EMAIL_SUFFIXES),
   debugBindCode: (process.env.DEBUG_BIND_CODE ?? "false").toLowerCase() === "true",
 };

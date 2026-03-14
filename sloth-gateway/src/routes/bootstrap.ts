@@ -101,7 +101,11 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string) => {
     if (trimmed.length > 0) {
       const lower = trimmed.toLowerCase();
       // Some upstream panels return subscribe URL as invite URL, which is invalid for invite flow in App.
-      if (!lower.includes("/api/subscribe/") && !lower.includes("/api/v1/subscribe/")) {
+      if (
+        !lower.includes("/api/subscribe/") &&
+        !lower.includes("/api/v1/subscribe/") &&
+        !lower.includes("token is error")
+      ) {
         return trimmed;
       }
     }
@@ -130,6 +134,10 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string) => {
       can_withdraw: summary.canWithdraw,
       invited_count: summary.invitedCount,
       invite_manage_url: manageUrl,
+      commission_rate: config.inviteCommissionRate,
+      commission_level_1_rate: config.inviteLevel1Rate,
+      commission_level_2_rate: config.inviteLevel2Rate,
+      commission_level_3_rate: config.inviteLevel3Rate,
       supported: true,
     };
   } catch {
@@ -145,6 +153,10 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string) => {
       can_withdraw: false,
       invited_count: 0,
       invite_manage_url: inviteManageUrl,
+      commission_rate: config.inviteCommissionRate,
+      commission_level_1_rate: config.inviteLevel1Rate,
+      commission_level_2_rate: config.inviteLevel2Rate,
+      commission_level_3_rate: config.inviteLevel3Rate,
       supported: false,
     };
   }

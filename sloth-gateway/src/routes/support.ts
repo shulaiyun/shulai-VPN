@@ -168,15 +168,54 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
     if (!message) {
       throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "message is required");
     }
-    await deps.xboard
+    const created = await deps.xboard
       .createTicket({ authData: session.xboardAuthData, subject, message, level })
       .catch((error: unknown): never => mapTicketError(error));
+
+    if (!created.created) {
+      throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "工单提交失败，请稍后重试");
+    }
+
     const tickets = await deps.xboard
       .getTickets(session.xboardAuthData)
       .catch((error: unknown): never => mapTicketError(error));
+
+    let createdTicket =
+      created.ticketId != null
+        ? tickets.find((item) => toNumber(item.id) === created.ticketId || toNumber(item.ticket_id) === created.ticketId)
+        : undefined;
+
+    createdTicket ??= tickets.find((item) => toText(item.subject) === subject);
+
+    if (!createdTicket && created.ticketId != null) {
+      createdTicket = (await deps.xboard
+        .getTicketDetail(session.xboardAuthData, created.ticketId)
+        .catch(() => null)) ?? undefined;
+    }
+
+    const syntheticTicket = {
+      id: created.ticketId ?? Date.now() * -1,
+      subject,
+      level,
+      status: 0,
+      reply_status: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      message: [
+        {
+          id: 1,
+          ticket_id: created.ticketId ?? 0,
+          is_me: true,
+          message,
+          created_at: new Date().toISOString(),
+        },
+      ],
+    } as Record<string, unknown>;
+
     return ok(reply, {
       created: true,
-      latest_ticket_id: tickets.length > 0 ? toNumber(tickets[0].id) : null,
+      latest_ticket_id: created.ticketId ?? (tickets.length > 0 ? toNumber(tickets[0].id) : null),
+      ticket: normalizeTicket(createdTicket ?? syntheticTicket),
       fetched_at: new Date().toISOString(),
     });
   });

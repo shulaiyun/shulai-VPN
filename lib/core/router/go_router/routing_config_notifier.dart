@@ -11,9 +11,11 @@ import 'package:hiddify/features/app_gateway/model/gateway_models.dart';
 import 'package:hiddify/features/app_gateway/widget/gateway_account_page.dart';
 import 'package:hiddify/features/app_gateway/widget/gateway_change_password_page.dart';
 import 'package:hiddify/features/app_gateway/widget/gateway_content_pages.dart';
+import 'package:hiddify/features/app_gateway/widget/gateway_forgot_password_page.dart';
 import 'package:hiddify/features/app_gateway/widget/gateway_login_page.dart';
 import 'package:hiddify/features/app_gateway/widget/gateway_plans_page.dart';
 import 'package:hiddify/features/app_gateway/widget/gateway_register_page.dart';
+import 'package:hiddify/features/app_gateway/widget/gateway_ticket_page.dart';
 import 'package:hiddify/features/app_gateway/widget/gateway_webview_page.dart';
 import 'package:hiddify/features/home/widget/home_page.dart';
 import 'package:hiddify/features/intro/widget/intro_page.dart';
@@ -152,6 +154,12 @@ class RoutingConfigNotifier extends _$RoutingConfigNotifier {
                       pageBuilder: (_, state) =>
                           customTransition(TransitionType.slide, state.pageKey, const GatewayRegisterPage()),
                     ),
+                    GoRoute(
+                      name: 'gatewayForgotPassword',
+                      path: '/gateway-forgot-password',
+                      pageBuilder: (_, state) =>
+                          customTransition(TransitionType.slide, state.pageKey, const GatewayForgotPasswordPage()),
+                    ),
                     if (isMobileBreakpoint)
                       GoRoute(
                         name: 'profileDetails',
@@ -206,6 +214,12 @@ class RoutingConfigNotifier extends _$RoutingConfigNotifier {
                       path: 'knowledge',
                       pageBuilder: (_, state) =>
                           customTransition(TransitionType.slide, state.pageKey, const GatewayKnowledgePage()),
+                    ),
+                    GoRoute(
+                      name: 'gatewayTickets',
+                      path: 'tickets',
+                      pageBuilder: (_, state) =>
+                          customTransition(TransitionType.slide, state.pageKey, const GatewayTicketPage()),
                     ),
                     GoRoute(
                       name: 'gatewayKnowledgeDetail',

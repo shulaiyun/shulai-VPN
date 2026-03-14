@@ -2,6 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hiddify/core/app_info/app_info_provider.dart';
 import 'package:hiddify/core/directories/directories_provider.dart';
 import 'package:hiddify/core/localization/translations.dart';
@@ -9,6 +10,8 @@ import 'package:hiddify/core/model/constants.dart';
 import 'package:hiddify/core/model/failures.dart';
 import 'package:hiddify/core/router/dialog/dialog_notifier.dart';
 import 'package:hiddify/core/widget/adaptive_icon.dart';
+import 'package:hiddify/features/app_gateway/model/gateway_l10n.dart';
+import 'package:hiddify/features/app_gateway/notifier/gateway_sync_controller.dart';
 import 'package:hiddify/features/app_update/notifier/app_update_notifier.dart';
 import 'package:hiddify/features/app_update/notifier/app_update_state.dart';
 import 'package:hiddify/gen/assets.gen.dart';
@@ -20,6 +23,7 @@ class AboutPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final g = GatewayL10n.of(context);
     final t = ref.watch(translationsProvider).requireValue;
     final appInfo = ref.watch(appInfoProvider).requireValue;
     final appUpdate = ref.watch(appUpdateNotifierProvider);
@@ -110,6 +114,26 @@ class AboutPage extends HookConsumerWidget {
             delegate: SliverChildListDelegate([
               ...conditionalTiles,
               if (conditionalTiles.isNotEmpty) const Divider(),
+              ListTile(
+                title: Text(g.aboutAccountCenterTitle),
+                subtitle: Text(g.aboutAccountCenterSub),
+                trailing: const Icon(FluentIcons.person_24_regular),
+                onTap: () => context.push("/gateway-account"),
+              ),
+              ListTile(
+                title: Text(g.aboutPlanTitle),
+                subtitle: Text(g.aboutPlanSub),
+                trailing: const Icon(FluentIcons.cart_24_regular),
+                onTap: () => context.push("/gateway-plans"),
+              ),
+              ListTile(
+                title: Text(g.aboutCompatBindTitle),
+                subtitle: Text(g.aboutCompatBindSub),
+                trailing: const Icon(FluentIcons.link_24_regular),
+                onTap: () async {
+                  await ref.read(slothGatewaySyncControllerProvider).startBindFlow();
+                },
+              ),
               ListTile(
                 title: Text(t.pages.about.sourceCode),
                 trailing: const Icon(FluentIcons.open_24_regular),

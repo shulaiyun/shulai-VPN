@@ -97,17 +97,26 @@ class GatewayTicketPage extends HookConsumerWidget {
           : subjectController.text.trim();
       if (message.isEmpty) {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(isZh ? "请输入问题描述" : "Please input message")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(isZh ? "请输入问题描述" : "Please input message")),
+        );
         return;
       }
 
       try {
-        await ref
-            .read(slothGatewayPortalControllerProvider)
-            .createTicket(subject: subject, message: message, level: level.value);
-        if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(isZh ? "工单提交成功" : "Ticket submitted")));
+        final created = await ref.read(slothGatewayPortalControllerProvider).createTicket(
+              subject: subject,
+              message: message,
+              level: level.value,
+            );
+        if (created != null) {
+          tickets.value = [created, ...tickets.value.where((item) => item.id != created.id)];
+        }
         await load();
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(isZh ? "工单已提交，可在列表中继续沟通" : "Ticket submitted")),
+        );
       } on GatewayApiException catch (e) {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
@@ -133,11 +142,17 @@ class GatewayTicketPage extends HookConsumerWidget {
             final text = replyController.text.trim();
             if (text.isEmpty) return;
             try {
-              await ref.read(slothGatewayPortalControllerProvider).replyTicket(id: ticket!.id, message: text);
+              final updated = await ref.read(slothGatewayPortalControllerProvider).replyTicket(id: ticket!.id, message: text);
               if (!context.mounted) return;
               Navigator.pop(context);
-              await load();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(isZh ? "回复已发送" : "Reply sent")));
+              if (updated != null) {
+                tickets.value = [updated, ...tickets.value.where((item) => item.id != updated.id)];
+              } else {
+                await load();
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(isZh ? "回复已发送" : "Reply sent")),
+              );
             } on GatewayApiException catch (e) {
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
@@ -150,7 +165,9 @@ class GatewayTicketPage extends HookConsumerWidget {
               if (!context.mounted) return;
               Navigator.pop(context);
               await load();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(isZh ? "工单已关闭" : "Ticket closed")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(isZh ? "工单已关闭" : "Ticket closed")),
+              );
             } on GatewayApiException catch (e) {
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
@@ -169,7 +186,7 @@ class GatewayTicketPage extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "${isZh ? "状态" : "Status"}: ${ticket.status == "closed" ? (isZh ? "已关闭" : "Closed") : (isZh ? "处理中" : "Open")}",
+                  "${isZh ? "状态" : "Status"}: ${ticket.isClosed ? (isZh ? "已关闭" : "Closed") : (isZh ? "处理中" : "Open")}",
                 ),
                 Text("${isZh ? "优先级" : "Priority"}: ${ticket.levelLabel}"),
                 if (ticket.updatedAt != null) Text("${isZh ? "更新时间" : "Updated"}: ${_formatTime(ticket.updatedAt)}"),
@@ -179,7 +196,7 @@ class GatewayTicketPage extends HookConsumerWidget {
                   child: ListView(
                     shrinkWrap: true,
                     children: ticket.messages.isEmpty
-                        ? [Text(isZh ? "暂无消息记录" : "No messages")]
+                        ? [Text(isZh ? "暂无消息记录" : "No messages yet")]
                         : ticket.messages
                               .map(
                                 (msg) => Align(
@@ -219,7 +236,10 @@ class GatewayTicketPage extends HookConsumerWidget {
                     controller: replyController,
                     minLines: 2,
                     maxLines: 5,
-                    decoration: InputDecoration(labelText: isZh ? "回复内容" : "Reply", border: const OutlineInputBorder()),
+                    decoration: InputDecoration(
+                      labelText: isZh ? "回复内容" : "Reply",
+                      border: const OutlineInputBorder(),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Wrap(
@@ -259,7 +279,7 @@ class GatewayTicketPage extends HookConsumerWidget {
       body = ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(isZh ? "暂无工单，点击右下角提交新工单" : "No tickets yet, tap + to submit"),
+          Text(isZh ? "暂无工单，点击下方按钮提交新工单" : "No tickets yet"),
           const SizedBox(height: 10),
           FilledButton(onPressed: createTicket, child: Text(isZh ? "提交工单" : "Create Ticket")),
         ],

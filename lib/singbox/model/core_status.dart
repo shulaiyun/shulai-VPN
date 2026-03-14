@@ -73,6 +73,14 @@ sealed class CoreStatus with _$CoreStatus {
   }
 
   ConnectionFailure? getCoreAlert() {
+    bool looksLikeVpnPermissionIssue(String? message) {
+      final text = (message ?? "").toLowerCase();
+      return text.contains("vpn permission") ||
+          text.contains("tun permission") ||
+          text.contains("requestvpnpermission") ||
+          (text.contains("permission denied") && text.contains("tun"));
+    }
+
     return switch (this) {
       CoreStopped(alert: final alert, message: final message) when alert != null => switch (alert) {
         CoreAlert.emptyConfiguration => ConnectionFailure.invalidConfig(message),
@@ -85,7 +93,9 @@ sealed class CoreStatus with _$CoreStatus {
         CoreAlert.createService ||
         CoreAlert.startService ||
         CoreAlert.alreadyStarted ||
-        CoreAlert.startFailed => ConnectionFailure.unexpected("${alert.name} - $message"),
+        CoreAlert.startFailed => looksLikeVpnPermissionIssue(message)
+            ? ConnectionFailure.missingVpnPermission(message)
+            : ConnectionFailure.unexpected("${alert.name} - $message"),
 
         _ => null,
       },

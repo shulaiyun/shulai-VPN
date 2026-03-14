@@ -3,7 +3,11 @@ import 'package:flutter/services.dart';
 
 abstract class Constants {
   static const appName = "\u6811\u61D2VPN";
-  static const githubUrl = "https://github.com/shulaiyun/shulai-VPN.git";
+  static const gatewayBaseUrl = String.fromEnvironment(
+    "SLOTH_GATEWAY_BASE_URL",
+    defaultValue: "https://gateway.jxjvip.help",
+  );
+  static const githubUrl = "https://github.com/shulaiyun/shulai-VPN";
   static const licenseUrl = "https://github.com/shulaiyun/shulai-VPN/blob/main/LICENSE.md";
   static const githubReleasesApiUrl = "https://api.github.com/repos/shulaiyun/shulai-VPN/releases";
   static const githubLatestReleaseUrl = "https://github.com/shulaiyun/shulai-VPN/releases/latest";
@@ -86,4 +90,3 @@ abstract class KeyboardConst {
   static final verticalArrows = {LogicalKeyboardKey.arrowUp, LogicalKeyboardKey.arrowDown};
   static final select = {LogicalKeyboardKey.select, LogicalKeyboardKey.enter, LogicalKeyboardKey.tab};
 }
-

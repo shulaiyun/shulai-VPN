@@ -64,6 +64,11 @@ class GatewayLoginPage extends HookConsumerWidget {
             child: Text(isLoading.value ? g.loggingIn : g.loginButton),
           ),
           const SizedBox(height: 8),
+          TextButton(
+            onPressed: isLoading.value ? null : () => context.push("/home/gateway-forgot-password"),
+            child: Text(Localizations.localeOf(context).languageCode.toLowerCase().startsWith('zh') ? "忘记密码" : "Forgot Password"),
+          ),
+          const SizedBox(height: 8),
           OutlinedButton(
             onPressed: isLoading.value ? null : () => context.push("/home/gateway-register"),
             child: Text(g.createAccountButton),

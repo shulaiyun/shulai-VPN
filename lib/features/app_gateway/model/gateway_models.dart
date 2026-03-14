@@ -16,6 +16,10 @@ String? _asNullableString(dynamic value) {
   if (value == null) return null;
   final text = value.toString().trim();
   if (text.isEmpty) return null;
+  if (text == "0" || text == "0.0" || text.toLowerCase() == "null" || text == "--") return null;
+  final numeric = num.tryParse(text);
+  if (numeric != null && numeric <= 0) return null;
+  if (text.startsWith("1970-01-01")) return null;
   return text;
 }
 
@@ -211,6 +215,10 @@ class GatewayInviteSummary {
     this.rebateRuleText,
     required this.canWithdraw,
     required this.invitedCount,
+    this.commissionRate = 20,
+    this.commissionLevel1Rate = 50,
+    this.commissionLevel2Rate = 50,
+    this.commissionLevel3Rate = 50,
   });
 
   final bool supported;
@@ -225,6 +233,10 @@ class GatewayInviteSummary {
   final String? rebateRuleText;
   final bool canWithdraw;
   final int invitedCount;
+  final double commissionRate;
+  final double commissionLevel1Rate;
+  final double commissionLevel2Rate;
+  final double commissionLevel3Rate;
 
   factory GatewayInviteSummary.fromMap(Map<String, dynamic> map) {
     return GatewayInviteSummary(
@@ -240,6 +252,10 @@ class GatewayInviteSummary {
       rebateRuleText: _asNullableString(map["rebate_rule_text"]),
       canWithdraw: map["can_withdraw"] == true,
       invitedCount: _asInt(map["invited_count"]),
+      commissionRate: _asDouble(map["commission_rate"], 20),
+      commissionLevel1Rate: _asDouble(map["commission_level_1_rate"], 50),
+      commissionLevel2Rate: _asDouble(map["commission_level_2_rate"], 50),
+      commissionLevel3Rate: _asDouble(map["commission_level_3_rate"], 50),
     );
   }
 }
@@ -470,13 +486,7 @@ class GatewayOrderPaymentResult {
 }
 
 class GatewayNoticeItem {
-  GatewayNoticeItem({
-    required this.id,
-    required this.title,
-    required this.content,
-    this.createdAt,
-    this.updatedAt,
-  });
+  GatewayNoticeItem({required this.id, required this.title, required this.content, this.createdAt, this.updatedAt});
 
   final int id;
   final String title;
@@ -518,11 +528,7 @@ class GatewayKnowledgeItem {
 }
 
 class GatewayTicketEntry {
-  GatewayTicketEntry({
-    required this.url,
-    required this.quickLogin,
-    this.fallbackUrl,
-  });
+  GatewayTicketEntry({required this.url, required this.quickLogin, this.fallbackUrl});
 
   final String url;
   final bool quickLogin;
@@ -533,4 +539,91 @@ class GatewayTicketEntry {
     quickLogin: map["quick_login"] == true,
     fallbackUrl: _asNullableString(map["fallback_url"]),
   );
+}
+
+class GatewayTicketMessage {
+  GatewayTicketMessage({
+    required this.id,
+    required this.ticketId,
+    required this.isMe,
+    required this.message,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  final int id;
+  final int ticketId;
+  final bool isMe;
+  final String message;
+  final String? createdAt;
+  final String? updatedAt;
+
+  factory GatewayTicketMessage.fromMap(Map<String, dynamic> map) => GatewayTicketMessage(
+    id: _asInt(map["id"]),
+    ticketId: _asInt(map["ticket_id"]),
+    isMe: map["is_me"] == true,
+    message: _asNullableString(map["message"]) ?? "",
+    createdAt: _asNullableString(map["created_at"]),
+    updatedAt: _asNullableString(map["updated_at"]),
+  );
+}
+
+class GatewayTicketItem {
+  GatewayTicketItem({
+    required this.id,
+    required this.subject,
+    required this.level,
+    required this.levelLabel,
+    required this.statusCode,
+    required this.status,
+    required this.replyStatus,
+    required this.replyStatusLabel,
+    required this.canReply,
+    required this.canClose,
+    required this.messages,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  final int id;
+  final String subject;
+  final int level;
+  final String levelLabel;
+  final int statusCode;
+  final String status;
+  final int replyStatus;
+  final String replyStatusLabel;
+  final bool canReply;
+  final bool canClose;
+  final List<GatewayTicketMessage> messages;
+  final String? createdAt;
+  final String? updatedAt;
+
+  bool get isClosed => status == "closed" || statusCode == 1;
+
+  factory GatewayTicketItem.fromMap(Map<String, dynamic> map) {
+    final rawMessages = map["messages"];
+    final messages = rawMessages is List
+        ? rawMessages
+              .whereType<Map>()
+              .map((item) => GatewayTicketMessage.fromMap(item.cast<String, dynamic>()))
+              .toList()
+        : const <GatewayTicketMessage>[];
+
+    return GatewayTicketItem(
+      id: _asInt(map["id"]),
+      subject: _asNullableString(map["subject"]) ?? "-",
+      level: _asInt(map["level"]),
+      levelLabel: _asNullableString(map["level_label"]) ?? "-",
+      statusCode: _asInt(map["status_code"]),
+      status: _asNullableString(map["status"]) ?? "open",
+      replyStatus: _asInt(map["reply_status"]),
+      replyStatusLabel: _asNullableString(map["reply_status_label"]) ?? "-",
+      canReply: map["can_reply"] != false,
+      canClose: map["can_close"] != false,
+      messages: messages,
+      createdAt: _asNullableString(map["created_at"]),
+      updatedAt: _asNullableString(map["updated_at"]),
+    );
+  }
 }

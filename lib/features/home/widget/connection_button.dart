@@ -121,8 +121,8 @@ class _ConnectionButton extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [BoxShadow(blurRadius: 28, color: buttonColor.withValues(alpha: 0.44))],
       ),
-      width: 168,
-      height: 168,
+      width: 148,
+      height: 148,
       child: Material(
         key: const ValueKey("home_connection_button"),
         shape: const CircleBorder(),
@@ -150,8 +150,8 @@ class _ConnectionButton extends StatelessWidget {
                 ),
                 child: Center(
                   child: Container(
-                    width: 112,
-                    height: 112,
+                    width: 96,
+                    height: 96,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
@@ -181,7 +181,7 @@ class _ConnectionButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Semantics(button: true, enabled: enabled, label: label, child: button),
-        const Gap(16),
+        const Gap(10),
         ExcludeSemantics(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

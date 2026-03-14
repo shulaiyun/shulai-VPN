@@ -94,7 +94,7 @@ const buildCaptchaAction = (email?: string) => {
 
 const mapUpstreamAuthError = (
   error: unknown,
-  context?: { email?: string; operation?: "send_email_verify" | "register" | "login" },
+  context?: { email?: string; operation?: "send_email_verify" | "register" | "login" | "forgot_password" },
 ): never => {
   if (!(error instanceof AppError)) {
     throw error;
@@ -112,6 +112,12 @@ const mapUpstreamAuthError = (
     operation === "send_email_verify" ||
     upstreamPath.endsWith("/api/v1/passport/comm/sendEmailVerify") ||
     upstreamPath.endsWith("/api/v2/passport/comm/sendEmailVerify");
+  const isForgotPassword =
+    operation === "forgot_password" ||
+    upstreamPath.endsWith("/api/v1/passport/auth/forget") ||
+    upstreamPath.endsWith("/api/v2/passport/auth/forget") ||
+    upstreamPath.endsWith("/api/v1/passport/auth/forgot") ||
+    upstreamPath.endsWith("/api/v2/passport/auth/forgot");
 
   if (upstreamStatus === 429 || text.includes("too many request")) {
     throw new AppError(429, ErrorCodes.UPSTREAM_ERROR, "请求过于频繁，请稍后重试");
@@ -146,6 +152,22 @@ const mapUpstreamAuthError = (
     }
     if (upstreamStatus >= 400 && upstreamStatus < 500 && upstreamMessage.length > 0) {
       throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, upstreamMessage);
+    }
+  }
+
+  if (isForgotPassword) {
+    if (
+      loweredUpstream.includes("email code") ||
+      loweredUpstream.includes("验证码") ||
+      loweredUpstream.includes("verify code")
+    ) {
+      throw new AppError(400, ErrorCodes.EMAIL_CODE_INVALID, "邮箱验证码错误或已过期");
+    }
+    if (
+      loweredUpstream.includes("password") &&
+      (loweredUpstream.includes("short") || loweredUpstream.includes("length"))
+    ) {
+      throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "新密码长度不符合要求");
     }
   }
 
@@ -708,6 +730,61 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
         plan_name: subscribe.plan?.name ?? null,
         expired_at: subscribe.expired_at ?? null,
       },
+    });
+  });
+
+  app.post("/api/app/v1/auth/forgot-password", async (request, reply) => {
+    const body = (request.body ?? {}) as Record<string, unknown>;
+    const email = normalizeEmail(String(body.email ?? ""));
+    const newPassword = String(body.new_password ?? "").trim();
+    if (!email || !newPassword) {
+      throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "email and new_password are required");
+    }
+    if (newPassword.length < 8) {
+      throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "新密码至少 8 位");
+    }
+    const policy = await readAuthPolicy();
+    ensureEmailValidAndAllowed(email, policy.allowedEmailSuffixes);
+
+    await deps.xboard
+      .forgotPassword(email, newPassword, {
+        emailCode: typeof body.email_code === "string" ? body.email_code : undefined,
+        captchaData: typeof body.captcha_data === "string" ? body.captcha_data : undefined,
+        recaptchaData: typeof body.recaptcha_data === "string" ? body.recaptcha_data : undefined,
+        turnstileData: typeof body.turnstile_data === "string" ? body.turnstile_data : undefined,
+        hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
+      })
+      .catch((error): never => mapUpstreamAuthError(error, { email, operation: "forgot_password" }));
+
+    let loginIssued: ReturnType<typeof issueSessionTokenSet> | null = null;
+    try {
+      const login = await deps.xboard.login(email, newPassword);
+      const [user, subscribe] = await Promise.all([
+        deps.xboard.getUserInfo(login.authData),
+        deps.xboard.getSubscribe(login.authData),
+      ]);
+      loginIssued = issueSessionTokenSet(deps, {
+        xboardAuthData: login.authData,
+        xboardToken: login.token,
+        userEmail: user.email,
+        userUuid: subscribe.uuid,
+      });
+    } catch {
+      loginIssued = null;
+    }
+
+    if (loginIssued != null) {
+      return ok(reply, {
+        ...tokenResponse(loginIssued),
+        changed: true,
+        auto_login: true,
+      });
+    }
+
+    return ok(reply, {
+      changed: true,
+      auto_login: false,
+      changed_at: new Date().toISOString(),
     });
   });
 

@@ -79,6 +79,14 @@ class SlothGatewayPortalController with AppLogger {
     return _api.inviteSummary(token!);
   }
 
+  Future<bool> generateInviteCode() async {
+    final token = await _accessToken();
+    if (_isBlank(token)) {
+      throw GatewayApiException(message: "请先登录后再生成邀请码");
+    }
+    return _api.inviteGenerate(token!);
+  }
+
   Future<bool> requestInviteWithdraw(double amount) async {
     final token = await _accessToken();
     if (_isBlank(token)) {
@@ -136,6 +144,28 @@ class SlothGatewayPortalController with AppLogger {
     );
     _notifyUiRefresh();
     await _tryAutoSync("auth_register");
+  }
+
+  Future<void> forgotPassword({
+    required String email,
+    required String newPassword,
+    required String emailCode,
+  }) async {
+    final store = await _store();
+    final result = await _api.forgotPassword(
+      email: email,
+      newPassword: newPassword,
+      emailCode: emailCode,
+    );
+    if (result != null) {
+      await store.saveAuth(
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        sessionId: result.sessionId,
+      );
+      _notifyUiRefresh();
+      await _tryAutoSync("auth_forgot_password");
+    }
   }
 
   Future<void> logout() async {
@@ -239,6 +269,50 @@ class SlothGatewayPortalController with AppLogger {
       throw GatewayApiException(message: "请先登录后再打开工单");
     }
     return _api.ticketEntry(token!);
+  }
+
+  Future<List<GatewayTicketItem>> fetchTickets() async {
+    final token = await _accessToken();
+    if (_isBlank(token)) {
+      throw GatewayApiException(message: "请先登录后再查看工单");
+    }
+    return _api.tickets(token!);
+  }
+
+  Future<GatewayTicketItem?> fetchTicketDetail(int id) async {
+    final token = await _accessToken();
+    if (_isBlank(token)) {
+      throw GatewayApiException(message: "请先登录后再查看工单");
+    }
+    return _api.ticketDetail(accessToken: token!, id: id);
+  }
+
+  Future<GatewayTicketItem?> createTicket({
+    required String subject,
+    required String message,
+    int level = 1,
+  }) async {
+    final token = await _accessToken();
+    if (_isBlank(token)) {
+      throw GatewayApiException(message: "请先登录后再提交工单");
+    }
+    return _api.createTicket(accessToken: token!, subject: subject, message: message, level: level);
+  }
+
+  Future<GatewayTicketItem?> replyTicket({required int id, required String message}) async {
+    final token = await _accessToken();
+    if (_isBlank(token)) {
+      throw GatewayApiException(message: "请先登录后再回复工单");
+    }
+    return _api.replyTicket(accessToken: token!, id: id, message: message);
+  }
+
+  Future<bool> closeTicket(int id) async {
+    final token = await _accessToken();
+    if (_isBlank(token)) {
+      throw GatewayApiException(message: "请先登录后再关闭工单");
+    }
+    return _api.closeTicket(accessToken: token!, id: id);
   }
 
   Future<GatewayTelegramBindingStatus> fetchTelegramBinding() async {

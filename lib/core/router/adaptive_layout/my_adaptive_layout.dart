@@ -8,6 +8,7 @@ import 'package:hiddify/core/router/adaptive_layout/shell_route_action.dart';
 import 'package:hiddify/core/router/go_router/helper/active_breakpoint_notifier.dart';
 import 'package:hiddify/core/router/go_router/routing_config_notifier.dart';
 import 'package:hiddify/core/widget/sloth_icon.dart';
+import 'package:hiddify/features/app_gateway/model/gateway_l10n.dart';
 import 'package:hiddify/features/stats/widget/side_bar_stats_overview.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -64,7 +65,7 @@ class MyAdaptiveLayout extends HookConsumerWidget {
                     node: navScopeNode,
                     child: NavigationRail(
                       extended: Breakpoint(context).isDesktop(),
-                      destinations: _navRailDests(_actions(t, showProfilesAction, isMobileBreakpoint)),
+                      destinations: _navRailDests(_actions(context, t, showProfilesAction, isMobileBreakpoint)),
                       selectedIndex: navigationShell.currentIndex,
                       onDestinationSelected: (index) => _onTap(context, index),
                       trailing: Breakpoint(context).isDesktop()
@@ -83,10 +84,39 @@ class MyAdaptiveLayout extends HookConsumerWidget {
         bottomNavigationBar: isMobileBreakpoint
             ? FocusScope(
                 node: navScopeNode,
-                child: NavigationBar(
-                  selectedIndex: navigationShell.currentIndex <= 1 ? navigationShell.currentIndex : 0,
-                  destinations: _navDests(context, _actions(t, showProfilesAction, isMobileBreakpoint)),
-                  onDestinationSelected: (index) => _onTap(context, index),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    navigationBarTheme: NavigationBarThemeData(
+                      height: 72,
+                      elevation: 0,
+                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow.withValues(alpha: 0.95),
+                      indicatorColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.18),
+                      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+                        final selected = states.contains(WidgetState.selected);
+                        return TextStyle(
+                          fontSize: 13,
+                          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                          color: selected
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                        );
+                      }),
+                      iconTheme: WidgetStateProperty.resolveWith((states) {
+                        final selected = states.contains(WidgetState.selected);
+                        return IconThemeData(
+                          size: 22,
+                          color: selected
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                        );
+                      }),
+                    ),
+                  ),
+                  child: NavigationBar(
+                    selectedIndex: navigationShell.currentIndex,
+                    destinations: _navDests(context, _actions(context, t, showProfilesAction, isMobileBreakpoint)),
+                    onDestinationSelected: (index) => _onTap(context, index),
+                  ),
                 ),
               )
             : null,
@@ -99,13 +129,24 @@ class MyAdaptiveLayout extends HookConsumerWidget {
     navigationShell.goBranch(index, initialLocation: index == navigationShell.currentIndex);
   }
 
-  List<ShellRouteAction> _actions(Translations t, bool showProfilesAction, bool isMobileBreakpoint) => [
-    ShellRouteAction(SlothIconType.home, t.pages.home.title),
-    if (showProfilesAction && !isMobileBreakpoint) ShellRouteAction(SlothIconType.subscription, t.pages.profiles.title),
-    ShellRouteAction(SlothIconType.settings, t.pages.settings.title),
-    if (!isMobileBreakpoint) ShellRouteAction(SlothIconType.logs, t.pages.logs.title),
-    if (!isMobileBreakpoint) ShellRouteAction(SlothIconType.info, t.pages.about.title),
-  ];
+  List<ShellRouteAction> _actions(
+    BuildContext context,
+    Translations t,
+    bool showProfilesAction,
+    bool isMobileBreakpoint,
+  ) {
+    final g = GatewayL10n.of(context);
+    return [
+      ShellRouteAction(SlothIconType.home, t.pages.home.title),
+      ShellRouteAction(SlothIconType.subscription, g.plansTitle),
+      ShellRouteAction(SlothIconType.cloud, g.accountCenterTitle),
+      if (showProfilesAction && !isMobileBreakpoint)
+        ShellRouteAction(SlothIconType.subscription, t.pages.profiles.title),
+      ShellRouteAction(SlothIconType.settings, t.pages.settings.title),
+      if (!isMobileBreakpoint) ShellRouteAction(SlothIconType.logs, t.pages.logs.title),
+      if (!isMobileBreakpoint) ShellRouteAction(SlothIconType.info, t.pages.about.title),
+    ];
+  }
 
   List<NavigationDestination> _navDests(BuildContext context, List<ShellRouteAction> actions) {
     final scheme = Theme.of(context).colorScheme;
