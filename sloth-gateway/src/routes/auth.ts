@@ -43,6 +43,11 @@ const readUpstreamStatus = (error: AppError): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const readUpstreamPath = (error: AppError): string => {
+  const details = error.details as Record<string, unknown> | undefined;
+  return String(details?.upstream_path ?? "").trim();
+};
+
 const readUpstreamMessage = (error: AppError): string => {
   const details = error.details as Record<string, unknown> | undefined;
   const upstreamError = details?.upstream_error;
@@ -87,7 +92,10 @@ const buildCaptchaAction = (email?: string) => {
   };
 };
 
-const mapUpstreamAuthError = (error: unknown, context?: { email?: string }): never => {
+const mapUpstreamAuthError = (
+  error: unknown,
+  context?: { email?: string; operation?: "send_email_verify" | "register" | "login" },
+): never => {
   if (!(error instanceof AppError)) {
     throw error;
   }
@@ -97,13 +105,49 @@ const mapUpstreamAuthError = (error: unknown, context?: { email?: string }): nev
 
   const text = extractErrorText(error);
   const upstreamStatus = readUpstreamStatus(error);
+  const upstreamPath = readUpstreamPath(error);
   const upstreamMessage = readUpstreamMessage(error);
+  const operation = context?.operation;
+  const isSendEmailVerify =
+    operation === "send_email_verify" ||
+    upstreamPath.endsWith("/api/v1/passport/comm/sendEmailVerify") ||
+    upstreamPath.endsWith("/api/v2/passport/comm/sendEmailVerify");
 
   if (upstreamStatus === 429 || text.includes("too many request")) {
     throw new AppError(429, ErrorCodes.UPSTREAM_ERROR, "请求过于频繁，请稍后重试");
   }
 
   const loweredUpstream = upstreamMessage.toLowerCase();
+  if (isSendEmailVerify) {
+    if (
+      loweredUpstream.includes("email format") ||
+      loweredUpstream.includes("invalid email") ||
+      loweredUpstream.includes("邮箱格式")
+    ) {
+      throw new AppError(400, ErrorCodes.BAD_EMAIL_FORMAT, "邮箱格式不正确，请检查邮箱是否正确");
+    }
+    if (
+      loweredUpstream.includes("captcha") ||
+      loweredUpstream.includes("turnstile") ||
+      loweredUpstream.includes("hcaptcha") ||
+      loweredUpstream.includes("recaptcha") ||
+      loweredUpstream.includes("图形验证码") ||
+      loweredUpstream.includes("人机验证") ||
+      loweredUpstream.includes("验证码错误") ||
+      loweredUpstream.includes("验证码已过期")
+    ) {
+      throw new AppError(
+        400,
+        ErrorCodes.CAPTCHA_REQUIRED,
+        "当前站点需要完成人机验证后才能发送验证码，请先前往网页验证",
+        buildCaptchaAction(context?.email),
+      );
+    }
+    if (upstreamStatus >= 400 && upstreamStatus < 500 && upstreamMessage.length > 0) {
+      throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, upstreamMessage);
+    }
+  }
+
   if (
     loweredUpstream.includes("captcha") ||
     loweredUpstream.includes("turnstile") ||
@@ -146,6 +190,14 @@ const mapUpstreamAuthError = (error: unknown, context?: { email?: string }): nev
       lowered.includes("email code") ||
       lowered.includes("验证码")
     ) {
+      if (isSendEmailVerify) {
+        throw new AppError(
+          400,
+          ErrorCodes.CAPTCHA_REQUIRED,
+          "当前站点需要完成人机验证后才能发送验证码，请先前往网页验证",
+          buildCaptchaAction(context?.email),
+        );
+      }
       throw new AppError(400, ErrorCodes.EMAIL_CODE_INVALID, "邮箱验证码错误或已过期");
     }
     if (lowered.includes("invite")) {
@@ -162,6 +214,14 @@ const mapUpstreamAuthError = (error: unknown, context?: { email?: string }): nev
       throw new AppError(400, ErrorCodes.INVITE_CODE_REQUIRED, "当前站点要求填写邀请码");
     }
     if (text.includes("verify") || text.includes("验证码")) {
+      if (isSendEmailVerify) {
+        throw new AppError(
+          400,
+          ErrorCodes.CAPTCHA_REQUIRED,
+          "当前站点需要完成人机验证后才能发送验证码，请先前往网页验证",
+          buildCaptchaAction(context?.email),
+        );
+      }
       throw new AppError(400, ErrorCodes.EMAIL_CODE_INVALID, "邮箱验证码错误或已过期");
     }
     if (upstreamMessage.length > 0) {
@@ -556,7 +616,7 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
       });
     } catch (error) {
       try {
-        mapUpstreamAuthError(error, { email });
+        mapUpstreamAuthError(error, { email, operation: "send_email_verify" });
       } catch (mapped) {
         if (mapped instanceof AppError) {
           throw mapped;
@@ -583,7 +643,7 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
 
     const login = await deps.xboard
       .login(email, password)
-      .catch((error): never => mapUpstreamAuthError(error));
+      .catch((error): never => mapUpstreamAuthError(error, { operation: "login" }));
     const [user, subscribe] = await Promise.all([
       deps.xboard.getUserInfo(login.authData),
       deps.xboard.getSubscribe(login.authData),
@@ -627,7 +687,7 @@ export const registerAuthRoutes = (app: FastifyInstance, deps: AuthRouteDeps): v
         turnstileData: typeof body.turnstile_data === "string" ? body.turnstile_data : undefined,
         hcaptchaData: typeof body.hcaptcha_data === "string" ? body.hcaptcha_data : undefined,
       })
-      .catch((error): never => mapUpstreamAuthError(error, { email }));
+      .catch((error): never => mapUpstreamAuthError(error, { email, operation: "register" }));
 
     const [user, subscribe] = await Promise.all([
       deps.xboard.getUserInfo(registered.authData),

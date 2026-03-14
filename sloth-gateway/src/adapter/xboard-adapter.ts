@@ -283,9 +283,22 @@ export class XboardAdapter {
       return true;
     } catch (error) {
       if (error instanceof AppError && error.code === ErrorCodes.UPSTREAM_ERROR) {
-        // Compatibility fallback for panel variants.
-        await this.request<boolean>("POST", "/api/v1/user/invite/save", payload, authData);
-        return true;
+        const fallbacks = [
+          "/api/v1/user/invite/save",
+          "/api/v1/user/invite/withdraw/save",
+          "/api/v1/user/commission/withdraw",
+          "/api/v1/user/commission/save",
+        ];
+        for (const path of fallbacks) {
+          try {
+            await this.request<boolean>("POST", path, payload, authData);
+            return true;
+          } catch (fallbackError) {
+            if (!(fallbackError instanceof AppError) || fallbackError.code !== ErrorCodes.UPSTREAM_ERROR) {
+              throw fallbackError;
+            }
+          }
+        }
       }
       throw error;
     }

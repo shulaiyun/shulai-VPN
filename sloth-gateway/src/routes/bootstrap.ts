@@ -75,6 +75,7 @@ const buildAccountSummary = async (
 };
 
 const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string, subscribeUrl: string) => {
+  const inviteManageUrl = `${config.xboardWebBaseUrl}/#/invite`;
   try {
     const summary = await deps.xboard.getInviteSummary(authData);
     return {
@@ -89,6 +90,7 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string, subs
       rebate_rule_text: summary.rebateRuleText,
       can_withdraw: summary.canWithdraw,
       invited_count: summary.invitedCount,
+      invite_manage_url: inviteManageUrl,
       supported: true,
     };
   } catch {
@@ -103,6 +105,7 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string, subs
       rebate_rule_text: null,
       can_withdraw: false,
       invited_count: 0,
+      invite_manage_url: inviteManageUrl,
       supported: false,
     };
   }

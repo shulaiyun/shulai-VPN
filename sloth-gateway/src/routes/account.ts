@@ -56,11 +56,16 @@ export const registerAccountRoutes = (app: FastifyInstance, deps: AccountDeps): 
 
   app.get("/api/app/v1/account/telegram-binding", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
-    const user = await deps.xboard.getUserInfo(session.xboardAuthData);
+    const [user, subscribe] = await Promise.all([
+      deps.xboard.getUserInfo(session.xboardAuthData),
+      deps.xboard.getSubscribe(session.xboardAuthData),
+    ]);
     const telegramId = user.telegram_id == null ? "" : String(user.telegram_id).trim();
     const telegramUser = user.telegram_username == null ? "" : String(user.telegram_username).trim();
     const linked = telegramId.length > 0 || telegramUser.length > 0;
     const bindStart = `${config.telegramBotUrl}?start=${encodeURIComponent(`bind_${session.sid}`)}`;
+    const subscribeUrl = String(subscribe.subscribe_url ?? "").trim();
+    const bindCommand = subscribeUrl.length > 0 ? `/bind ${subscribeUrl}` : null;
 
     return ok(reply, {
       linked,
@@ -69,9 +74,11 @@ export const registerAccountRoutes = (app: FastifyInstance, deps: AccountDeps): 
       bot_username: `@${config.telegramBotUsername.replace(/^@/, "")}`,
       bot_url: config.telegramBotUrl,
       bind_url: bindStart,
+      subscribe_url: subscribeUrl.length > 0 ? subscribeUrl : null,
+      bind_command: bindCommand,
       tips: linked
         ? "已检测到 Telegram 绑定状态"
-        : "点击“打开机器人”后，按机器人提示完成绑定",
+        : "点击“打开机器人”后发送 /bind 订阅链接 完成绑定",
     });
   });
 

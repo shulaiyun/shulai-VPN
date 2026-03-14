@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GatewayWebViewPage extends StatefulWidget {
   const GatewayWebViewPage({
@@ -18,19 +19,53 @@ class GatewayWebViewPage extends StatefulWidget {
 class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
   late final WebViewController _controller;
   bool _loading = true;
+  String? _errorText;
 
   @override
   void initState() {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..setUserAgent(
+        "Mozilla/5.0 (Linux; Android 13; SlothVPN) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36",
+      )
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageStarted: (_) => setState(() => _loading = true),
+          onPageStarted: (_) => setState(() {
+            _loading = true;
+            _errorText = null;
+          }),
           onPageFinished: (_) => setState(() => _loading = false),
+          onWebResourceError: (error) {
+            if (!mounted) return;
+            setState(() {
+              _loading = false;
+              _errorText = error.description;
+            });
+          },
+          onNavigationRequest: (request) async {
+            final uri = Uri.tryParse(request.url);
+            if (uri == null) return NavigationDecision.prevent;
+            if (uri.scheme == "slothvpn") {
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
+              return NavigationDecision.prevent;
+            }
+            if (uri.scheme != "http" && uri.scheme != "https") {
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
+  }
+
+  Future<void> _openExternal() async {
+    final uri = Uri.tryParse(widget.url);
+    if (uri == null) return;
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   @override
@@ -40,6 +75,10 @@ class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
         title: Text(widget.title),
         actions: [
           IconButton(
+            onPressed: _openExternal,
+            icon: const Icon(Icons.open_in_browser),
+          ),
+          IconButton(
             onPressed: () => _controller.reload(),
             icon: const Icon(Icons.refresh),
           ),
@@ -48,6 +87,37 @@ class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
+          if (_errorText != null)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.error_outline, size: 32),
+                    const SizedBox(height: 12),
+                    Text(
+                      "页面加载失败，请重试或在外部浏览器打开",
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      _errorText!,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      children: [
+                        OutlinedButton(onPressed: () => _controller.reload(), child: const Text("重试")),
+                        FilledButton(onPressed: _openExternal, child: const Text("外部浏览器打开")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           if (_loading) const Center(child: CircularProgressIndicator()),
         ],
       ),

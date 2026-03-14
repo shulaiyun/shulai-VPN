@@ -202,16 +202,28 @@ class GatewayInviteSummary {
     required this.supported,
     this.inviteCode,
     this.inviteUrl,
+    this.inviteManageUrl,
     required this.rebateTotal,
     required this.rebatePending,
+    required this.rebateAvailable,
+    required this.rebateWithdrawn,
+    required this.rebateRate,
+    this.rebateRuleText,
+    required this.canWithdraw,
     required this.invitedCount,
   });
 
   final bool supported;
   final String? inviteCode;
   final String? inviteUrl;
+  final String? inviteManageUrl;
   final double rebateTotal;
   final double rebatePending;
+  final double rebateAvailable;
+  final double rebateWithdrawn;
+  final double rebateRate;
+  final String? rebateRuleText;
+  final bool canWithdraw;
   final int invitedCount;
 
   factory GatewayInviteSummary.fromMap(Map<String, dynamic> map) {
@@ -219,8 +231,14 @@ class GatewayInviteSummary {
       supported: map["supported"] != false,
       inviteCode: _asNullableString(map["invite_code"]),
       inviteUrl: _asNullableString(map["invite_url"]),
+      inviteManageUrl: _asNullableString(map["invite_manage_url"]),
       rebateTotal: _asDouble(map["rebate_total"]),
       rebatePending: _asDouble(map["rebate_pending"]),
+      rebateAvailable: _asDouble(map["rebate_available"]),
+      rebateWithdrawn: _asDouble(map["rebate_withdrawn"]),
+      rebateRate: _asDouble(map["rebate_rate"]),
+      rebateRuleText: _asNullableString(map["rebate_rule_text"]),
+      canWithdraw: map["can_withdraw"] == true,
       invitedCount: _asInt(map["invited_count"]),
     );
   }
@@ -242,6 +260,9 @@ class GatewayAccountSummary {
     this.githubUrl,
     this.ticketUrl,
     this.noticeUrl,
+    this.telegramBound = false,
+    this.telegramUsername,
+    this.telegramBotUrl,
   });
 
   final String email;
@@ -258,6 +279,9 @@ class GatewayAccountSummary {
   final String? githubUrl;
   final String? ticketUrl;
   final String? noticeUrl;
+  final bool telegramBound;
+  final String? telegramUsername;
+  final String? telegramBotUrl;
 
   int get trafficRemaining {
     final value = trafficTotal - trafficUsed;
@@ -286,8 +310,47 @@ class GatewayAccountSummary {
       githubUrl: _asNullableString(links["github"]),
       ticketUrl: _asNullableString(links["tickets"]),
       noticeUrl: _asNullableString(links["notices"]),
+      telegramBound: user["telegram_bound"] == true,
+      telegramUsername: _asNullableString(user["telegram_username"]),
+      telegramBotUrl: _asNullableString(links["telegram_bot"]),
     );
   }
+}
+
+class GatewayTelegramBindingStatus {
+  GatewayTelegramBindingStatus({
+    required this.linked,
+    this.telegramId,
+    this.telegramUsername,
+    required this.botUsername,
+    required this.botUrl,
+    required this.bindUrl,
+    this.subscribeUrl,
+    this.bindCommand,
+    this.tips,
+  });
+
+  final bool linked;
+  final String? telegramId;
+  final String? telegramUsername;
+  final String botUsername;
+  final String botUrl;
+  final String bindUrl;
+  final String? subscribeUrl;
+  final String? bindCommand;
+  final String? tips;
+
+  factory GatewayTelegramBindingStatus.fromMap(Map<String, dynamic> map) => GatewayTelegramBindingStatus(
+    linked: map["linked"] == true,
+    telegramId: _asNullableString(map["telegram_id"]),
+    telegramUsername: _asNullableString(map["telegram_username"]),
+    botUsername: _asNullableString(map["bot_username"]) ?? "@shulaiyun_bot",
+    botUrl: _asNullableString(map["bot_url"]) ?? "https://t.me/shulaiyun_bot",
+    bindUrl: _asNullableString(map["bind_url"]) ?? "https://t.me/shulaiyun_bot",
+    subscribeUrl: _asNullableString(map["subscribe_url"]),
+    bindCommand: _asNullableString(map["bind_command"]),
+    tips: _asNullableString(map["tips"]),
+  );
 }
 
 class GatewayPlanPeriod {
