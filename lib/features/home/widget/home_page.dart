@@ -422,13 +422,13 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
               g.accountAndPlanSectionTitle,
               style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1),
             if (_loggedIn) ...[
               Text(g.statusLoggedIn(_summary?.email ?? "--")),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Wrap(
                 spacing: 8,
-                runSpacing: 6,
+                runSpacing: 4,
                 children: [
                   _MiniStatusTile(label: g.homeCurrentPlan, value: _summary?.planName ?? "--"),
                   _MiniStatusTile(label: g.homeExpireAt, value: _summary?.expiredAt ?? "--"),
@@ -439,10 +439,10 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
                 ],
               ),
               if ((_summary?.trafficTotal ?? 0) > 0) ...[
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 LinearProgressIndicator(
                   value: ((_summary!.trafficRemaining) / (_summary!.trafficTotal)).clamp(0.0, 1.0),
-                  minHeight: 8,
+                  minHeight: 6,
                   borderRadius: BorderRadius.circular(999),
                   color: Colors.green.shade500,
                   backgroundColor: Colors.green.shade100.withValues(alpha: 0.5),
@@ -450,13 +450,13 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
               ],
             ] else ...[
               Text(g.statusNotLoggedIn),
-              const SizedBox(height: 2),
+              const SizedBox(height: 1),
               Text(g.homeGuide),
             ],
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Wrap(
               spacing: 8,
-              runSpacing: 6,
+              runSpacing: 4,
               children: [
                 if (_loggedIn)
                   FilledButton(onPressed: () => context.go("/gateway-account"), child: Text(g.myAccount))
@@ -488,7 +488,7 @@ class _MiniStatusTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: theme.colorScheme.surfaceContainerHigh),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

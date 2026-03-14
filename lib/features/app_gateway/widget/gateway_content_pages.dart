@@ -61,7 +61,7 @@ class GatewayNoticesPage extends HookConsumerWidget {
         actions: [IconButton(onPressed: load, icon: const Icon(Icons.refresh))],
       ),
       body: items.value.isEmpty
-          ? Center(child: Text(g.knowledgeEmpty))
+          ? const Center(child: Text("暂无公告"))
           : ListView.builder(
               padding: const EdgeInsets.all(12),
               itemCount: items.value.length,
@@ -276,5 +276,3 @@ class GatewayKnowledgeDetailPage extends HookConsumerWidget {
     );
   }
 }
-
-

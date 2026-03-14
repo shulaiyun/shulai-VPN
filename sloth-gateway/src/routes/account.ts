@@ -31,6 +31,23 @@ const mapChangePasswordError = (error: unknown): never => {
 };
 
 export const registerAccountRoutes = (app: FastifyInstance, deps: AccountDeps): void => {
+  const normalizeTicketUrl = (candidate: string, fallback: string): string => {
+    const raw = String(candidate ?? "").trim();
+    if (!raw) return fallback;
+    try {
+      const fallbackUrl = new URL(fallback);
+      const targetUrl = new URL(raw);
+      if (targetUrl.host !== fallbackUrl.host) {
+        targetUrl.protocol = fallbackUrl.protocol;
+        targetUrl.host = fallbackUrl.host;
+        return targetUrl.toString();
+      }
+      return targetUrl.toString();
+    } catch {
+      return fallback;
+    }
+  };
+
   app.post("/api/app/v1/account/change-password", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
     const body = (request.body ?? {}) as Record<string, unknown>;
@@ -89,7 +106,7 @@ export const registerAccountRoutes = (app: FastifyInstance, deps: AccountDeps): 
 
     const fallback = `${deps.xboardWebBaseUrl}/#/ticket`;
     const quickLoginUrl = await deps.xboard.getQuickLoginUrl(session.xboardAuthData, redirect).catch(() => "");
-    const target = quickLoginUrl || fallback;
+    const target = quickLoginUrl ? normalizeTicketUrl(quickLoginUrl, fallback) : fallback;
 
     if (!target) {
       throw new AppError(503, ErrorCodes.TICKET_UNAVAILABLE, "工单入口暂时不可用，请稍后重试");

@@ -232,41 +232,44 @@ export class XboardAdapter {
   }> {
     const rawUnknown = await this.request<unknown>("GET", "/api/v1/user/invite/fetch", undefined, authData);
     const raw = this.toRecord(rawUnknown);
-    const statRow = this.firstRecord(raw["stat"]);
-    const codeRow = this.firstRecord(raw["codes"]);
+    const statRows = this.recordList(raw["stat"]);
+    const codeRows = this.recordList(raw["codes"]);
+    const statRow = statRows[0] ?? this.firstRecord(raw["stat"]);
+    const codeRow = codeRows[0] ?? this.firstRecord(raw["codes"]);
+    const allSources: Array<Record<string, unknown> | null> = [raw, statRow, codeRow, ...statRows, ...codeRows];
 
     const inviteCode = this.toStringOrNull(
-      this.pickFrom([raw, statRow, codeRow], ["invite_code", "code", "inviteCode"]),
+      this.pickFrom(allSources, ["invite_code", "code", "inviteCode", "inviteCodeValue"]),
     );
     const inviteUrl = this.toStringOrNull(
-      this.pickFrom([raw, statRow, codeRow], ["invite_url", "invite_link", "inviteLink", "url", "link"]),
+      this.pickFrom(allSources, ["invite_url", "invite_link", "inviteLink", "url", "link", "inviteURL"]),
     );
 
     return {
       inviteCode,
       inviteUrl,
       rebateTotal: this.toNumber(
-        this.pickFrom([raw, statRow], ["rebate_total", "commission_total", "total_rebate", "total_amount"]),
+        this.pickFrom(allSources, ["rebate_total", "commission_total", "total_rebate", "total_amount"]),
       ),
       rebatePending: this.toNumber(
-        this.pickFrom([raw, statRow], ["rebate_pending", "commission_pending", "pending_amount"]),
+        this.pickFrom(allSources, ["rebate_pending", "commission_pending", "pending_amount"]),
       ),
       rebateAvailable: this.toNumber(
-        this.pickFrom([raw, statRow], ["rebate_available", "commission_available", "can_withdraw_amount", "available_amount"]),
+        this.pickFrom(allSources, ["rebate_available", "commission_available", "can_withdraw_amount", "available_amount"]),
       ),
       rebateWithdrawn: this.toNumber(
-        this.pickFrom([raw, statRow], ["rebate_withdrawn", "commission_withdrawn", "withdrawn_amount", "withdraw_amount"]),
+        this.pickFrom(allSources, ["rebate_withdrawn", "commission_withdrawn", "withdrawn_amount", "withdraw_amount"]),
       ),
       rebateRate: this.toNumber(
-        this.pickFrom([raw, statRow], ["rebate_rate", "commission_rate", "invite_rate"]),
+        this.pickFrom(allSources, ["rebate_rate", "commission_rate", "invite_rate"]),
       ),
       rebateRuleText: this.toStringOrNull(
-        this.pickFrom([raw, statRow], ["rebate_rule", "commission_rule", "rule", "description"]),
+        this.pickFrom(allSources, ["rebate_rule", "commission_rule", "rule", "description"]),
       ),
       canWithdraw: this.toBool(
-        this.pickFrom([raw, statRow], ["can_withdraw", "withdraw_enable", "is_withdraw_enable", "enable_withdraw"]),
+        this.pickFrom(allSources, ["can_withdraw", "withdraw_enable", "is_withdraw_enable", "enable_withdraw"]),
       ),
-      invitedCount: this.toNumber(this.pickFrom([raw, statRow], ["invited_count", "invite_count", "user_count"])),
+      invitedCount: this.toNumber(this.pickFrom(allSources, ["invited_count", "invite_count", "user_count"])),
     };
   }
 
@@ -373,10 +376,16 @@ export class XboardAdapter {
       authData,
     );
     if (typeof raw === "string") return raw;
+    if (Array.isArray(raw)) {
+      const firstString = raw.find((item) => typeof item === "string" && item.trim().length > 0);
+      if (typeof firstString === "string") return firstString.trim();
+    }
     const mapped = this.toRecord(raw);
-    return (
-      this.toStringOrNull(this.pick(mapped, ["url", "login_url", "quick_login_url", "redirect_url", "link"])) ?? ""
-    );
+    const nested = this.toRecord(this.pick(mapped, ["data", "result", "payload"]));
+    const direct =
+      this.toStringOrNull(this.pick(mapped, ["url", "login_url", "quick_login_url", "redirect_url", "link"])) ?? "";
+    if (direct.length > 0) return direct;
+    return this.toStringOrNull(this.pick(nested, ["url", "login_url", "quick_login_url", "redirect_url", "link"])) ?? "";
   }
 
   async createOrder(input: {
@@ -461,6 +470,16 @@ export class XboardAdapter {
     if (!Array.isArray(value)) return null;
     const first = value.find((item) => item && typeof item === "object" && !Array.isArray(item));
     return first ? (first as Record<string, unknown>) : null;
+  }
+
+  private recordList(value: unknown): Array<Record<string, unknown>> {
+    if (!Array.isArray(value)) {
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        return [value as Record<string, unknown>];
+      }
+      return [];
+    }
+    return value.filter((item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item));
   }
 
   private toBool(value: unknown): boolean {

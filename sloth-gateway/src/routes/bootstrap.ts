@@ -74,14 +74,30 @@ const buildAccountSummary = async (
   };
 };
 
-const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string, subscribeUrl: string) => {
+const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string) => {
   const inviteManageUrl = `${config.xboardWebBaseUrl}/#/invite`;
+  const registerWithCodeUrl = (code: string) =>
+    `${config.xboardWebBaseUrl}/#/register?code=${encodeURIComponent(code)}`;
+  const normalizeInviteUrl = (raw: string | null, code: string | null): string | null => {
+    const trimmed = String(raw ?? "").trim();
+    if (trimmed.length > 0) {
+      const lower = trimmed.toLowerCase();
+      // Some upstream panels return subscribe URL as invite URL, which is invalid for invite flow in App.
+      if (!lower.includes("/api/subscribe/") && !lower.includes("/api/v1/subscribe/")) {
+        return trimmed;
+      }
+    }
+    if (code && code.trim().length > 0) {
+      return registerWithCodeUrl(code.trim());
+    }
+    return null;
+  };
   try {
     const summary = await deps.xboard.getInviteSummary(authData);
+    const normalizedInviteUrl = normalizeInviteUrl(summary.inviteUrl, summary.inviteCode);
     return {
       invite_code: summary.inviteCode,
-      invite_url:
-        summary.inviteUrl ?? (summary.inviteCode ? `${subscribeUrl}&code=${encodeURIComponent(summary.inviteCode)}` : null),
+      invite_url: normalizedInviteUrl,
       rebate_total: summary.rebateTotal,
       rebate_pending: summary.rebatePending,
       rebate_available: summary.rebateAvailable,
@@ -128,8 +144,7 @@ export const registerBootstrapRoutes = (app: FastifyInstance, deps: BootstrapDep
 
   app.get("/api/app/v1/invite/summary", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
-    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData);
-    const data = await readInviteSummarySafe(deps, session.xboardAuthData, subscribe.subscribe_url);
+    const data = await readInviteSummarySafe(deps, session.xboardAuthData);
     return ok(reply, data);
   });
 
