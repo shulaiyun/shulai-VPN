@@ -547,13 +547,21 @@ class _TrafficMiniStatusTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final safeRate = remainingRate.clamp(0.0, 1.0);
+    final isLight = theme.brightness == Brightness.light;
+    final tileBgColor = isLight
+        ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.9)
+        : theme.colorScheme.surfaceContainerHigh;
     final fillColor = Color.lerp(
-      Colors.orange.shade500.withValues(alpha: 0.22),
-      Colors.green.shade500.withValues(alpha: 0.26),
+      isLight ? Colors.orange.shade600.withValues(alpha: 0.45) : Colors.orange.shade500.withValues(alpha: 0.22),
+      isLight ? Colors.green.shade600.withValues(alpha: 0.6) : Colors.green.shade500.withValues(alpha: 0.26),
       safeRate,
     )!;
-    final textColor = safeRate >= 0.78 ? Colors.white : theme.colorScheme.onSurface;
-    final labelColor = safeRate >= 0.78 ? Colors.white.withValues(alpha: 0.88) : theme.textTheme.labelSmall?.color;
+    final textColor = isLight
+        ? theme.colorScheme.onSurface
+        : (safeRate >= 0.78 ? Colors.white : theme.colorScheme.onSurface);
+    final labelColor = isLight
+        ? theme.colorScheme.onSurfaceVariant
+        : (safeRate >= 0.78 ? Colors.white.withValues(alpha: 0.88) : theme.textTheme.labelSmall?.color);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -561,7 +569,10 @@ class _TrafficMiniStatusTile extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-            decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHigh),
+            decoration: BoxDecoration(
+              color: tileBgColor,
+              border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: isLight ? 0.6 : 0.25)),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
