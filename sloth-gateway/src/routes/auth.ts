@@ -133,6 +133,7 @@ const mapUpstreamAuthError = (
       loweredUpstream.includes("recaptcha") ||
       loweredUpstream.includes("图形验证码") ||
       loweredUpstream.includes("人机验证") ||
+      loweredUpstream.includes("验证码有误") ||
       loweredUpstream.includes("验证码错误") ||
       loweredUpstream.includes("验证码已过期")
     ) {

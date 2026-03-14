@@ -447,7 +447,7 @@ class GatewayAccountPage extends HookConsumerWidget {
               children: [
                 ListTile(
                   title: Text(g.openKnowledge),
-                  subtitle: Text(isZh ? "瀹夊崜 / iOS / Windows / macOS / Linux" : "Android / iOS / Windows / macOS / Linux"),
+                  subtitle: Text(isZh ? "安卓 / iOS / Windows / macOS / Linux" : "Android / iOS / Windows / macOS / Linux"),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push("/gateway-account/knowledge"),
                 ),

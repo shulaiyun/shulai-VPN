@@ -230,49 +230,43 @@ export class XboardAdapter {
     canWithdraw: boolean;
     invitedCount: number;
   }> {
-    const raw = await this.request<Record<string, unknown>>("GET", "/api/v1/user/invite/fetch", undefined, authData);
+    const rawUnknown = await this.request<unknown>("GET", "/api/v1/user/invite/fetch", undefined, authData);
+    const raw = this.toRecord(rawUnknown);
+    const statRow = this.firstRecord(raw["stat"]);
+    const codeRow = this.firstRecord(raw["codes"]);
+
     const inviteCode = this.toStringOrNull(
-      this.pick(raw, [
-        "invite_code",
-        "code",
-        "inviteCode",
-      ]),
+      this.pickFrom([raw, statRow, codeRow], ["invite_code", "code", "inviteCode"]),
     );
     const inviteUrl = this.toStringOrNull(
-      this.pick(raw, [
-        "invite_url",
-        "invite_link",
-        "inviteLink",
-        "url",
-        "link",
-      ]),
+      this.pickFrom([raw, statRow, codeRow], ["invite_url", "invite_link", "inviteLink", "url", "link"]),
     );
 
     return {
       inviteCode,
       inviteUrl,
       rebateTotal: this.toNumber(
-        this.pick(raw, ["rebate_total", "commission_total", "total_rebate", "total_amount"]),
+        this.pickFrom([raw, statRow], ["rebate_total", "commission_total", "total_rebate", "total_amount"]),
       ),
       rebatePending: this.toNumber(
-        this.pick(raw, ["rebate_pending", "commission_pending", "pending_amount"]),
+        this.pickFrom([raw, statRow], ["rebate_pending", "commission_pending", "pending_amount"]),
       ),
       rebateAvailable: this.toNumber(
-        this.pick(raw, ["rebate_available", "commission_available", "can_withdraw_amount", "available_amount"]),
+        this.pickFrom([raw, statRow], ["rebate_available", "commission_available", "can_withdraw_amount", "available_amount"]),
       ),
       rebateWithdrawn: this.toNumber(
-        this.pick(raw, ["rebate_withdrawn", "commission_withdrawn", "withdrawn_amount", "withdraw_amount"]),
+        this.pickFrom([raw, statRow], ["rebate_withdrawn", "commission_withdrawn", "withdrawn_amount", "withdraw_amount"]),
       ),
       rebateRate: this.toNumber(
-        this.pick(raw, ["rebate_rate", "commission_rate", "invite_rate"]),
+        this.pickFrom([raw, statRow], ["rebate_rate", "commission_rate", "invite_rate"]),
       ),
       rebateRuleText: this.toStringOrNull(
-        this.pick(raw, ["rebate_rule", "commission_rule", "rule", "description"]),
+        this.pickFrom([raw, statRow], ["rebate_rule", "commission_rule", "rule", "description"]),
       ),
       canWithdraw: this.toBool(
-        this.pick(raw, ["can_withdraw", "withdraw_enable", "is_withdraw_enable", "enable_withdraw"]),
+        this.pickFrom([raw, statRow], ["can_withdraw", "withdraw_enable", "is_withdraw_enable", "enable_withdraw"]),
       ),
-      invitedCount: this.toNumber(this.pick(raw, ["invited_count", "invite_count", "user_count"])),
+      invitedCount: this.toNumber(this.pickFrom([raw, statRow], ["invited_count", "invite_count", "user_count"])),
     };
   }
 
@@ -372,13 +366,17 @@ export class XboardAdapter {
   }
 
   async getQuickLoginUrl(authData: string, redirect = "ticket"): Promise<string> {
-    const url = await this.request<string>(
+    const raw = await this.request<unknown>(
       "POST",
       "/api/v1/user/getQuickLoginUrl",
       { redirect },
       authData,
     );
-    return typeof url === "string" ? url : "";
+    if (typeof raw === "string") return raw;
+    const mapped = this.toRecord(raw);
+    return (
+      this.toStringOrNull(this.pick(mapped, ["url", "login_url", "quick_login_url", "redirect_url", "link"])) ?? ""
+    );
   }
 
   async createOrder(input: {
@@ -441,6 +439,28 @@ export class XboardAdapter {
       if (key in source) return source[key];
     }
     return undefined;
+  }
+
+  private pickFrom(sources: Array<Record<string, unknown> | null>, keys: string[]): unknown {
+    for (const source of sources) {
+      if (!source) continue;
+      const found = this.pick(source, keys);
+      if (found !== undefined) return found;
+    }
+    return undefined;
+  }
+
+  private toRecord(value: unknown): Record<string, unknown> {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return value as Record<string, unknown>;
+    }
+    return {};
+  }
+
+  private firstRecord(value: unknown): Record<string, unknown> | null {
+    if (!Array.isArray(value)) return null;
+    const first = value.find((item) => item && typeof item === "object" && !Array.isArray(item));
+    return first ? (first as Record<string, unknown>) : null;
   }
 
   private toBool(value: unknown): boolean {
