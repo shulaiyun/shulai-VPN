@@ -127,6 +127,8 @@ const mapTicketError = (error: unknown): never => {
   throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "工单服务暂时不可用，请稍后重试");
 };
 
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): void => {
   app.get("/api/app/v1/support/tickets", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
@@ -176,7 +178,7 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
       throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "工单提交失败，请稍后重试");
     }
 
-    const tickets = await deps.xboard
+    let tickets = await deps.xboard
       .getTickets(session.xboardAuthData)
       .catch((error: unknown): never => mapTicketError(error));
 
@@ -186,6 +188,24 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
         : undefined;
 
     createdTicket ??= tickets.find((item) => toText(item.subject) === subject);
+
+    // Some XBoard deployments create ticket asynchronously. Poll briefly to get the real ticket id for immediate chat.
+    if (!createdTicket) {
+      for (const delayMs of [350, 850, 1500]) {
+        await sleep(delayMs);
+        tickets = await deps.xboard
+          .getTickets(session.xboardAuthData)
+          .catch((error: unknown): never => mapTicketError(error));
+        createdTicket =
+          (created.ticketId != null
+            ? tickets.find(
+                (item) =>
+                  toNumber(item.id) === created.ticketId || toNumber(item.ticket_id) === created.ticketId,
+              )
+            : undefined) ?? tickets.find((item) => toText(item.subject) === subject);
+        if (createdTicket) break;
+      }
+    }
 
     if (!createdTicket && created.ticketId != null) {
       createdTicket = (await deps.xboard

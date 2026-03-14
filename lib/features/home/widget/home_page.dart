@@ -478,7 +478,14 @@ class _GatewayEntryCardState extends ConsumerState<_GatewayEntryCard> {
               runSpacing: 4,
               children: [
                 if (_loggedIn)
-                  FilledButton(onPressed: () => context.go("/gateway-account"), child: Text(g.myAccount))
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: theme.colorScheme.tertiaryContainer,
+                      foregroundColor: theme.colorScheme.onTertiaryContainer,
+                    ),
+                    onPressed: () => context.go("/gateway-account"),
+                    child: Text(g.myAccount),
+                  )
                 else
                   FilledButton(onPressed: () => context.push("/home/gateway-login"), child: Text(g.login)),
                 if (_loggedIn)

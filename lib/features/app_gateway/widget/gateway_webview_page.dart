@@ -26,7 +26,7 @@ class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
       ..setUserAgent(
-        "Mozilla/5.0 (Linux; Android 13; SlothVPN) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36",
+        'Mozilla/5.0 (Linux; Android 13; SlothVPN) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36',
       )
       ..setNavigationDelegate(
         NavigationDelegate(
@@ -45,11 +45,11 @@ class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
           onNavigationRequest: (request) async {
             final uri = Uri.tryParse(request.url);
             if (uri == null) return NavigationDecision.prevent;
-            if (uri.scheme == "slothvpn") {
+            if (uri.scheme == 'slothvpn') {
               await launchUrl(uri, mode: LaunchMode.externalApplication);
               return NavigationDecision.prevent;
             }
-            if (uri.scheme != "http" && uri.scheme != "https") {
+            if (uri.scheme != 'http' && uri.scheme != 'https') {
               await launchUrl(uri, mode: LaunchMode.externalApplication);
               return NavigationDecision.prevent;
             }
@@ -59,8 +59,8 @@ class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
       );
 
     final parsed = Uri.tryParse(widget.url);
-    if (parsed == null || (!parsed.hasScheme)) {
-      _errorText = _isZh ? "页面地址无效" : "Invalid page URL";
+    if (parsed == null || !parsed.hasScheme) {
+      _errorText = _isZh ? '页面地址无效' : 'Invalid page URL';
       _loading = false;
       return;
     }
@@ -96,7 +96,7 @@ class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
                     const Icon(Icons.error_outline, size: 32),
                     const SizedBox(height: 12),
                     Text(
-                      _isZh ? "页面加载失败，请重试或在外部浏览器打开" : "Failed to load page, retry or open in browser",
+                      _isZh ? '页面加载失败，请重试或在外部浏览器打开' : 'Failed to load page, retry or open in browser',
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
@@ -105,8 +105,8 @@ class _GatewayWebViewPageState extends State<GatewayWebViewPage> {
                     Wrap(
                       spacing: 8,
                       children: [
-                        OutlinedButton(onPressed: () => _controller.reload(), child: Text(_isZh ? "重试" : "Retry")),
-                        FilledButton(onPressed: _openExternal, child: Text(_isZh ? "外部浏览器打开" : "Open in browser")),
+                        OutlinedButton(onPressed: () => _controller.reload(), child: Text(_isZh ? '重试' : 'Retry')),
+                        FilledButton(onPressed: _openExternal, child: Text(_isZh ? '外部浏览器打开' : 'Open in browser')),
                       ],
                     ),
                   ],

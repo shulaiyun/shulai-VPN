@@ -7,18 +7,17 @@ import 'package:hiddify/features/app_gateway/model/gateway_models.dart';
 import 'package:hiddify/features/app_gateway/notifier/gateway_portal_controller.dart';
 import 'package:hiddify/features/app_gateway/notifier/gateway_state_bus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class GatewayPlansPage extends HookConsumerWidget {
   const GatewayPlansPage({super.key});
 
-  String _presentPrice(int cents) => "CNY ${(cents / 100).toStringAsFixed(2)}";
+  String _presentPrice(int cents) => 'CNY ${(cents / 100).toStringAsFixed(2)}';
 
   String _presentTraffic(int transferEnable) {
     final gb = transferEnable / (1024 * 1024 * 1024);
-    if (gb >= 1) return "${gb.toStringAsFixed(0)} GB";
+    if (gb >= 1) return '${gb.toStringAsFixed(0)} GB';
     final mb = transferEnable / (1024 * 1024);
-    return "${mb.toStringAsFixed(0)} MB";
+    return '${mb.toStringAsFixed(0)} MB';
   }
 
   @override
@@ -26,6 +25,7 @@ class GatewayPlansPage extends HookConsumerWidget {
     final g = GatewayL10n.of(context);
     final isZh = Localizations.localeOf(context).languageCode.toLowerCase().startsWith('zh');
     final refreshTick = ref.watch(slothGatewayUiRefreshTickProvider);
+    final theme = Theme.of(context);
 
     final loading = useState(true);
     final plans = useState<List<GatewayPlan>>([]);
@@ -37,7 +37,7 @@ class GatewayPlansPage extends HookConsumerWidget {
     final selectedPeriods = useState<Map<int, String>>({});
     final runningPlanId = useState<int?>(null);
     final runningOrderNo = useState<String?>(null);
-    final orderStatusFilter = useState<String>("all");
+    final orderStatusFilter = useState<String>('all');
     final tabIndex = useState<int>(0);
     final errorText = useState<String?>(null);
 
@@ -59,6 +59,7 @@ class GatewayPlansPage extends HookConsumerWidget {
         final loadedPlans = await portal.fetchPlans();
         final loadedMethods = await portal.fetchPaymentMethods();
         final loadedOrders = await portal.fetchOrders(status: orderStatusFilter.value);
+
         summary.value = loadedSummary;
         plans.value = loadedPlans;
         methods.value = loadedMethods;
@@ -67,6 +68,7 @@ class GatewayPlansPage extends HookConsumerWidget {
         if (selectedMethodId.value == null && loadedMethods.isNotEmpty) {
           selectedMethodId.value = loadedMethods.first.id;
         }
+
         final defaults = <int, String>{};
         for (final plan in loadedPlans) {
           if (plan.periods.isNotEmpty) {
@@ -107,17 +109,10 @@ class GatewayPlansPage extends HookConsumerWidget {
         return;
       }
 
-      // 优先应用内浏览器（Custom Tabs / SFSafariViewController），兼容性优于纯 WebView。
-      var opened = await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
-      if (!opened) {
-        opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-      }
-      if (!opened && context.mounted) {
-        await context.push(
-          "/gateway-account/webview",
-          extra: <String, String>{"url": target, "title": isZh ? "支付订单 $orderNo" : "Order $orderNo"},
-        );
-      }
+      await context.push(
+        '/gateway-account/webview',
+        extra: <String, String>{'url': target, 'title': isZh ? '支付订单 $orderNo' : 'Pay Order $orderNo'},
+      );
 
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.paymentPageOpened(orderNo))));
@@ -141,15 +136,17 @@ class GatewayPlansPage extends HookConsumerWidget {
         builder: (context) {
           final textTheme = Theme.of(context).textTheme;
           Widget kv(String key, String value) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 120, child: Text(key, style: textTheme.bodyMedium)),
-                    Expanded(child: Text(value, style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600))),
-                  ],
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(width: 120, child: Text(key, style: textTheme.bodyMedium)),
+                Expanded(
+                  child: Text(value, style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600)),
                 ),
-              );
+              ],
+            ),
+          );
 
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -212,9 +209,9 @@ class GatewayPlansPage extends HookConsumerWidget {
           await load();
         }
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(g.orderStatusUpdated(order.orderNo, status.status))),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(g.orderStatusUpdated(order.orderNo, status.status))));
       } on GatewayApiException catch (error) {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.orderFailed(error.message))));
@@ -229,14 +226,14 @@ class GatewayPlansPage extends HookConsumerWidget {
         final portal = ref.read(slothGatewayPortalControllerProvider);
         final ok = await portal.cancelOrder(order.orderNo);
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(ok ? g.orderCancelled : g.cancelOrderFailed(g.unknownError))),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(ok ? g.orderCancelled : g.cancelOrderFailed(g.unknownError))));
         await load();
       } on GatewayApiException catch (error) {
         if (!context.mounted) return;
-        final code = error.code ?? "";
-        if (code == "ORDER_NOT_CANCELLABLE" || code == "ORDER_ALREADY_PAID") {
+        final code = error.code ?? '';
+        if (code == 'ORDER_NOT_CANCELLABLE' || code == 'ORDER_ALREADY_PAID') {
           await load();
           if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
@@ -251,12 +248,8 @@ class GatewayPlansPage extends HookConsumerWidget {
     Future<bool> confirmBeforeBuy(GatewayPlan plan, String period) async {
       final currentPlan = summary.value?.planName?.trim();
       final isRenew = currentPlan != null && currentPlan.isNotEmpty && currentPlan == plan.name.trim();
-      final title = isRenew ? (isZh ? "续费确认" : "Renew Confirmation") : (isZh ? "切换套餐确认" : "Plan Change Confirmation");
-      final lines = <String>[
-        "1. ${g.renewRulesSamePlan}",
-        "2. ${g.renewRulesUpgrade}",
-        "3. ${g.renewRulesRefund}",
-      ];
+      final title = isRenew ? (isZh ? '续费确认' : 'Renew Confirmation') : (isZh ? '切换套餐确认' : 'Plan Change Confirmation');
+      final lines = <String>['1. ${g.renewRulesSamePlan}', '2. ${g.renewRulesUpgrade}', '3. ${g.renewRulesRefund}'];
       final selectedPeriod = plan.periods.firstWhere(
         (item) => item.code == period,
         orElse: () => GatewayPlanPeriod(code: period, label: period, price: 0),
@@ -264,12 +257,14 @@ class GatewayPlansPage extends HookConsumerWidget {
       final periodLabel = g.periodLabel(selectedPeriod.code, selectedPeriod.label);
       final amountText = _presentPrice(selectedPeriod.price);
       final content = StringBuffer()
-        ..writeln("${isZh ? '当前套餐' : 'Current plan'}: ${currentPlan == null || currentPlan.isEmpty ? '--' : currentPlan}")
-        ..writeln("${isZh ? '目标套餐' : 'Target plan'}: ${plan.name}")
-        ..writeln("${isZh ? '购买周期' : 'Billing cycle'}: $periodLabel")
-        ..writeln("${isZh ? '订单金额' : 'Order amount'}: $amountText")
+        ..writeln(
+          '${isZh ? '当前套餐' : 'Current plan'}: ${currentPlan == null || currentPlan.isEmpty ? '--' : currentPlan}',
+        )
+        ..writeln('${isZh ? '目标套餐' : 'Target plan'}: ${plan.name}')
+        ..writeln('${isZh ? '购买周期' : 'Billing cycle'}: $periodLabel')
+        ..writeln('${isZh ? '订单金额' : 'Order amount'}: $amountText')
         ..writeln()
-        ..writeln(lines.join("\n"));
+        ..writeln(lines.join('\n'));
 
       final result = await showDialog<bool>(
         context: context,
@@ -277,8 +272,8 @@ class GatewayPlansPage extends HookConsumerWidget {
           title: Text(title),
           content: Text(content.toString()),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(isZh ? "取消" : "Cancel")),
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(isZh ? "确认下单" : "Confirm")),
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(isZh ? '取消' : 'Cancel')),
+            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(isZh ? '确认下单' : 'Confirm')),
           ],
         ),
       );
@@ -306,7 +301,7 @@ class GatewayPlansPage extends HookConsumerWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                "${g.orderAmount} ${_presentPrice(preview.totalAmount)} / ${g.orderSurplusAmount} ${_presentPrice(preview.surplusAmount)} / ${g.orderRefundAmount} ${_presentPrice(preview.refundAmount)}",
+                '${g.orderAmount} ${_presentPrice(preview.totalAmount)} / ${g.orderSurplusAmount} ${_presentPrice(preview.surplusAmount)} / ${g.orderRefundAmount} ${_presentPrice(preview.refundAmount)}',
               ),
             ),
           );
@@ -333,6 +328,7 @@ class GatewayPlansPage extends HookConsumerWidget {
     }
 
     Widget rulesCard() {
+      final summaryValue = summary.value;
       return Card(
         margin: const EdgeInsets.only(bottom: 12),
         child: Padding(
@@ -340,17 +336,37 @@ class GatewayPlansPage extends HookConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(g.renewRulesTitle, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+              Row(
+                children: [
+                  const Icon(Icons.auto_awesome, size: 18),
+                  const SizedBox(width: 6),
+                  Text(g.renewRulesTitle, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                ],
+              ),
               const SizedBox(height: 8),
               Text('1. ${g.renewRulesSamePlan}'),
               const SizedBox(height: 4),
               Text('2. ${g.renewRulesUpgrade}'),
               const SizedBox(height: 4),
               Text('3. ${g.renewRulesRefund}'),
-              if (summary.value != null) ...[
-                const SizedBox(height: 8),
-                Text('${g.accountPlan}: ${summary.value?.planName ?? '--'}'),
-                Text('${g.accountBalance}: ${_presentPrice(summary.value?.balance ?? 0)}'),
+              if (summaryValue != null) ...[
+                const SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: theme.colorScheme.primaryContainer.withValues(alpha: 0.35),
+                  ),
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 6,
+                    children: [
+                      Text('${g.accountPlan}: ${summaryValue.planName ?? '--'}'),
+                      Text('${g.accountBalance}: ${_presentPrice(summaryValue.balance)}'),
+                    ],
+                  ),
+                ),
               ],
             ],
           ),
@@ -364,14 +380,21 @@ class GatewayPlansPage extends HookConsumerWidget {
         children: [
           rulesCard(),
           if (methods.value.isNotEmpty) ...[
-            DropdownButtonFormField<int>(
-              key: ValueKey("payment-method-${selectedMethodId.value}"),
-              initialValue: selectedMethodId.value,
-              decoration: InputDecoration(labelText: g.paymentMethod, border: const OutlineInputBorder()),
-              items: methods.value.map((m) => DropdownMenuItem(value: m.id, child: Text("${m.icon} ${m.name}"))).toList(),
-              onChanged: (value) => selectedMethodId.value = value,
+            Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: DropdownButtonFormField<int>(
+                  key: ValueKey('payment-method-${selectedMethodId.value}'),
+                  initialValue: selectedMethodId.value,
+                  decoration: InputDecoration(labelText: g.paymentMethod, border: const OutlineInputBorder()),
+                  items: methods.value
+                      .map((m) => DropdownMenuItem(value: m.id, child: Text('${m.icon} ${m.name}')))
+                      .toList(),
+                  onChanged: (value) => selectedMethodId.value = value,
+                ),
+              ),
             ),
-            const SizedBox(height: 12),
           ],
           ...plans.value.map(
             (plan) => Card(
@@ -383,31 +406,41 @@ class GatewayPlansPage extends HookConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        Expanded(child: Text(plan.name, style: Theme.of(context).textTheme.titleMedium)),
-                        if (!plan.sell) Chip(label: Text(isZh ? '暂停销售' : 'Unavailable')),
+                        Expanded(
+                          child: Text(
+                            plan.name,
+                            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        if (!plan.sell) Chip(label: Text(isZh ? '暂停售卖' : 'Unavailable')),
                       ],
                     ),
                     if (plan.description.isNotEmpty) ...[
                       const SizedBox(height: 6),
-                      Text(plan.description),
+                      Text(plan.description, style: theme.textTheme.bodySmall),
                     ],
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 10,
                       runSpacing: 6,
                       children: [
-                        Text("${g.planTraffic}: ${_presentTraffic(plan.transferEnable)}"),
-                        Text("${g.planDevices}: ${plan.deviceLimit?.toString() ?? g.unlimited}"),
-                        Text("${g.planSpeed}: ${plan.speedLimit?.toString() ?? g.unlimited}"),
+                        _TagText(text: '${g.planTraffic}: ${_presentTraffic(plan.transferEnable)}'),
+                        _TagText(text: '${g.planDevices}: ${plan.deviceLimit?.toString() ?? g.unlimited}'),
+                        _TagText(text: '${g.planSpeed}: ${plan.speedLimit?.toString() ?? g.unlimited}'),
                       ],
                     ),
                     const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
-                      key: ValueKey("period-${plan.id}-${selectedPeriods.value[plan.id]}"),
+                      key: ValueKey('period-${plan.id}-${selectedPeriods.value[plan.id]}'),
                       initialValue: selectedPeriods.value[plan.id],
                       decoration: InputDecoration(labelText: g.billingPeriod, border: const OutlineInputBorder()),
                       items: plan.periods
-                          .map((p) => DropdownMenuItem(value: p.code, child: Text("${g.periodLabel(p.code, p.label)}  ${_presentPrice(p.price)}")))
+                          .map(
+                            (p) => DropdownMenuItem(
+                              value: p.code,
+                              child: Text('${g.periodLabel(p.code, p.label)}  ${_presentPrice(p.price)}'),
+                            ),
+                          )
                           .toList(),
                       onChanged: (value) {
                         if (value == null) return;
@@ -415,9 +448,10 @@ class GatewayPlansPage extends HookConsumerWidget {
                       },
                     ),
                     const SizedBox(height: 10),
-                    FilledButton(
+                    FilledButton.icon(
                       onPressed: (plan.sell && runningPlanId.value != plan.id) ? () => buy(plan) : null,
-                      child: Text(runningPlanId.value == plan.id ? g.processing : g.buyNow),
+                      icon: const Icon(Icons.shopping_cart_checkout),
+                      label: Text(runningPlanId.value == plan.id ? g.processing : g.buyNow),
                     ),
                   ],
                 ),
@@ -441,12 +475,36 @@ class GatewayPlansPage extends HookConsumerWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              _OrderFilterChip(label: g.allStatus, selected: orderStatusFilter.value == "all", onTap: () => orderStatusFilter.value = "all"),
-              _OrderFilterChip(label: g.pendingStatus, selected: orderStatusFilter.value == "pending", onTap: () => orderStatusFilter.value = "pending"),
-              _OrderFilterChip(label: g.paidStatus, selected: orderStatusFilter.value == "paid", onTap: () => orderStatusFilter.value = "paid"),
-              _OrderFilterChip(label: g.cancelledStatus, selected: orderStatusFilter.value == "cancelled", onTap: () => orderStatusFilter.value = "cancelled"),
-              _OrderFilterChip(label: g.expiredStatus, selected: orderStatusFilter.value == "expired", onTap: () => orderStatusFilter.value = "expired"),
-              _OrderFilterChip(label: isZh ? '已关闭' : 'Closed', selected: orderStatusFilter.value == "closed", onTap: () => orderStatusFilter.value = "closed"),
+              _OrderFilterChip(
+                label: g.allStatus,
+                selected: orderStatusFilter.value == 'all',
+                onTap: () => orderStatusFilter.value = 'all',
+              ),
+              _OrderFilterChip(
+                label: g.pendingStatus,
+                selected: orderStatusFilter.value == 'pending',
+                onTap: () => orderStatusFilter.value = 'pending',
+              ),
+              _OrderFilterChip(
+                label: g.paidStatus,
+                selected: orderStatusFilter.value == 'paid',
+                onTap: () => orderStatusFilter.value = 'paid',
+              ),
+              _OrderFilterChip(
+                label: g.cancelledStatus,
+                selected: orderStatusFilter.value == 'cancelled',
+                onTap: () => orderStatusFilter.value = 'cancelled',
+              ),
+              _OrderFilterChip(
+                label: g.expiredStatus,
+                selected: orderStatusFilter.value == 'expired',
+                onTap: () => orderStatusFilter.value = 'expired',
+              ),
+              _OrderFilterChip(
+                label: isZh ? '已关闭' : 'Closed',
+                selected: orderStatusFilter.value == 'closed',
+                onTap: () => orderStatusFilter.value = 'closed',
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -469,19 +527,19 @@ class GatewayPlansPage extends HookConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          Expanded(child: Text(order.planName ?? '-', style: Theme.of(context).textTheme.titleMedium)),
+                          Expanded(child: Text(order.planName ?? '-', style: theme.textTheme.titleMedium)),
                           Chip(label: Text(g.orderStatusLabel(order.status))),
                         ],
                       ),
                       const SizedBox(height: 6),
-                      Text("${isZh ? '订单号' : 'Order'}: ${order.orderNo}"),
-                      Text("${g.orderType}: ${order.typeLabel.isEmpty ? order.type : order.typeLabel}"),
-                      Text("${isZh ? '周期' : 'Period'}: ${g.periodLabel(order.period ?? '', order.period ?? '-')}"),
-                      Text("${g.orderAmount}: ${_presentPrice(order.totalAmount)}"),
-                      Text("${g.orderSurplusAmount}: ${_presentPrice(order.surplusAmount)}"),
-                      Text("${g.orderRefundAmount}: ${_presentPrice(order.refundAmount)}"),
-                      if (order.createdAt != null) Text("${g.orderCreatedAt}: ${order.createdAt}"),
-                      if (order.paidAt != null) Text("${g.orderPaidAt}: ${order.paidAt}"),
+                      Text('${isZh ? '订单号' : 'Order'}: ${order.orderNo}'),
+                      Text('${g.orderType}: ${order.typeLabel.isEmpty ? order.type : order.typeLabel}'),
+                      Text('${isZh ? '周期' : 'Period'}: ${g.periodLabel(order.period ?? '', order.period ?? '-')}'),
+                      Text('${g.orderAmount}: ${_presentPrice(order.totalAmount)}'),
+                      Text('${g.orderSurplusAmount}: ${_presentPrice(order.surplusAmount)}'),
+                      Text('${g.orderRefundAmount}: ${_presentPrice(order.refundAmount)}'),
+                      if (order.createdAt != null) Text('${g.orderCreatedAt}: ${order.createdAt}'),
+                      if (order.paidAt != null) Text('${g.orderPaidAt}: ${order.paidAt}'),
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 8,
@@ -493,8 +551,14 @@ class GatewayPlansPage extends HookConsumerWidget {
                               child: Text(busy ? g.processing : g.continuePay),
                             ),
                           if (order.canCancel)
-                            OutlinedButton(onPressed: busy ? null : () => cancelOrder(order), child: Text(g.cancelOrder)),
-                          OutlinedButton(onPressed: busy ? null : () => refreshOrderStatus(order), child: Text(g.refreshOrderStatus)),
+                            OutlinedButton(
+                              onPressed: busy ? null : () => cancelOrder(order),
+                              child: Text(g.cancelOrder),
+                            ),
+                          OutlinedButton(
+                            onPressed: busy ? null : () => refreshOrderStatus(order),
+                            child: Text(g.refreshOrderStatus),
+                          ),
                           TextButton(onPressed: busy ? null : () => showOrderDetail(order), child: Text(g.orderDetail)),
                         ],
                       ),
@@ -519,9 +583,9 @@ class GatewayPlansPage extends HookConsumerWidget {
           const SizedBox(height: 8),
           Text(g.homeGuide),
           const SizedBox(height: 12),
-          FilledButton(onPressed: () => context.push("/home/gateway-login"), child: Text(g.login)),
+          FilledButton(onPressed: () => context.push('/home/gateway-login'), child: Text(g.login)),
           const SizedBox(height: 8),
-          OutlinedButton(onPressed: () => context.push("/home/gateway-register"), child: Text(g.register)),
+          OutlinedButton(onPressed: () => context.push('/home/gateway-register'), child: Text(g.register)),
         ],
       );
     } else if (errorText.value != null) {
@@ -539,8 +603,16 @@ class GatewayPlansPage extends HookConsumerWidget {
           const SizedBox(height: 8),
           SegmentedButton<int>(
             segments: [
-              ButtonSegment<int>(value: 0, label: Text(g.purchaseTabPlans)),
-              ButtonSegment<int>(value: 1, label: Text(g.purchaseTabOrders)),
+              ButtonSegment<int>(
+                value: 0,
+                label: Text(g.purchaseTabPlans),
+                icon: const Icon(Icons.inventory_2_outlined),
+              ),
+              ButtonSegment<int>(
+                value: 1,
+                label: Text(g.purchaseTabOrders),
+                icon: const Icon(Icons.receipt_long_outlined),
+              ),
             ],
             selected: {tabIndex.value},
             onSelectionChanged: (set) {
@@ -573,5 +645,24 @@ class _OrderFilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChoiceChip(label: Text(label), selected: selected, onSelected: (_) => onTap());
+  }
+}
+
+class _TagText extends StatelessWidget {
+  const _TagText({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      ),
+      child: Text(text, style: theme.textTheme.bodySmall),
+    );
   }
 }

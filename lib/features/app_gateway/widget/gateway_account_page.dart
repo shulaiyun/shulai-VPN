@@ -17,19 +17,19 @@ class GatewayAccountPage extends HookConsumerWidget {
   String _formatTraffic(int bytes) {
     const gb = 1024 * 1024 * 1024;
     const mb = 1024 * 1024;
-    if (bytes >= gb) return "${(bytes / gb).toStringAsFixed(2)} GB";
-    return "${(bytes / mb).toStringAsFixed(2)} MB";
+    if (bytes >= gb) return '${(bytes / gb).toStringAsFixed(2)} GB';
+    return '${(bytes / mb).toStringAsFixed(2)} MB';
   }
 
-  String _formatMoneyFromCent(num value) => "CNY ${(value / 100).toStringAsFixed(2)}";
+  String _formatMoneyFromCent(num value) => 'CNY ${(value / 100).toStringAsFixed(2)}';
 
   String _formatPercent(double rate) {
     final normalized = rate <= 0 ? 0 : (rate <= 1 ? rate * 100 : rate);
-    return "${normalized.toStringAsFixed(2)}%";
+    return '${normalized.toStringAsFixed(2)}%';
   }
 
   String _formatIsoTime(String? value) {
-    if (value == null || value.isEmpty) return "--";
+    if (value == null || value.isEmpty) return '--';
     DateTime? dt = DateTime.tryParse(value);
     if (dt == null) {
       final numeric = num.tryParse(value);
@@ -38,10 +38,10 @@ class GatewayAccountPage extends HookConsumerWidget {
         dt = DateTime.fromMillisecondsSinceEpoch(millis, isUtc: true);
       }
     }
-    if (dt == null || dt.year <= 1970) return "--";
+    if (dt == null || dt.year <= 1970) return '--';
     final local = dt.toLocal();
-    final two = (int n) => n.toString().padLeft(2, '0');
-    return "${local.year}-${two(local.month)}-${two(local.day)} ${two(local.hour)}:${two(local.minute)}";
+    String two(int n) => n.toString().padLeft(2, '0');
+    return '${local.year}-${two(local.month)}-${two(local.day)} ${two(local.hour)}:${two(local.minute)}';
   }
 
   @override
@@ -49,6 +49,7 @@ class GatewayAccountPage extends HookConsumerWidget {
     final g = GatewayL10n.of(context);
     final isZh = Localizations.localeOf(context).languageCode.toLowerCase().startsWith('zh');
     final refreshTick = ref.watch(slothGatewayUiRefreshTickProvider);
+    final theme = Theme.of(context);
 
     final loading = useState(true);
     final summary = useState<GatewayAccountSummary?>(null);
@@ -125,7 +126,7 @@ class GatewayAccountPage extends HookConsumerWidget {
     }
 
     Future<void> openTicket() async {
-      await context.push("/gateway-account/tickets");
+      await context.push('/gateway-account/tickets');
     }
 
     Future<void> ensureInviteCode() async {
@@ -133,7 +134,7 @@ class GatewayAccountPage extends HookConsumerWidget {
         final ok = await ref.read(slothGatewayPortalControllerProvider).generateInviteCode();
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(ok ? (isZh ? "邀请码已生成" : "Invite code generated") : g.inviteNotAvailable)),
+          SnackBar(content: Text(ok ? (isZh ? '邀请码已生成' : 'Invite code generated') : g.inviteNotAvailable)),
         );
         await load();
       } on GatewayApiException catch (error) {
@@ -149,7 +150,7 @@ class GatewayAccountPage extends HookConsumerWidget {
       final status = telegramBinding.value;
       final url = status?.bindUrl.isNotEmpty == true
           ? status!.bindUrl
-          : (status?.botUrl ?? summary.value?.telegramBotUrl ?? "https://t.me/shulaiyun_bot");
+          : (status?.botUrl ?? summary.value?.telegramBotUrl ?? 'https://t.me/shulaiyun_bot');
       await UriUtils.tryLaunch(Uri.parse(url));
     }
 
@@ -164,18 +165,18 @@ class GatewayAccountPage extends HookConsumerWidget {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(isZh ? "申请提现" : "Withdraw"),
+          title: Text(isZh ? '申请提现' : 'Withdraw'),
           content: TextField(
             controller: amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
-              labelText: isZh ? "提现金额（元）" : "Amount (CNY)",
+              labelText: isZh ? '提现金额（元）' : 'Amount (CNY)',
               border: const OutlineInputBorder(),
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(isZh ? "取消" : "Cancel")),
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(isZh ? "提交" : "Submit")),
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(isZh ? '取消' : 'Cancel')),
+            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(isZh ? '提交' : 'Submit')),
           ],
         ),
       );
@@ -184,7 +185,7 @@ class GatewayAccountPage extends HookConsumerWidget {
       final amountYuan = double.tryParse(amountController.text.trim());
       if (amountYuan == null || amountYuan <= 0) {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(isZh ? "请输入正确金额" : "Invalid amount")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(isZh ? '请输入正确金额' : 'Invalid amount')));
         return;
       }
 
@@ -193,7 +194,7 @@ class GatewayAccountPage extends HookConsumerWidget {
         if (!context.mounted) return;
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(isZh ? "已提交提现申请，请等待审核" : "Withdraw request submitted")));
+        ).showSnackBar(SnackBar(content: Text(isZh ? '提现申请已提交，请等待审核' : 'Withdraw request submitted')));
         await load();
       } on GatewayApiException catch (error) {
         if (!context.mounted) return;
@@ -201,14 +202,14 @@ class GatewayAccountPage extends HookConsumerWidget {
         final msg = error.message.toLowerCase();
         final shouldFallbackWeb =
             (manageUrl != null && manageUrl.isNotEmpty) &&
-            (msg.contains("暂不支持") ||
-                msg.contains("not support") ||
-                msg.contains("unsupported") ||
-                error.code == "UPSTREAM_ERROR");
+            (msg.contains('暂不支持') ||
+                msg.contains('not support') ||
+                msg.contains('unsupported') ||
+                error.code == 'UPSTREAM_ERROR');
         if (shouldFallbackWeb) {
           await context.push(
-            "/gateway-account/webview",
-            extra: <String, String>{"url": manageUrl, "title": isZh ? "返利与提现" : "Rebate & Withdraw"},
+            '/gateway-account/webview',
+            extra: <String, String>{'url': manageUrl, 'title': isZh ? '返利与提现' : 'Rebate & Withdraw'},
           );
           return;
         }
@@ -230,13 +231,23 @@ class GatewayAccountPage extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${g.accountEmail}: ${s.email}", style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${g.accountEmail}: ${s.email}',
+                          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Icon(Icons.verified_user, color: theme.colorScheme.primary),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                   Wrap(
                     spacing: 10,
                     runSpacing: 8,
                     children: [
-                      _KvChip(label: g.accountPlan, value: s.planName ?? "--"),
+                      _KvChip(label: g.accountPlan, value: s.planName ?? '--'),
                       _KvChip(label: g.accountExpire, value: _formatIsoTime(s.expiredAt)),
                       _KvChip(label: g.accountRemainingTraffic, value: _formatTraffic(s.trafficRemaining)),
                       _KvChip(label: g.accountUsedTraffic, value: _formatTraffic(s.trafficUsed)),
@@ -254,14 +265,14 @@ class GatewayAccountPage extends HookConsumerWidget {
                   const SizedBox(height: 6),
                   Text(
                     isZh
-                        ? "流量使用进度：${(usageRate * 100).toStringAsFixed(1)}%"
-                        : "Traffic usage: ${(usageRate * 100).toStringAsFixed(1)}%",
-                    style: Theme.of(context).textTheme.bodySmall,
+                        ? '流量使用进度：${(usageRate * 100).toStringAsFixed(1)}%'
+                        : 'Traffic usage: ${(usageRate * 100).toStringAsFixed(1)}%',
+                    style: theme.textTheme.bodySmall,
                   ),
                   const SizedBox(height: 10),
-                  Text("${g.accountSubVersion}: ${s.subscriptionVersion ?? "--"}"),
-                  Text("${g.accountLastSynced}: ${_formatIsoTime(s.lastSyncedAt)}"),
-                  Text("${g.accountNodeCount}: ${s.nodeCount?.toString() ?? "--"}"),
+                  Text('${g.accountSubVersion}: ${s.subscriptionVersion ?? '--'}'),
+                  Text('${g.accountLastSynced}: ${_formatIsoTime(s.lastSyncedAt)}'),
+                  Text('${g.accountNodeCount}: ${s.nodeCount?.toString() ?? '--'}'),
                 ],
               ),
             ),
@@ -274,16 +285,30 @@ class GatewayAccountPage extends HookConsumerWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  FilledButton(onPressed: syncNow, child: Text(g.syncSubscriptionNow)),
-                  OutlinedButton(onPressed: () => context.go("/gateway-plans"), child: Text(g.openPlansAndPurchase)),
-                  OutlinedButton(
-                    onPressed: () => context.push("/gateway-account/change-password"),
-                    child: Text(g.changePassword),
+                  FilledButton.icon(
+                    onPressed: syncNow,
+                    icon: const Icon(Icons.sync),
+                    label: Text(g.syncSubscriptionNow),
                   ),
-                  OutlinedButton(onPressed: openTicket, child: Text(g.ticket)),
-                  OutlinedButton(
-                    onPressed: () => context.push("/gateway-account/knowledge"),
-                    child: Text(g.openKnowledge),
+                  OutlinedButton.icon(
+                    onPressed: () => context.go('/gateway-plans'),
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                    label: Text(g.openPlansAndPurchase),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () => context.push('/gateway-account/change-password'),
+                    icon: const Icon(Icons.lock_reset),
+                    label: Text(g.changePassword),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: openTicket,
+                    icon: const Icon(Icons.support_agent),
+                    label: Text(g.ticket),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () => context.push('/gateway-account/knowledge'),
+                    icon: const Icon(Icons.menu_book_outlined),
+                    label: Text(g.openKnowledge),
                   ),
                 ],
               ),
@@ -296,20 +321,20 @@ class GatewayAccountPage extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(isZh ? "Telegram 绑定" : "Telegram Binding", style: Theme.of(context).textTheme.titleMedium),
+                  Text(isZh ? 'Telegram 绑定' : 'Telegram Binding', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 6),
                   Text(
                     tg?.linked == true || s.telegramBound
                         ? (isZh
-                              ? "已绑定：${tg?.telegramUsername ?? s.telegramUsername ?? tg?.telegramId ?? '--'}"
-                              : "Bound")
-                        : (tg?.tips ?? (isZh ? "未绑定，点击打开机器人后发送 /bind 订阅链接" : "Not linked yet")),
+                              ? '已绑定：${tg?.telegramUsername ?? s.telegramUsername ?? tg?.telegramId ?? '--'}'
+                              : 'Bound')
+                        : (tg?.tips ?? (isZh ? '未绑定，点击“打开机器人”后发送 /bind 订阅链接' : 'Not linked yet')),
                   ),
-                  if ((tg?.bindCommand ?? "").isNotEmpty) ...[
+                  if ((tg?.bindCommand ?? '').isNotEmpty) ...[
                     const SizedBox(height: 8),
                     SelectableText(
                       tg!.bindCommand!,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+                      style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ],
                   const SizedBox(height: 8),
@@ -317,8 +342,8 @@ class GatewayAccountPage extends HookConsumerWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      FilledButton(onPressed: openTelegramBot, child: Text(isZh ? "打开机器人" : "Open Bot")),
-                      if ((tg?.bindCommand ?? "").isNotEmpty)
+                      FilledButton(onPressed: openTelegramBot, child: Text(isZh ? '打开机器人' : 'Open Bot')),
+                      if ((tg?.bindCommand ?? '').isNotEmpty)
                         OutlinedButton(
                           onPressed: () async {
                             final command = tg?.bindCommand;
@@ -327,7 +352,7 @@ class GatewayAccountPage extends HookConsumerWidget {
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(g.copied)));
                           },
-                          child: Text(isZh ? "复制绑定命令" : "Copy bind command"),
+                          child: Text(isZh ? '复制绑定命令' : 'Copy bind command'),
                         ),
                     ],
                   ),
@@ -343,21 +368,21 @@ class GatewayAccountPage extends HookConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(g.inviteCenterTitle, style: Theme.of(context).textTheme.titleMedium),
+                    Text(g.inviteCenterTitle, style: theme.textTheme.titleMedium),
                     const SizedBox(height: 8),
-                    Text("${g.inviteCode}: ${invite.inviteCode ?? "--"}"),
-                    Text("${g.inviteLink}: ${invite.inviteUrl ?? "--"}"),
-                    const SizedBox(height: 6),
+                    Text('${g.inviteCode}: ${invite.inviteCode ?? '--'}'),
+                    Text('${g.inviteLink}: ${invite.inviteUrl ?? '--'}'),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: [
                         OutlinedButton(
-                          onPressed: () => context.push("/gateway-account/invite"),
-                          child: Text(isZh ? "查看返利详情" : "View details"),
+                          onPressed: () => context.push('/gateway-account/invite'),
+                          child: Text(isZh ? '查看返利详情' : 'View details'),
                         ),
-                        if ((invite.inviteCode ?? "").isEmpty)
-                          FilledButton(onPressed: ensureInviteCode, child: Text(isZh ? "生成邀请码" : "Generate invite")),
+                        if ((invite.inviteCode ?? '').isEmpty)
+                          FilledButton(onPressed: ensureInviteCode, child: Text(isZh ? '生成邀请码' : 'Generate invite')),
                       ],
                     ),
                   ],
@@ -382,21 +407,27 @@ class GatewayAccountPage extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(g.inviteCenterTitle, style: Theme.of(context).textTheme.titleMedium),
+                  Row(
+                    children: [
+                      const Icon(Icons.campaign_outlined),
+                      const SizedBox(width: 6),
+                      Text(g.inviteCenterTitle, style: theme.textTheme.titleMedium),
+                    ],
+                  ),
                   const SizedBox(height: 8),
                   if (invite == null) ...[
                     Text(g.inviteNotAvailable),
                     const SizedBox(height: 8),
                     OutlinedButton(
                       onPressed: ensureInviteCode,
-                      child: Text(isZh ? "尝试生成邀请码" : "Try generate invite code"),
+                      child: Text(isZh ? '尝试生成邀请码' : 'Try generate invite code'),
                     ),
                   ] else ...[
-                    Text("${g.inviteCode}: ${invite.inviteCode ?? "--"}"),
+                    Text('${g.inviteCode}: ${invite.inviteCode ?? '--'}'),
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Expanded(child: Text("${g.inviteLink}: ${invite.inviteUrl ?? "--"}")),
+                        Expanded(child: Text('${g.inviteLink}: ${invite.inviteUrl ?? '--'}')),
                         IconButton(
                           onPressed: () async {
                             final url = invite.inviteUrl;
@@ -409,27 +440,45 @@ class GatewayAccountPage extends HookConsumerWidget {
                         ),
                       ],
                     ),
-                    Text("${g.inviteRebateTotal}: ${_formatMoneyFromCent(invite.rebateTotal)}"),
-                    Text("${g.inviteRebatePending}: ${_formatMoneyFromCent(invite.rebatePending)}"),
-                    Text("${isZh ? "可提现佣金" : "Withdrawable rebate"}: ${_formatMoneyFromCent(invite.rebateAvailable)}"),
-                    Text("${isZh ? "已提现佣金" : "Withdrawn rebate"}: ${_formatMoneyFromCent(invite.rebateWithdrawn)}"),
-                    Text("${isZh ? "返利比例" : "Rebate rate"}: ${_formatPercent(invite.rebateRate)}"),
-                    if ((invite.rebateRuleText ?? "").isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Text("${isZh ? "返利规则：" : "Rules: "}${invite.rebateRuleText!}"),
+                    Text('${g.inviteRebateTotal}: ${_formatMoneyFromCent(invite.rebateTotal)}'),
+                    Text('${g.inviteRebatePending}: ${_formatMoneyFromCent(invite.rebatePending)}'),
+                    Text('${isZh ? '可提现佣金' : 'Withdrawable rebate'}: ${_formatMoneyFromCent(invite.rebateAvailable)}'),
+                    Text('${isZh ? '已提现佣金' : 'Withdrawn rebate'}: ${_formatMoneyFromCent(invite.rebateWithdrawn)}'),
+                    Text('${isZh ? '邀请码人数' : 'Invited users'}: ${invite.invitedCount}'),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
                       ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            isZh
+                                ? '返利规则：总佣金比例 ${_formatPercent(invite.commissionRate)}，三级分销比例 L1 ${_formatPercent(invite.commissionLevel1Rate)} / L2 ${_formatPercent(invite.commissionLevel2Rate)} / L3 ${_formatPercent(invite.commissionLevel3Rate)}'
+                                : 'Commission: ${_formatPercent(invite.commissionRate)}, L1 ${_formatPercent(invite.commissionLevel1Rate)} / L2 ${_formatPercent(invite.commissionLevel2Rate)} / L3 ${_formatPercent(invite.commissionLevel3Rate)}',
+                          ),
+                          if ((invite.rebateRuleText ?? '').isNotEmpty) ...[
+                            const SizedBox(height: 6),
+                            Text('${isZh ? '补充说明：' : 'Rules: '}${invite.rebateRuleText!}'),
+                          ],
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        FilledButton(onPressed: requestWithdraw, child: Text(isZh ? "申请提现" : "Withdraw")),
-                        if ((invite.inviteCode ?? "").isEmpty)
-                          OutlinedButton(onPressed: ensureInviteCode, child: Text(isZh ? "生成邀请码" : "Generate invite")),
+                        FilledButton(onPressed: requestWithdraw, child: Text(isZh ? '申请提现' : 'Withdraw')),
+                        if ((invite.inviteCode ?? '').isEmpty)
+                          OutlinedButton(onPressed: ensureInviteCode, child: Text(isZh ? '生成邀请码' : 'Generate invite')),
                         OutlinedButton(
-                          onPressed: () => context.push("/gateway-account/invite"),
-                          child: Text(isZh ? "返利详情" : "Details"),
+                          onPressed: () => context.push('/gateway-account/invite'),
+                          child: Text(isZh ? '返利详情' : 'Details'),
                         ),
                       ],
                     ),
@@ -445,10 +494,10 @@ class GatewayAccountPage extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(g.noticesTitle, style: Theme.of(context).textTheme.titleMedium),
+                  Text(g.noticesTitle, style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
                   if (notices.value.isEmpty)
-                    Text(isZh ? "暂无公告" : "No notices")
+                    Text(isZh ? '暂无公告' : 'No notices')
                   else
                     ...notices.value.map(
                       (item) => ListTile(
@@ -456,14 +505,14 @@ class GatewayAccountPage extends HookConsumerWidget {
                         contentPadding: EdgeInsets.zero,
                         title: Text(item.title),
                         subtitle: item.updatedAt == null ? null : Text(item.updatedAt!),
-                        onTap: () => context.push("/gateway-account/notices"),
+                        onTap: () => context.push('/gateway-account/notices'),
                       ),
                     ),
                   const SizedBox(height: 4),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
-                      onPressed: () => context.push("/gateway-account/notices"),
+                      onPressed: () => context.push('/gateway-account/notices'),
                       child: Text(g.openNotices),
                     ),
                   ),
@@ -478,10 +527,10 @@ class GatewayAccountPage extends HookConsumerWidget {
                 ListTile(
                   title: Text(g.openKnowledge),
                   subtitle: Text(
-                    isZh ? "安卓 / iOS / Windows / macOS / Linux" : "Android / iOS / Windows / macOS / Linux",
+                    isZh ? '安卓 / iPhone / Windows / macOS / Linux' : 'Android / iOS / Windows / macOS / Linux',
                   ),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push("/gateway-account/knowledge"),
+                  onTap: () => context.push('/gateway-account/knowledge'),
                 ),
                 ListTile(
                   title: Text(g.ticket),
@@ -503,15 +552,6 @@ class GatewayAccountPage extends HookConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: 10),
-          Card(
-            child: ListTile(
-              title: Text(isZh ? "活动与加盟" : "Activity & Partner"),
-              subtitle: Text(isZh ? "申请加盟、活动通知将持续在公告区更新" : "Partner and promotion updates in notices"),
-              trailing: const Icon(Icons.campaign_outlined),
-              onTap: () => context.push("/gateway-account/notices"),
-            ),
-          ),
         ],
       );
     }
@@ -525,18 +565,18 @@ class GatewayAccountPage extends HookConsumerWidget {
         children: [
           Text(g.notLoggedIn),
           const SizedBox(height: 12),
-          FilledButton(onPressed: () => context.push("/home/gateway-login"), child: Text(g.login)),
+          FilledButton(onPressed: () => context.push('/home/gateway-login'), child: Text(g.login)),
           const SizedBox(height: 8),
-          OutlinedButton(onPressed: () => context.push("/home/gateway-register"), child: Text(g.register)),
+          OutlinedButton(onPressed: () => context.push('/home/gateway-register'), child: Text(g.register)),
           const SizedBox(height: 8),
-          TextButton(onPressed: () => context.go("/gateway-plans"), child: Text(g.goPurchase)),
+          TextButton(onPressed: () => context.go('/gateway-plans'), child: Text(g.goPurchase)),
         ],
       );
     } else if (summary.value == null) {
       content = ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text("${g.viewAccountFailed}: ${errorText.value ?? g.unknownError}"),
+          Text('${g.viewAccountFailed}: ${errorText.value ?? g.unknownError}'),
           const SizedBox(height: 12),
           FilledButton(onPressed: load, child: Text(g.retry)),
         ],
@@ -549,8 +589,8 @@ class GatewayAccountPage extends HookConsumerWidget {
             const SizedBox(height: 8),
             TabBar(
               tabs: [
-                Tab(text: isZh ? "账户页" : "Account"),
-                Tab(text: isZh ? "服务页" : "Service"),
+                Tab(text: isZh ? '账户页' : 'Account'),
+                Tab(text: isZh ? '服务页' : 'Service'),
               ],
             ),
             Expanded(child: TabBarView(children: [accountTab(summary.value!), serviceTab()])),
@@ -598,7 +638,12 @@ class _KvChip extends StatelessWidget {
 class GatewayInvitePage extends HookConsumerWidget {
   const GatewayInvitePage({super.key});
 
-  String _formatMoneyFromCent(double value) => "CNY ${(value / 100).toStringAsFixed(2)}";
+  String _formatMoneyFromCent(double value) => 'CNY ${(value / 100).toStringAsFixed(2)}';
+
+  String _formatPercent(double rate) {
+    final normalized = rate <= 0 ? 0 : (rate <= 1 ? rate * 100 : rate);
+    return '${normalized.toStringAsFixed(2)}%';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -657,46 +702,48 @@ class GatewayInvitePage extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${g.inviteCode}: ${i.inviteCode ?? '--'}"),
+                  Text('${g.inviteCode}: ${i.inviteCode ?? '--'}'),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Expanded(child: Text("${g.inviteLink}: ${i.inviteUrl ?? '--'}")),
+                      Expanded(child: Text('${g.inviteLink}: ${i.inviteUrl ?? '--'}')),
                       IconButton(onPressed: () => copyText(i.inviteUrl), icon: const Icon(Icons.copy)),
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text("${g.inviteRebateTotal}: ${_formatMoneyFromCent(i.rebateTotal)}"),
-                  Text("${g.inviteRebatePending}: ${_formatMoneyFromCent(i.rebatePending)}"),
-                  Text("${isZh ? "可提现佣金" : "Withdrawable rebate"}: ${_formatMoneyFromCent(i.rebateAvailable)}"),
-                  Text("${isZh ? "已提现佣金" : "Withdrawn rebate"}: ${_formatMoneyFromCent(i.rebateWithdrawn)}"),
-                  Text("${g.inviteCount}: ${i.invitedCount}"),
+                  Text('${g.inviteRebateTotal}: ${_formatMoneyFromCent(i.rebateTotal)}'),
+                  Text('${g.inviteRebatePending}: ${_formatMoneyFromCent(i.rebatePending)}'),
+                  Text('${isZh ? '可提现佣金' : 'Withdrawable rebate'}: ${_formatMoneyFromCent(i.rebateAvailable)}'),
+                  Text('${isZh ? '已提现佣金' : 'Withdrawn rebate'}: ${_formatMoneyFromCent(i.rebateWithdrawn)}'),
+                  Text('${g.inviteCount}: ${i.invitedCount}'),
                   const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      if ((i.inviteCode ?? "").isEmpty)
-                        FilledButton(
-                          onPressed: () async {
-                            try {
-                              final generated = await ref
-                                  .read(slothGatewayPortalControllerProvider)
-                                  .generateInviteCode();
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(
-                                context,
-                              ).showSnackBar(SnackBar(content: Text(generated ? "邀请码已生成" : g.inviteNotAvailable)));
-                              await load();
-                            } on GatewayApiException catch (error) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
-                            }
-                          },
-                          child: Text(isZh ? "生成邀请码" : "Generate invite code"),
-                        ),
-                    ],
+                  Text(
+                    isZh
+                        ? '返利规则：总佣金比例 ${_formatPercent(i.commissionRate)}，三级分销比例 L1 ${_formatPercent(i.commissionLevel1Rate)} / L2 ${_formatPercent(i.commissionLevel2Rate)} / L3 ${_formatPercent(i.commissionLevel3Rate)}'
+                        : 'Commission: ${_formatPercent(i.commissionRate)}, L1 ${_formatPercent(i.commissionLevel1Rate)} / L2 ${_formatPercent(i.commissionLevel2Rate)} / L3 ${_formatPercent(i.commissionLevel3Rate)}',
                   ),
+                  const SizedBox(height: 8),
+                  if ((i.inviteCode ?? '').isEmpty)
+                    FilledButton(
+                      onPressed: () async {
+                        try {
+                          final generated = await ref.read(slothGatewayPortalControllerProvider).generateInviteCode();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                generated ? (isZh ? '邀请码已生成' : 'Invite code generated') : g.inviteNotAvailable,
+                              ),
+                            ),
+                          );
+                          await load();
+                        } on GatewayApiException catch (error) {
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+                        }
+                      },
+                      child: Text(isZh ? '生成邀请码' : 'Generate invite code'),
+                    ),
                 ],
               ),
             ),

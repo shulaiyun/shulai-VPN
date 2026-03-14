@@ -65,7 +65,7 @@ class GatewayNoticesPage extends HookConsumerWidget {
         actions: [IconButton(onPressed: load, icon: const Icon(Icons.refresh))],
       ),
       body: items.value.isEmpty
-          ? Center(child: Text(isZh ? "暂无公告" : "No notices"))
+          ? Center(child: Text(isZh ? '暂无公告' : 'No notices'))
           : ListView.builder(
               padding: const EdgeInsets.all(12),
               itemCount: items.value.length,
@@ -98,18 +98,18 @@ class GatewayKnowledgePage extends HookConsumerWidget {
 
   String _categoryLabel(String code, bool isZh) {
     switch (code) {
-      case "android":
-        return isZh ? "安卓" : "Android";
-      case "ios":
-        return "iPhone / iOS";
-      case "windows":
-        return "Windows";
-      case "macos":
-        return "macOS";
-      case "linux":
-        return "Linux";
+      case 'android':
+        return isZh ? '安卓' : 'Android';
+      case 'ios':
+        return 'iPhone / iOS';
+      case 'windows':
+        return 'Windows';
+      case 'macos':
+        return 'macOS';
+      case 'linux':
+        return 'Linux';
       default:
-        return isZh ? "通用" : "General";
+        return isZh ? '通用' : 'General';
     }
   }
 
@@ -120,13 +120,13 @@ class GatewayKnowledgePage extends HookConsumerWidget {
     final loading = useState(true);
     final items = useState<List<GatewayKnowledgeItem>>(<GatewayKnowledgeItem>[]);
     final error = useState<String?>(null);
-    final category = useState<String>("all");
+    final category = useState<String>('all');
 
     Future<void> load() async {
       loading.value = true;
       error.value = null;
       try {
-        items.value = await ref.read(slothGatewayPortalControllerProvider).fetchKnowledge(language: "zh-CN");
+        items.value = await ref.read(slothGatewayPortalControllerProvider).fetchKnowledge(language: 'zh-CN');
       } on GatewayApiException catch (e) {
         error.value = e.message;
       } catch (_) {
@@ -141,8 +141,8 @@ class GatewayKnowledgePage extends HookConsumerWidget {
       return null;
     }, const []);
 
-    final allCategories = <String>{"all", ...items.value.map((item) => item.category)};
-    final filtered = category.value == "all"
+    final allCategories = <String>{'all', ...items.value.map((item) => item.category)};
+    final filtered = category.value == 'all'
         ? items.value
         : items.value.where((item) => item.category == category.value).toList();
 
@@ -184,7 +184,7 @@ class GatewayKnowledgePage extends HookConsumerWidget {
                     (item) => Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
-                        label: Text(item == "all" ? (isZh ? "全部" : "All") : _categoryLabel(item, isZh)),
+                        label: Text(item == 'all' ? (isZh ? '全部' : 'All') : _categoryLabel(item, isZh)),
                         selected: category.value == item,
                         onSelected: (_) => category.value = item,
                       ),
@@ -208,7 +208,7 @@ class GatewayKnowledgePage extends HookConsumerWidget {
                           title: Text(item.title),
                           subtitle: Text(_categoryLabel(item.category, isZh)),
                           trailing: const Icon(Icons.chevron_right),
-                          onTap: () => context.push("/gateway-account/knowledge-detail", extra: item),
+                          onTap: () => context.push('/gateway-account/knowledge-detail', extra: item),
                         ),
                       );
                     },
@@ -256,24 +256,24 @@ class GatewayKnowledgeDetailPage extends HookConsumerWidget {
       body: loading.value
           ? const Center(child: CircularProgressIndicator())
           : error.value != null
-              ? ListView(
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    Text(error.value!),
-                    const SizedBox(height: 12),
-                    FilledButton(onPressed: load, child: Text(g.retry)),
-                  ],
-                )
-              : ListView(
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    Text(detail.value?.title ?? "-", style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 8),
-                    if (detail.value?.updatedAt != null) Text(detail.value!.updatedAt!),
-                    const SizedBox(height: 12),
-                    MarkdownBody(data: detail.value?.body ?? ""),
-                  ],
-                ),
+          ? ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Text(error.value!),
+                const SizedBox(height: 12),
+                FilledButton(onPressed: load, child: Text(g.retry)),
+              ],
+            )
+          : ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Text(detail.value?.title ?? '-', style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 8),
+                if (detail.value?.updatedAt != null) Text(detail.value!.updatedAt!),
+                const SizedBox(height: 12),
+                MarkdownBody(data: detail.value?.body ?? ''),
+              ],
+            ),
     );
   }
 }
