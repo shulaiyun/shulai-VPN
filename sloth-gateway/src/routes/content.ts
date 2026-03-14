@@ -3,6 +3,7 @@ import type { XboardAdapter } from "../adapter/xboard-adapter";
 import { requireSession } from "../plugins/auth";
 import type { SessionStore } from "../store/session-store";
 import { ok } from "../utils/response";
+import { toIsoTimeOrNull } from "../utils/time";
 
 type ContentDeps = {
   sessions: SessionStore;
@@ -15,23 +16,6 @@ type KnowledgeItem = {
   title: string;
   body: string;
   updated_at: string | null;
-};
-
-const parseIsoTime = (value: unknown): string | null => {
-  if (value == null) return null;
-  if (typeof value === "number") {
-    const ts = value > 9_999_999_999 ? value : value * 1000;
-    return new Date(ts).toISOString();
-  }
-  const text = String(value).trim();
-  if (!text) return null;
-  const numeric = Number(text);
-  if (Number.isFinite(numeric)) {
-    const ts = numeric > 9_999_999_999 ? numeric : numeric * 1000;
-    return new Date(ts).toISOString();
-  }
-  const parsed = new Date(text);
-  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 };
 
 const pickText = (source: Record<string, unknown>, keys: string[]): string => {
@@ -111,8 +95,8 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
       id: Number(item.id ?? 0),
       title: pickText(item, ["title", "subject", "name"]),
       content: pickText(item, ["content", "body", "message"]),
-      created_at: parseIsoTime(item.created_at),
-      updated_at: parseIsoTime(item.updated_at),
+      created_at: toIsoTimeOrNull(item.created_at),
+      updated_at: toIsoTimeOrNull(item.updated_at),
     }));
 
     return ok(reply, {
@@ -128,7 +112,7 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
     const items = notices.items.map((item) => ({
       id: Number(item.id ?? 0),
       title: pickText(item, ["title", "subject", "name"]),
-      updated_at: parseIsoTime(item.updated_at ?? item.created_at),
+      updated_at: toIsoTimeOrNull(item.updated_at ?? item.created_at),
     }));
     return ok(reply, {
       items,
@@ -156,7 +140,7 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
           category,
           title: pickText(item, ["title", "name"]),
           body: pickText(item, ["body", "content"]),
-          updated_at: parseIsoTime(item.updated_at),
+          updated_at: toIsoTimeOrNull(item.updated_at),
         });
       }
     }
@@ -189,7 +173,7 @@ export const registerContentRoutes = (app: FastifyInstance, deps: ContentDeps): 
       category,
       title: pickText(raw, ["title", "name"]),
       body: pickText(raw, ["body", "content"]),
-      updated_at: parseIsoTime(raw.updated_at),
+      updated_at: toIsoTimeOrNull(raw.updated_at),
     };
     return ok(reply, { item });
   });

@@ -13,6 +13,41 @@ type SubscriptionDeps = {
   xboard: XboardAdapter;
 };
 
+const readUpstreamStatus = (error: AppError): number => {
+  const details = (error.details ?? {}) as Record<string, unknown>;
+  const value = details.upstream_status;
+  if (typeof value === "number") return value;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const mapSubscriptionError = (error: unknown): never => {
+  if (!(error instanceof AppError)) throw error;
+  if (error.code !== ErrorCodes.UPSTREAM_ERROR) throw error;
+
+  const status = readUpstreamStatus(error);
+  const details = (error.details ?? {}) as Record<string, unknown>;
+  const merged = `${error.message} ${JSON.stringify(details)}`.toLowerCase();
+  if (
+    status === 401 ||
+    status === 403 ||
+    merged.includes("token is error") ||
+    merged.includes("forbidden") ||
+    merged.includes("denied") ||
+    merged.includes("invalid token") ||
+    merged.includes("subscribe_url") ||
+    merged.includes("subscription pull failed")
+  ) {
+    throw new AppError(
+      400,
+      ErrorCodes.SUBSCRIPTION_NOT_AVAILABLE,
+      "当前账号暂无可用订阅，请先购买套餐或等待开通后再同步",
+    );
+  }
+
+  throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "订阅服务暂时不可用，请稍后重试");
+};
+
 const getSessionByQueryToken = (token: string | undefined, sessions: SessionStore) => {
   if (!token) return undefined;
   const payload = verifyPullToken(token);
@@ -24,7 +59,7 @@ const getSessionByQueryToken = (token: string | undefined, sessions: SessionStor
 export const registerSubscriptionRoutes = (app: FastifyInstance, deps: SubscriptionDeps): void => {
   app.get("/api/app/v1/subscription", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
-    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData);
+    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData).catch((error): never => mapSubscriptionError(error));
     const pullToken = signPullToken(session.sid);
     const pullUrl = `${config.publicBaseUrl}/api/app/v1/subscription/pull?token=${encodeURIComponent(pullToken)}`;
 
@@ -45,8 +80,8 @@ export const registerSubscriptionRoutes = (app: FastifyInstance, deps: Subscript
     const force = body.force === true;
     request.log.info({ evt: "subscription_sync", sid: session.sid, force });
 
-    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData);
-    const pulled = await deps.xboard.fetchSubscriptionContent(subscribe.subscribe_url);
+    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData).catch((error): never => mapSubscriptionError(error));
+    const pulled = await deps.xboard.fetchSubscriptionContent(subscribe.subscribe_url).catch((error): never => mapSubscriptionError(error));
 
     const prevVersion = session.subscriptionVersion;
     const changed = prevVersion !== pulled.version;
@@ -74,8 +109,8 @@ export const registerSubscriptionRoutes = (app: FastifyInstance, deps: Subscript
     const queryToken = typeof query.token === "string" ? query.token : undefined;
     const session = getSessionByQueryToken(queryToken, deps.sessions) ?? requireSession(request, deps.sessions);
 
-    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData);
-    const pulled = await deps.xboard.fetchSubscriptionContent(subscribe.subscribe_url);
+    const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData).catch((error): never => mapSubscriptionError(error));
+    const pulled = await deps.xboard.fetchSubscriptionContent(subscribe.subscribe_url).catch((error): never => mapSubscriptionError(error));
 
     deps.sessions.update(session.sid, {
       subscriptionVersion: pulled.version,

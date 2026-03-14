@@ -6,27 +6,11 @@ import type { SessionStore } from "../store/session-store";
 import type { XboardAdapter } from "../adapter/xboard-adapter";
 import { signPullToken } from "../utils/jwt";
 import { ok } from "../utils/response";
+import { toIsoTimeOrNull } from "../utils/time";
 
 type BootstrapDeps = {
   sessions: SessionStore;
   xboard: XboardAdapter;
-};
-
-const toIsoTime = (value: unknown): string | null => {
-  if (value == null) return null;
-  if (typeof value === "number") {
-    const ts = value > 9_999_999_999 ? value : value * 1000;
-    return new Date(ts).toISOString();
-  }
-  const text = String(value).trim();
-  if (!text) return null;
-  const parsed = Number(text);
-  if (Number.isFinite(parsed)) {
-    const ts = parsed > 9_999_999_999 ? parsed : parsed * 1000;
-    return new Date(ts).toISOString();
-  }
-  const date = new Date(text);
-  return Number.isNaN(date.getTime()) ? text : date.toISOString();
 };
 
 const buildAccountSummary = async (
@@ -35,24 +19,43 @@ const buildAccountSummary = async (
   xboardAuthData: string,
   session: ReturnType<SessionStore["get"]>,
 ) => {
-  const [user, subscribe] = await Promise.all([
-    deps.xboard.getUserInfo(xboardAuthData),
-    deps.xboard.getSubscribe(xboardAuthData),
-  ]);
+  const user = await deps.xboard.getUserInfo(xboardAuthData);
+  let subscribe: Awaited<ReturnType<XboardAdapter["getSubscribe"]>> | null = null;
+  try {
+    subscribe = await deps.xboard.getSubscribe(xboardAuthData);
+  } catch {
+    subscribe = null;
+  }
+  const rawPlanName = String(subscribe?.plan?.name ?? "").trim();
+  const userPlanId = Number(user.plan_id ?? subscribe?.plan?.id ?? 0);
+  const looksLikeOnlyId = rawPlanName.length > 0 && /^[0-9]+$/.test(rawPlanName);
+  let resolvedPlanName: string | null = rawPlanName.length > 0 && !looksLikeOnlyId ? rawPlanName : null;
+  if (!resolvedPlanName && Number.isFinite(userPlanId) && userPlanId > 0) {
+    try {
+      const plans = await deps.xboard.getPlans(xboardAuthData);
+      const matched = plans.find((item) => Number(item.id ?? 0) === userPlanId);
+      const mapped = String(matched?.name ?? "").trim();
+      if (mapped.length > 0) {
+        resolvedPlanName = mapped;
+      }
+    } catch {
+      // ignore mapping error and keep null plan name
+    }
+  }
 
   const pullToken = signPullToken(sid);
   const pullUrl = `${config.publicBaseUrl}/api/app/v1/subscription/pull?token=${encodeURIComponent(pullToken)}`;
-  const ticketUrl = config.defaultTicketUrl || `${config.xboardWebBaseUrl}/#/ticket`;
-  const noticeUrl = config.defaultNoticeUrl || `${config.xboardWebBaseUrl}/#/notice`;
+  const ticketUrl = config.defaultTicketUrl || `${config.xboardBaseUrl}/#/ticket`;
+  const noticeUrl = config.defaultNoticeUrl || `${config.xboardBaseUrl}/#/notice`;
 
   return {
     user: {
-      id: subscribe.uuid,
+      id: subscribe?.uuid ?? String(user.uuid ?? ""),
       email: user.email,
-      plan_name: subscribe.plan?.name ?? null,
-      expired_at: toIsoTime(subscribe.expired_at),
-      traffic_used: (subscribe.u ?? 0) + (subscribe.d ?? 0),
-      traffic_total: subscribe.transfer_enable ?? user.transfer_enable ?? 0,
+      plan_name: resolvedPlanName,
+      expired_at: toIsoTimeOrNull(subscribe?.expired_at ?? user.expired_at ?? null),
+      traffic_used: subscribe ? (subscribe.u ?? 0) + (subscribe.d ?? 0) : 0,
+      traffic_total: subscribe?.transfer_enable ?? user.transfer_enable ?? 0,
       balance: user.balance ?? 0,
       telegram_bound: user.telegram_id != null || String(user.telegram_username ?? "").trim().length > 0,
       telegram_username: String(user.telegram_username ?? "").trim() || null,
@@ -62,7 +65,7 @@ const buildAccountSummary = async (
       last_synced_at: session?.lastSyncedAt ?? null,
       version: session?.subscriptionVersion ?? null,
       node_count: session?.nodeCount ?? null,
-      reset_day: subscribe.reset_day ?? null,
+      reset_day: subscribe?.reset_day ?? null,
     },
     links: {
       telegram: config.defaultTelegramUrl,
@@ -78,6 +81,21 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string) => {
   const inviteManageUrl = `${config.xboardWebBaseUrl}/#/invite`;
   const registerWithCodeUrl = (code: string) =>
     `${config.xboardWebBaseUrl}/#/register?code=${encodeURIComponent(code)}`;
+  const normalizeQuickUrl = (candidate: string, fallback: string): string => {
+    const raw = String(candidate ?? "").trim();
+    if (!raw) return fallback;
+    try {
+      const fallbackUrl = new URL(fallback);
+      const targetUrl = new URL(raw);
+      if (targetUrl.host !== fallbackUrl.host) {
+        targetUrl.protocol = fallbackUrl.protocol;
+        targetUrl.host = fallbackUrl.host;
+      }
+      return targetUrl.toString();
+    } catch {
+      return fallback;
+    }
+  };
   const normalizeInviteUrl = (raw: string | null, code: string | null): string | null => {
     const trimmed = String(raw ?? "").trim();
     if (trimmed.length > 0) {
@@ -94,6 +112,11 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string) => {
   };
   try {
     const summary = await deps.xboard.getInviteSummary(authData);
+    const quickInviteUrl = await deps.xboard.getQuickLoginUrl(authData, "invite").catch(() => "");
+    const manageUrl =
+      quickInviteUrl.trim().length > 0
+        ? normalizeQuickUrl(quickInviteUrl, inviteManageUrl)
+        : inviteManageUrl;
     const normalizedInviteUrl = normalizeInviteUrl(summary.inviteUrl, summary.inviteCode);
     return {
       invite_code: summary.inviteCode,
@@ -106,7 +129,7 @@ const readInviteSummarySafe = async (deps: BootstrapDeps, authData: string) => {
       rebate_rule_text: summary.rebateRuleText,
       can_withdraw: summary.canWithdraw,
       invited_count: summary.invitedCount,
-      invite_manage_url: inviteManageUrl,
+      invite_manage_url: manageUrl,
       supported: true,
     };
   } catch {
@@ -146,6 +169,19 @@ export const registerBootstrapRoutes = (app: FastifyInstance, deps: BootstrapDep
     const session = requireSession(request, deps.sessions);
     const data = await readInviteSummarySafe(deps, session.xboardAuthData);
     return ok(reply, data);
+  });
+
+  app.post("/api/app/v1/invite/generate", async (request, reply) => {
+    const session = requireSession(request, deps.sessions);
+    const generated = await deps.xboard.generateInviteCode(session.xboardAuthData);
+    const summary = await readInviteSummarySafe(deps, session.xboardAuthData);
+    return ok(reply, {
+      generated,
+      invite_code: summary.invite_code,
+      invite_url: summary.invite_url,
+      invite_manage_url: summary.invite_manage_url,
+      fetched_at: new Date().toISOString(),
+    });
   });
 
   app.post("/api/app/v1/invite/withdraw", async (request, reply) => {

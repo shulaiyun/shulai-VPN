@@ -47,7 +47,9 @@ type XboardRegisterOptions = {
   inviteCode?: string;
   captchaData?: string;
   recaptchaData?: string;
+  recaptchaV3Token?: string;
   turnstileData?: string;
+  turnstileToken?: string;
   hcaptchaData?: string;
 };
 
@@ -128,7 +130,11 @@ export class XboardAdapter {
     if (options?.inviteCode) body.invite_code = options.inviteCode;
     if (options?.captchaData) body.captcha_data = options.captchaData;
     if (options?.recaptchaData) body.recaptcha_data = options.recaptchaData;
+    if (options?.recaptchaData) body.recaptcha_token = options.recaptchaData;
+    if (options?.recaptchaV3Token) body.recaptcha_v3_token = options.recaptchaV3Token;
     if (options?.turnstileData) body.turnstile_data = options.turnstileData;
+    if (options?.turnstileData) body.turnstile_token = options.turnstileData;
+    if (options?.turnstileToken) body.turnstile_token = options.turnstileToken;
     if (options?.hcaptchaData) body.hcaptcha_data = options.hcaptchaData;
 
     const data = await this.request<XboardAuthResult>("POST", "/api/v1/passport/auth/register", body);
@@ -143,13 +149,19 @@ export class XboardAdapter {
     email: string;
     captchaData?: string;
     recaptchaData?: string;
+    recaptchaV3Token?: string;
     turnstileData?: string;
+    turnstileToken?: string;
     hcaptchaData?: string;
   }): Promise<boolean> {
     const body: Record<string, unknown> = { email: input.email };
     if (input.captchaData) body.captcha_data = input.captchaData;
     if (input.recaptchaData) body.recaptcha_data = input.recaptchaData;
+    if (input.recaptchaData) body.recaptcha_token = input.recaptchaData;
+    if (input.recaptchaV3Token) body.recaptcha_v3_token = input.recaptchaV3Token;
     if (input.turnstileData) body.turnstile_data = input.turnstileData;
+    if (input.turnstileData) body.turnstile_token = input.turnstileData;
+    if (input.turnstileToken) body.turnstile_token = input.turnstileToken;
     if (input.hcaptchaData) body.hcaptcha_data = input.hcaptchaData;
     await this.request<boolean>("POST", "/api/v1/passport/comm/sendEmailVerify", body);
     return true;
@@ -299,6 +311,85 @@ export class XboardAdapter {
       }
       throw error;
     }
+  }
+
+  async generateInviteCode(authData: string): Promise<boolean> {
+    const attempts: Array<{ method: "GET" | "POST"; path: string; body?: Record<string, unknown> }> = [
+      { method: "POST", path: "/api/v1/user/invite/save", body: {} },
+      { method: "GET", path: "/api/v1/user/invite/save" },
+      { method: "POST", path: "/api/v2/user/invite/save", body: {} },
+      { method: "GET", path: "/api/v2/user/invite/save" },
+    ];
+    let lastError: unknown;
+    for (const attempt of attempts) {
+      try {
+        await this.request<unknown>(attempt.method, attempt.path, attempt.body, authData);
+        return true;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    if (lastError) throw lastError;
+    return false;
+  }
+
+  async getTickets(authData: string): Promise<Array<Record<string, unknown>>> {
+    const raw = await this.request<unknown>("GET", "/api/v1/user/ticket/fetch", undefined, authData);
+    if (Array.isArray(raw)) {
+      return raw.filter((item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item));
+    }
+    const mapped = this.toRecord(raw);
+    if ("id" in mapped) return [mapped];
+    const list = mapped.data;
+    if (Array.isArray(list)) {
+      return list.filter((item): item is Record<string, unknown> => item && typeof item === "object" && !Array.isArray(item));
+    }
+    return [];
+  }
+
+  async getTicketDetail(authData: string, id: number): Promise<Record<string, unknown> | null> {
+    const raw = await this.request<unknown>(
+      "GET",
+      `/api/v1/user/ticket/fetch?id=${encodeURIComponent(String(id))}`,
+      undefined,
+      authData,
+    );
+    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+      return raw as Record<string, unknown>;
+    }
+    if (Array.isArray(raw)) {
+      const first = raw.find((item) => item && typeof item === "object" && !Array.isArray(item));
+      return first ? (first as Record<string, unknown>) : null;
+    }
+    return null;
+  }
+
+  async createTicket(input: { authData: string; subject: string; message: string; level?: number }): Promise<boolean> {
+    const level = Number.isFinite(input.level) ? Number(input.level) : 1;
+    return this.request<boolean>(
+      "POST",
+      "/api/v1/user/ticket/save",
+      { subject: input.subject, message: input.message, level },
+      input.authData,
+    );
+  }
+
+  async replyTicket(input: { authData: string; id: number; message: string }): Promise<boolean> {
+    return this.request<boolean>(
+      "POST",
+      "/api/v1/user/ticket/reply",
+      { id: input.id, message: input.message },
+      input.authData,
+    );
+  }
+
+  async closeTicket(input: { authData: string; id: number }): Promise<boolean> {
+    return this.request<boolean>(
+      "POST",
+      "/api/v1/user/ticket/close",
+      { id: input.id },
+      input.authData,
+    );
   }
 
   async getNotices(authData: string, current = 1, pageSize = 10): Promise<{

@@ -132,7 +132,7 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
     const session = requireSession(request, deps.sessions);
     const tickets = await deps.xboard
       .getTickets(session.xboardAuthData)
-      .catch((error): never => mapTicketError(error));
+      .catch((error: unknown): never => mapTicketError(error));
     return ok(reply, {
       tickets: tickets.map(normalizeTicket),
       total: tickets.length,
@@ -149,7 +149,7 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
     }
     const detail = await deps.xboard
       .getTicketDetail(session.xboardAuthData, id)
-      .catch((error): never => mapTicketError(error));
+      .catch((error: unknown): never => mapTicketError(error));
     if (!detail) {
       throw new AppError(404, ErrorCodes.NOT_FOUND, "工单不存在");
     }
@@ -170,10 +170,10 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
     }
     await deps.xboard
       .createTicket({ authData: session.xboardAuthData, subject, message, level })
-      .catch((error): never => mapTicketError(error));
+      .catch((error: unknown): never => mapTicketError(error));
     const tickets = await deps.xboard
       .getTickets(session.xboardAuthData)
-      .catch((error): never => mapTicketError(error));
+      .catch((error: unknown): never => mapTicketError(error));
     return ok(reply, {
       created: true,
       latest_ticket_id: tickets.length > 0 ? toNumber(tickets[0].id) : null,
@@ -192,10 +192,10 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
     }
     await deps.xboard
       .replyTicket({ authData: session.xboardAuthData, id, message })
-      .catch((error): never => mapTicketError(error));
+      .catch((error: unknown): never => mapTicketError(error));
     const detail = await deps.xboard
       .getTicketDetail(session.xboardAuthData, id)
-      .catch((error): never => mapTicketError(error));
+      .catch((error: unknown): never => mapTicketError(error));
     return ok(reply, {
       replied: true,
       ticket: detail ? normalizeTicket(detail) : null,
@@ -212,7 +212,7 @@ export const registerSupportRoutes = (app: FastifyInstance, deps: SupportDeps): 
     }
     await deps.xboard
       .closeTicket({ authData: session.xboardAuthData, id })
-      .catch((error): never => mapTicketError(error));
+      .catch((error: unknown): never => mapTicketError(error));
     return ok(reply, {
       closed: true,
       closed_at: new Date().toISOString(),

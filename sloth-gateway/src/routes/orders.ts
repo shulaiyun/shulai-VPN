@@ -4,6 +4,7 @@ import { AppError, ErrorCodes } from "../errors";
 import { requireSession } from "../plugins/auth";
 import type { SessionStore } from "../store/session-store";
 import { ok } from "../utils/response";
+import { toIsoTimeOrNull } from "../utils/time";
 
 type OrderDeps = {
   sessions: SessionStore;
@@ -17,23 +18,6 @@ const parseNumber = (value: unknown): number => {
     if (Number.isFinite(parsed)) return parsed;
   }
   return 0;
-};
-
-const parseIsoTime = (value: unknown): string | null => {
-  if (value == null) return null;
-  if (typeof value === "number") {
-    const ts = value > 9_999_999_999 ? value : value * 1000;
-    return new Date(ts).toISOString();
-  }
-  const text = String(value).trim();
-  if (!text) return null;
-  const numeric = Number(text);
-  if (Number.isFinite(numeric)) {
-    const ts = numeric > 9_999_999_999 ? numeric : numeric * 1000;
-    return new Date(ts).toISOString();
-  }
-  const parsed = new Date(text);
-  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 };
 
 const mapOrderStatus = (code: number): { status: string; isFinal: boolean } => {
@@ -96,9 +80,9 @@ const normalizeOrder = (raw: Record<string, unknown>) => {
     type_code: typeCode,
     type: mappedType.key,
     type_label: mappedType.label,
-    created_at: parseIsoTime(raw.created_at),
-    updated_at: parseIsoTime(raw.updated_at),
-    paid_at: parseIsoTime(raw.paid_at),
+    created_at: toIsoTimeOrNull(raw.created_at),
+    updated_at: toIsoTimeOrNull(raw.updated_at),
+    paid_at: toIsoTimeOrNull(raw.paid_at),
     surplus_order_ids: Array.isArray(raw.surplus_order_ids) ? raw.surplus_order_ids : [],
   };
 };
