@@ -21,6 +21,20 @@ const buildSessionPullUrl = (pullToken: string, flag = "hiddify"): string => {
   return url.toString();
 };
 
+const buildCompatSubscriptionUrl = (subscriptionToken: string | undefined, flag: string): string | null => {
+  if (!subscriptionToken) return null;
+  try {
+    const url = new URL(
+      `/api/app/v1/subscription/export/${encodeURIComponent(subscriptionToken)}`,
+      config.subscriptionCompatBaseUrl,
+    );
+    url.searchParams.set("flag", flag);
+    return url.toString();
+  } catch {
+    return null;
+  }
+};
+
 const buildNativeSubscriptionUrl = (subscribeUrl: string | undefined, flag: string): string | null => {
   if (!subscribeUrl) return null;
   try {
@@ -80,6 +94,11 @@ const buildAccountSummary = async (
   const pullToken = signPullToken(sid);
   const gatewayPullUrl = buildSessionPullUrl(pullToken, "hiddify");
   const pullUrl = buildNativeSubscriptionUrl(subscribe?.subscribe_url, "hiddify") ?? gatewayPullUrl;
+  const clashMetaPullUrl =
+    buildCompatSubscriptionUrl(subscribe?.token, "meta") ?? buildNativeSubscriptionUrl(subscribe?.subscribe_url, "meta");
+  const generalPullUrl =
+    buildCompatSubscriptionUrl(subscribe?.token, "general") ??
+    buildNativeSubscriptionUrl(subscribe?.subscribe_url, "general");
   const ticketUrl = config.defaultTicketUrl || `${config.xboardBaseUrl}/#/ticket`;
   const noticeUrl = config.defaultNoticeUrl || `${config.xboardBaseUrl}/#/notice`;
 
@@ -103,8 +122,8 @@ const buildAccountSummary = async (
       pull_url: pullUrl,
       pull_url_hiddify: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "hiddify") ?? pullUrl,
       pull_url_sing_box: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "sing-box"),
-      pull_url_clash_meta: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "meta"),
-      pull_url_general: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "general"),
+      pull_url_clash_meta: clashMetaPullUrl,
+      pull_url_general: generalPullUrl,
       gateway_pull_url: gatewayPullUrl,
       last_synced_at: session?.lastSyncedAt ?? null,
       version: session?.subscriptionVersion ?? null,

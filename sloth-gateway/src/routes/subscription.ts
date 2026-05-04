@@ -96,27 +96,49 @@ const buildSessionPullUrl = (pullToken: string, flag = "hiddify"): string => {
   return url.toString();
 };
 
+const buildUpstreamSubscriptionUrl = (subscriptionToken: string): string => {
+  const normalizedPath = config.xboardSubscribePath.startsWith("/")
+    ? config.xboardSubscribePath
+    : `/${config.xboardSubscribePath}`;
+  const path = `${normalizedPath.replace(/\/$/, "")}/${encodeURIComponent(subscriptionToken)}`;
+  return new URL(path, config.xboardBaseUrl).toString();
+};
+
+const buildCompatSubscriptionUrl = (subscriptionToken: string | undefined, flag = "hiddify"): string | null => {
+  if (!subscriptionToken) return null;
+  const url = new URL(
+    `/api/app/v1/subscription/export/${encodeURIComponent(subscriptionToken)}`,
+    config.subscriptionCompatBaseUrl,
+  );
+  url.searchParams.set("flag", flag);
+  return url.toString();
+};
+
 const buildNativeSubscriptionUrl = (subscribeUrl: string, flag = "hiddify"): string => {
   const url = new URL(subscribeUrl);
   url.searchParams.set("flag", flag);
   return url.toString();
 };
 
-const buildPullUrlPayload = (subscribeUrl: string, pullToken: string) => ({
-  pull_url: buildNativeSubscriptionUrl(subscribeUrl, "hiddify"),
-  pull_url_hiddify: buildNativeSubscriptionUrl(subscribeUrl, "hiddify"),
-  pull_url_sing_box: buildNativeSubscriptionUrl(subscribeUrl, "sing-box"),
-  pull_url_clash_meta: buildNativeSubscriptionUrl(subscribeUrl, "meta"),
-  pull_url_general: buildNativeSubscriptionUrl(subscribeUrl, "general"),
-  gateway_pull_url: buildSessionPullUrl(pullToken, "hiddify"),
-});
+const buildPullUrlPayload = (subscribeUrl: string, subscriptionToken: string | undefined, pullToken: string) => {
+  const hiddifyUrl = buildNativeSubscriptionUrl(subscribeUrl, "hiddify");
+  const gatewayPullUrl = buildSessionPullUrl(pullToken, "hiddify");
+  return {
+    pull_url: hiddifyUrl,
+    pull_url_hiddify: hiddifyUrl,
+    pull_url_sing_box: buildNativeSubscriptionUrl(subscribeUrl, "sing-box"),
+    pull_url_clash_meta: buildCompatSubscriptionUrl(subscriptionToken, "meta") ?? buildNativeSubscriptionUrl(subscribeUrl, "meta"),
+    pull_url_general: buildCompatSubscriptionUrl(subscriptionToken, "general") ?? buildNativeSubscriptionUrl(subscribeUrl, "general"),
+    gateway_pull_url: gatewayPullUrl,
+  };
+};
 
 export const registerSubscriptionRoutes = (app: FastifyInstance, deps: SubscriptionDeps): void => {
   app.get("/api/app/v1/subscription", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
     const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData).catch((error): never => mapSubscriptionError(error));
     const pullToken = signPullToken(session.sid);
-    const pullUrls = buildPullUrlPayload(subscribe.subscribe_url, pullToken);
+    const pullUrls = buildPullUrlPayload(subscribe.subscribe_url, subscribe.token, pullToken);
 
     return ok(reply, {
       ...pullUrls,
@@ -127,6 +149,27 @@ export const registerSubscriptionRoutes = (app: FastifyInstance, deps: Subscript
       reset_day: subscribe.reset_day ?? null,
       plan_name: subscribe.plan?.name ?? null,
     });
+  });
+
+  app.get("/api/app/v1/subscription/export/:token", async (request, reply) => {
+    const params = request.params as Record<string, unknown>;
+    const subscriptionToken = typeof params.token === "string" ? params.token.trim() : "";
+    if (!subscriptionToken) {
+      throw new AppError(400, ErrorCodes.INVALID_ARGUMENT, "subscription token is required");
+    }
+
+    const query = request.query as Record<string, unknown>;
+    const formatFlag = normalizeSubscriptionFlag(query.flag) ?? "hiddify";
+    const subscribeUrl = buildUpstreamSubscriptionUrl(subscriptionToken);
+    const pulled = await deps.xboard
+      .fetchSubscriptionContent(subscribeUrl, formatFlag)
+      .catch((error): never => mapSubscriptionError(error));
+
+    reply.header("content-type", contentTypeForSubscriptionFlag(formatFlag));
+    reply.header("x-sloth-sub-version", pulled.version);
+    reply.header("x-sloth-sub-format", formatFlag);
+    reply.header("cache-control", "no-store, no-cache, must-revalidate");
+    return reply.send(pulled.raw);
   });
 
   app.post("/api/app/v1/subscription/sync", async (request, reply) => {
@@ -150,7 +193,7 @@ export const registerSubscriptionRoutes = (app: FastifyInstance, deps: Subscript
     });
 
     const pullToken = signPullToken(session.sid);
-    const pullUrls = buildPullUrlPayload(subscribe.subscribe_url, pullToken);
+    const pullUrls = buildPullUrlPayload(subscribe.subscribe_url, subscribe.token, pullToken);
 
     return ok(reply, {
       changed,

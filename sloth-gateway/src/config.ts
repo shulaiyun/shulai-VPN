@@ -33,6 +33,11 @@ export const config = {
   port: num(process.env.PORT, 8787),
   host: process.env.HOST ?? "0.0.0.0",
   publicBaseUrl: (process.env.PUBLIC_BASE_URL ?? "http://127.0.0.1:8787").replace(/\/$/, ""),
+  subscriptionCompatBaseUrl: (
+    process.env.SUBSCRIPTION_COMPAT_BASE_URL ??
+    process.env.PUBLIC_BASE_URL ??
+    "http://127.0.0.1:8787"
+  ).replace(/\/$/, ""),
   jwtSecret: process.env.JWT_SECRET ?? "replace-with-a-strong-secret",
   accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES ?? "30d",
   refreshTokenExpires: process.env.REFRESH_TOKEN_EXPIRES ?? "90d",
@@ -41,6 +46,7 @@ export const config = {
   bindTtlSeconds: num(process.env.BIND_TTL_SECONDS, 600),
   xboardBaseUrl: normalizeBaseUrl(process.env.XBOARD_BASE_URL, "http://127.0.0.1"),
   xboardWebBaseUrl: normalizeBaseUrl(process.env.XBOARD_WEB_BASE_URL ?? process.env.XBOARD_BASE_URL, "http://127.0.0.1"),
+  xboardSubscribePath: (process.env.XBOARD_SUBSCRIBE_PATH ?? "/api/subscribe/custom").trim(),
   xboardTimeoutMs: num(process.env.XBOARD_TIMEOUT_MS, 15000),
   xboardTrafficUnit: (process.env.XBOARD_TRAFFIC_UNIT ?? "auto").trim().toLowerCase(),
   defaultTelegramUrl: process.env.DEFAULT_TELEGRAM_URL ?? "https://t.me/shulai2026",
@@ -78,4 +84,3 @@ export const config = {
   allowedEmailSuffixes: csv(process.env.AUTH_ALLOWED_EMAIL_SUFFIXES),
   debugBindCode: (process.env.DEBUG_BIND_CODE ?? "false").toLowerCase() === "true",
 };
-
