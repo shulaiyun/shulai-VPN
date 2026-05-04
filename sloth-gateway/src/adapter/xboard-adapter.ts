@@ -82,11 +82,21 @@ export class XboardAdapter {
 
   private static readonly subscriptionClientCandidates: Array<{ ua: string; flag?: string }> = [
     { ua: "sing-box 1.10.0", flag: "sing-box" },
-    { ua: "Hiddify/2.0", flag: "hiddify" },
+    { ua: "Hiddify/4.0.4", flag: "hiddify" },
     { ua: "v2rayNG/1.10.0", flag: "v2rayng" },
-    { ua: "Clash.Meta/1.18.0", flag: "clash-meta" },
+    { ua: "Clash.Meta/1.18.0", flag: "meta" },
     { ua: "SlothVPN-Gateway/0.1.0" },
   ];
+
+  private static readonly subscriptionFormatClients: Record<string, { ua: string; flag: string }> = {
+    hiddify: { ua: "Hiddify/4.0.4", flag: "hiddify" },
+    "sing-box": { ua: "sing-box 1.10.0", flag: "sing-box" },
+    sfm: { ua: "SFM/1.0", flag: "sfm" },
+    meta: { ua: "Clash.Meta/1.18.0", flag: "meta" },
+    v2rayn: { ua: "v2rayN/6.0", flag: "v2rayn" },
+    v2rayng: { ua: "v2rayNG/1.10.0", flag: "v2rayng" },
+    general: { ua: "SlothVPN-Gateway/0.1.0", flag: "general" },
+  };
 
   private async fetchJson(
     method: "GET" | "POST",
@@ -696,8 +706,14 @@ export class XboardAdapter {
     return { type, data: payload.data };
   }
 
-  async fetchSubscriptionContent(subscribeUrl: string): Promise<{ raw: string; version: string; nodeCount: number }> {
-    const text = await this.fetchBestSubscriptionText(subscribeUrl);
+  async fetchSubscriptionContent(
+    subscribeUrl: string,
+    preferredFlag?: string,
+  ): Promise<{ raw: string; version: string; nodeCount: number }> {
+    const client = preferredFlag ? XboardAdapter.subscriptionFormatClients[preferredFlag] : undefined;
+    const text = client
+      ? await this.fetchTextWithUa(subscribeUrl, client.ua, client.flag)
+      : await this.fetchBestSubscriptionText(subscribeUrl);
     const normalized = text.replace(/^\uFEFF/, "").trim();
     if (!normalized) {
       throw new AppError(502, ErrorCodes.UPSTREAM_ERROR, "Subscription content is empty");

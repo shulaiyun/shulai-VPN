@@ -56,15 +56,70 @@ const getSessionByQueryToken = (token: string | undefined, sessions: SessionStor
   return session;
 };
 
+const normalizeSubscriptionFlag = (value: unknown): string | undefined => {
+  if (typeof value !== "string") return undefined;
+  const normalized = value.trim().toLowerCase().replace(/_/g, "-");
+  if (!normalized) return undefined;
+  const aliases: Record<string, string> = {
+    hiddify: "hiddify",
+    "hiddify-next": "hiddify",
+    "sing-box": "sing-box",
+    singbox: "sing-box",
+    sfm: "sfm",
+    meta: "meta",
+    "clash-meta": "meta",
+    clashmeta: "meta",
+    mihomo: "meta",
+    clash: "meta",
+    verge: "meta",
+    flclash: "meta",
+    nekobox: "meta",
+    clashmetaforandroid: "meta",
+    v2rayn: "v2rayn",
+    v2rayng: "v2rayng",
+    general: "general",
+    plain: "general",
+  };
+  return aliases[normalized];
+};
+
+const contentTypeForSubscriptionFlag = (flag: string): string => {
+  if (["hiddify", "sing-box", "sfm"].includes(flag)) return "application/json; charset=utf-8";
+  if (flag === "meta") return "text/yaml; charset=utf-8";
+  return "text/plain; charset=utf-8";
+};
+
+const buildSessionPullUrl = (pullToken: string, flag = "hiddify"): string => {
+  const url = new URL("/api/app/v1/subscription/pull", config.publicBaseUrl);
+  url.searchParams.set("token", pullToken);
+  url.searchParams.set("flag", flag);
+  return url.toString();
+};
+
+const buildNativeSubscriptionUrl = (subscribeUrl: string, flag = "hiddify"): string => {
+  const url = new URL(subscribeUrl);
+  url.searchParams.set("flag", flag);
+  return url.toString();
+};
+
+const buildPullUrlPayload = (subscribeUrl: string, pullToken: string) => ({
+  pull_url: buildNativeSubscriptionUrl(subscribeUrl, "hiddify"),
+  pull_url_hiddify: buildNativeSubscriptionUrl(subscribeUrl, "hiddify"),
+  pull_url_sing_box: buildNativeSubscriptionUrl(subscribeUrl, "sing-box"),
+  pull_url_clash_meta: buildNativeSubscriptionUrl(subscribeUrl, "meta"),
+  pull_url_general: buildNativeSubscriptionUrl(subscribeUrl, "general"),
+  gateway_pull_url: buildSessionPullUrl(pullToken, "hiddify"),
+});
+
 export const registerSubscriptionRoutes = (app: FastifyInstance, deps: SubscriptionDeps): void => {
   app.get("/api/app/v1/subscription", async (request, reply) => {
     const session = requireSession(request, deps.sessions);
     const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData).catch((error): never => mapSubscriptionError(error));
     const pullToken = signPullToken(session.sid);
-    const pullUrl = `${config.publicBaseUrl}/api/app/v1/subscription/pull?token=${encodeURIComponent(pullToken)}`;
+    const pullUrls = buildPullUrlPayload(subscribe.subscribe_url, pullToken);
 
     return ok(reply, {
-      pull_url: pullUrl,
+      ...pullUrls,
       version: session.subscriptionVersion ?? null,
       last_synced_at: session.lastSyncedAt ?? null,
       node_count: session.nodeCount ?? null,
@@ -81,7 +136,9 @@ export const registerSubscriptionRoutes = (app: FastifyInstance, deps: Subscript
     request.log.info({ evt: "subscription_sync", sid: session.sid, force });
 
     const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData).catch((error): never => mapSubscriptionError(error));
-    const pulled = await deps.xboard.fetchSubscriptionContent(subscribe.subscribe_url).catch((error): never => mapSubscriptionError(error));
+    const pulled = await deps.xboard
+      .fetchSubscriptionContent(subscribe.subscribe_url, "hiddify")
+      .catch((error): never => mapSubscriptionError(error));
 
     const prevVersion = session.subscriptionVersion;
     const changed = prevVersion !== pulled.version;
@@ -93,24 +150,27 @@ export const registerSubscriptionRoutes = (app: FastifyInstance, deps: Subscript
     });
 
     const pullToken = signPullToken(session.sid);
-    const pullUrl = `${config.publicBaseUrl}/api/app/v1/subscription/pull?token=${encodeURIComponent(pullToken)}`;
+    const pullUrls = buildPullUrlPayload(subscribe.subscribe_url, pullToken);
 
     return ok(reply, {
       changed,
       version: pulled.version,
       node_count: pulled.nodeCount,
       last_synced_at: new Date().toISOString(),
-      pull_url: pullUrl,
+      ...pullUrls,
     });
   });
 
   app.get("/api/app/v1/subscription/pull", async (request, reply) => {
     const query = request.query as Record<string, unknown>;
     const queryToken = typeof query.token === "string" ? query.token : undefined;
+    const formatFlag = normalizeSubscriptionFlag(query.flag) ?? "hiddify";
     const session = getSessionByQueryToken(queryToken, deps.sessions) ?? requireSession(request, deps.sessions);
 
     const subscribe = await deps.xboard.getSubscribe(session.xboardAuthData).catch((error): never => mapSubscriptionError(error));
-    const pulled = await deps.xboard.fetchSubscriptionContent(subscribe.subscribe_url).catch((error): never => mapSubscriptionError(error));
+    const pulled = await deps.xboard
+      .fetchSubscriptionContent(subscribe.subscribe_url, formatFlag)
+      .catch((error): never => mapSubscriptionError(error));
 
     deps.sessions.update(session.sid, {
       subscriptionVersion: pulled.version,
@@ -118,8 +178,9 @@ export const registerSubscriptionRoutes = (app: FastifyInstance, deps: Subscript
       lastSyncedAt: new Date().toISOString(),
     });
 
-    reply.header("content-type", "text/plain; charset=utf-8");
+    reply.header("content-type", contentTypeForSubscriptionFlag(formatFlag));
     reply.header("x-sloth-sub-version", pulled.version);
+    reply.header("x-sloth-sub-format", formatFlag);
     reply.header("cache-control", "no-store, no-cache, must-revalidate");
     return reply.send(pulled.raw);
   });
