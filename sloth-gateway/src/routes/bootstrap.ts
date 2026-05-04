@@ -14,6 +14,24 @@ type BootstrapDeps = {
   xboard: XboardAdapter;
 };
 
+const buildSessionPullUrl = (pullToken: string, flag = "hiddify"): string => {
+  const url = new URL("/api/app/v1/subscription/pull", config.publicBaseUrl);
+  url.searchParams.set("token", pullToken);
+  url.searchParams.set("flag", flag);
+  return url.toString();
+};
+
+const buildNativeSubscriptionUrl = (subscribeUrl: string | undefined, flag: string): string | null => {
+  if (!subscribeUrl) return null;
+  try {
+    const url = new URL(subscribeUrl);
+    url.searchParams.set("flag", flag);
+    return url.toString();
+  } catch {
+    return null;
+  }
+};
+
 const buildAccountSummary = async (
   deps: BootstrapDeps,
   sid: string,
@@ -60,7 +78,8 @@ const buildAccountSummary = async (
   );
 
   const pullToken = signPullToken(sid);
-  const pullUrl = `${config.publicBaseUrl}/api/app/v1/subscription/pull?token=${encodeURIComponent(pullToken)}`;
+  const gatewayPullUrl = buildSessionPullUrl(pullToken, "hiddify");
+  const pullUrl = buildNativeSubscriptionUrl(subscribe?.subscribe_url, "hiddify") ?? gatewayPullUrl;
   const ticketUrl = config.defaultTicketUrl || `${config.xboardBaseUrl}/#/ticket`;
   const noticeUrl = config.defaultNoticeUrl || `${config.xboardBaseUrl}/#/notice`;
 
@@ -82,6 +101,11 @@ const buildAccountSummary = async (
     },
     subscription: {
       pull_url: pullUrl,
+      pull_url_hiddify: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "hiddify") ?? pullUrl,
+      pull_url_sing_box: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "sing-box"),
+      pull_url_clash_meta: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "meta"),
+      pull_url_general: buildNativeSubscriptionUrl(subscribe?.subscribe_url, "general"),
+      gateway_pull_url: gatewayPullUrl,
       last_synced_at: session?.lastSyncedAt ?? null,
       version: session?.subscriptionVersion ?? null,
       node_count: session?.nodeCount ?? null,
