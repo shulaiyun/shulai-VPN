@@ -116,3 +116,12 @@ https://shulaiyun.github.io/Sloth-VPN/
 ## 合规声明
 
 本项目仅用于合法合规场景下的网络连接管理、品牌面板交付和技术研究。使用方需自行确保符合所在地法律法规、平台政策、支付渠道规则和服务条款。
+
+
+## 开源许可证
+
+本项目基于 Hiddify app 生态进行深度定制，遵循与上游兼容的 **Hiddify Extended GNU General Public License v3**（基于 GNU GPL v3，并包含 GPL v3 Section 7 额外条款）。
+
+- 许可证全文见 [LICENSE.md](LICENSE.md)。
+- 上游归属和主要修改说明见 [NOTICE.md](NOTICE.md)。
+- 使用、分发、二次开发和商业化前，请确认你已理解并遵守上游许可证、第三方依赖许可证及所在地法律法规。
